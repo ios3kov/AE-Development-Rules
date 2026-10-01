@@ -2148,19 +2148,43 @@ Test case должен проверять наблюдаемое требова�
 
 Общий стандарт должен сопровождаться reusable automation и templates.
 
-Центральный `AE-Development-Rules` starter kit рекомендуется использовать как исходную точку для:
+Центральный [starter kit](starter-kit/README.md) рекомендуется использовать как исходную точку.
 
-- preflight;
-- CI;
-- Build Identity;
-- artifact hashing;
-- compatibility audit;
-- macOS / Windows binary, signing и release checks;
-- Test Records;
-- release checklist;
-- test-case templates;
-- retrospective;
-- user guide.
+### Прямые ссылки на scripts
+
+- [macOS/local preflight](starter-kit/scripts/preflight.sh)
+- [Windows preflight](starter-kit/scripts/preflight.ps1)
+- [Artifact identity + SHA-256](starter-kit/scripts/record-artifact.sh)
+- [ExtendScript sanity-check](starter-kit/scripts/check-extendscript.mjs)
+- [Adobe API inventory для compatibility audit](starter-kit/scripts/scan-adobe-api.sh)
+- [macOS binary audit](starter-kit/scripts/macos-binary-audit.sh)
+- [macOS bundle / signing / Gatekeeper verification](starter-kit/scripts/macos-bundle-verify.sh)
+- [Native AE effect bundle verification on macOS](starter-kit/scripts/verify-native-effect-bundle-macos.sh)
+- [Owned fail-closed AE test workspace](starter-kit/scripts/create-owned-test-workspace.sh)
+- [Windows binary / dependency / Authenticode audit](starter-kit/scripts/windows-binary-audit.ps1)
+- [Windows release signature/hash verification](starter-kit/scripts/windows-release-verify.ps1)
+
+### Прямые ссылки на templates
+
+- [Test Record](starter-kit/templates/TEST_RECORD.md)
+- [Test Case](starter-kit/templates/TEST_CASE.md)
+- [Compatibility Matrix](starter-kit/templates/COMPATIBILITY_MATRIX.md)
+- [Static API Compatibility Audit](starter-kit/templates/API_COMPATIBILITY_AUDIT.md)
+- [Build Identity contract](starter-kit/templates/BUILD_IDENTITY.md)
+- [AE Runtime Test Safety](starter-kit/templates/AE_RUNTIME_TEST_SAFETY.md)
+- [Release Checklist](starter-kit/templates/RELEASE_CHECKLIST.md)
+- [Cross-platform Porting Audit](starter-kit/templates/CROSS_PLATFORM_PORTING.md)
+- [Security Checklist](starter-kit/templates/SECURITY_CHECKLIST.md)
+- [Localization Checklist](starter-kit/templates/LOCALIZATION_CHECKLIST.md)
+- [Quality Metrics](starter-kit/templates/QUALITY_METRICS.md)
+- [Documentation Structure](starter-kit/templates/DOCS_STRUCTURE.md)
+- [Retrospective](starter-kit/templates/RETROSPECTIVE.md)
+- [User Guide](starter-kit/templates/USER_GUIDE.md)
+
+### CI examples
+
+- [GitHub Actions: AE preflight](starter-kit/examples/github-actions/ae-preflight.yml)
+- [GitHub Actions: cross-platform macOS + Windows preflight](starter-kit/examples/github-actions/cross-platform-preflight.yml)
 
 Проект может использовать другие инструменты, если они обеспечивают эквивалентный или более сильный контроль.
 
