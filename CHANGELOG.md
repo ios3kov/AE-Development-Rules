@@ -1,5 +1,36 @@
 # Changelog
 
+## 4.0.0 — 2026-10-01
+
+Breaking process release: для задач, где пользователь явно выбирает конкретный внешний продукт/artifact как **референс, основу, аналог или parity target**, введён обязательный conditional **Reference Audit** до Technical Design соответствующего scope.
+
+- Добавлен [REFERENCE_AUDIT.md](REFERENCE_AUDIT.md) как нормативный §R0.
+- Trigger строго ограничен explicit external reference: присланный reference artifact, ссылка на конкретный продукт, named product/analogue или явно обозначенный UI/behavior/preset/render reference.
+- Общие запросы вида «хочу glow» и случайные упоминания продукта Reference Audit автоматически не включают.
+- Для whole-product analogue требуется систематическая декомпозиция UI/controls, functionality, presets, state/persistence, animation/keyframes, render/output, alpha/color/bit depth, edge cases, performance и packaging/integration.
+- Введён отдельный **Reference Claim Status**: PROVEN / OBSERVED / INFERRED / UNKNOWN. Он не заменяет Test Status, Compatibility Status или Evidence Confidence.
+- Недоказанная внутренняя реализация запрещена как факт: hypotheses остаются INFERRED/UNKNOWN до достаточного Evidence.
+- Добавлен обязательный Reference Coverage Map: COMPLETE / PARTIAL / BLOCKED / N/A по ключевым областям.
+- Добавлена фиксация reference identity: version/build/platform/host/source/file/hash/date и boundary разрешённого анализа.
+- Разрешён максимально глубокий безопасный/допустимый анализ, включая black-box runtime и static artifact inspection; decompilation/disassembly используется только при наличии соответствующих прав/разрешения и без обхода DRM/licensing/activation/access controls.
+- Для нескольких референсов требуется отдельная identity/Evidence boundary и явное разрешение конфликтов между products.
+- Добавлен [REFERENCE_SPECIFICATION_TEMPLATE.md](starter-kit/templates/REFERENCE_SPECIFICATION_TEMPLATE.md) с UI inventory, parameter sweeps, preset matrix, state/render/performance contracts, claim ledger, Coverage Map и parity acceptance tests.
+- После реализации reference-driven scope MUST проходить parity testing на одинаковых/эквивалентных fixtures для reference и нашего implementation.
+- Reference Audit встроен в AI Smart Entry, Product Discovery, Workflow, Process Core, DEVELOPMENT_RULES index, starter-kit и STANDARD_ADOPTION.
+- `rules-manifest.yaml` обновлён до schema 2 и содержит conditional Rule Group `REFERENCE-AUDIT` с trigger `explicit_external_reference`.
+- Self-test блокирует release стандарта при потере trigger semantics, Reference Claim Status, Coverage Map, parity contract или Reference Specification template.
+
+### Migration from 3.x
+
+Проект, переходящий на 4.0, должен:
+
+1. определить, использует ли текущий product scope конкретный внешний продукт/artifact как заявленный reference/analogue/parity target;
+2. если нет — зафиксировать Reference Audit как N/A и продолжить существующий процесс;
+3. если да — зафиксировать reference identity и scope, создать Reference Specification и Coverage Map;
+4. отделить OBSERVED/PROVEN факты от INFERRED/UNKNOWN внутренних выводов;
+5. до новых parity claims / значимого reference-driven Technical Design определить acceptance tests и закрыть critical gaps либо явно зафиксировать BLOCKED;
+6. сохранить Reference Audit status/baseline в project STANDARD_ADOPTION record.
+
 ## 3.1.1 — 2026-10-01
 
 Maintenance / optimization cleanup без изменения process contract.
