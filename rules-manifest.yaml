@@ -1,0 +1,104 @@
+schema_version: 1
+
+risk_profiles:
+  - id: light
+    label: Light
+    description: low-risk, local or documentation-only change
+  - id: standard
+    label: Standard
+    description: normal feature, bugfix or behavior change
+  - id: critical
+    label: Critical
+    description: high-risk change affecting render, data safety, security, packaging, compatibility or architecture
+
+delivery_gates:
+  - id: development
+    label: Development
+    description: internal development; no user handoff requirement
+  - id: validation
+    label: Validation
+    description: limited user validation build; Validation Gate applies
+  - id: release
+    label: Release
+    description: final Release Candidate; full Release Gate applies
+
+rule_groups:
+  - id: CORE-SCOPE
+    section: "1"
+  - id: TEST-CONTROL
+    section: "2"
+  - id: GIT
+    section: "6"
+  - id: IDENTITY
+    section: "7"
+  - id: BASELINE
+    section: "8"
+  - id: REGRESSION
+    section: "9"
+  - id: EVIDENCE
+    section: "10"
+  - id: CODE-SAFETY
+    section: "14"
+  - id: PERF
+    section: "17-19"
+  - id: REPRO
+    section: "20"
+  - id: COMPAT
+    section: "21"
+  - id: TOOL-RUNTIME
+    section: "22"
+  - id: NATIVE-RUNTIME
+    section: "23"
+  - id: DOCS
+    section: "24-25"
+  - id: GATES
+    section: "26"
+  - id: MAC-DIST
+    section: "28"
+  - id: PORTING
+    section: "29"
+  - id: WIN-DIST
+    section: "30"
+  - id: DEPSEC
+    section: "35"
+  - id: UXP
+    section: "40"
+  - id: TESTABILITY
+    section: "41"
+
+artifact_profiles:
+  - id: native
+    label: Native plugin / effect
+    light: CORE-SCOPE, GIT, IDENTITY, REGRESSION, EVIDENCE, CODE-SAFETY, NATIVE-RUNTIME
+    standard: light + BASELINE, TEST-CONTROL, COMPAT, PERF, real AE runtime tests
+    critical: standard + REPRO, deep risk-specific checks; Critical does not imply Release
+    validation: GATES / Validation Gate
+    release: GATES / Release Gate + MAC-DIST or WIN-DIST when applicable
+  - id: jsx
+    label: JSX / ScriptUI
+    light: CORE-SCOPE; micro-helper profile allowed when eligible
+    standard: GIT, IDENTITY, REGRESSION, EVIDENCE, TOOL-RUNTIME, real AE smoke/integration test
+    critical: standard + risk-specific CODE-SAFETY / PERF / COMPAT
+    validation: GATES / Validation Gate
+    release: GATES / Release Gate; OS signing only for executable installer/helper
+  - id: cep
+    label: CEP
+    light: CORE-SCOPE, TOOL-RUNTIME
+    standard: GIT, IDENTITY, REGRESSION, EVIDENCE, COMPAT, TOOL-RUNTIME, bridge/lifecycle/package/runtime tests
+    critical: standard + risk-specific security/IPC/helper checks
+    validation: GATES / Validation Gate
+    release: GATES / Release Gate + Adobe distribution requirements; OS signing only for executable code
+  - id: uxp
+    label: UXP
+    light: CORE-SCOPE, UXP
+    standard: GIT, IDENTITY, REGRESSION, EVIDENCE, COMPAT, TOOL-RUNTIME, UXP, host/Min Version/runtime tests
+    critical: standard + risk-specific permissions/lifecycle/native-addon checks
+    validation: GATES / Validation Gate
+    release: GATES / Release Gate + current Adobe distribution requirements; OS signing only for native addon/executable
+  - id: helper
+    label: Helper / companion app
+    light: CORE-SCOPE, GIT, IDENTITY, REGRESSION, EVIDENCE, CODE-SAFETY
+    standard: light + BASELINE, COMPAT, PERF, IPC/files/network/runtime tests
+    critical: standard + REPRO, DEPSEC, security/data-loss checks
+    validation: GATES / Validation Gate
+    release: GATES / Release Gate + MAC-DIST or WIN-DIST when applicable
