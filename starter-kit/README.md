@@ -6,6 +6,8 @@
 
 ## Scripts
 
+- `scripts/preflight.sh` — единая локальная entry point для быстрых проверок; вызывает project-specific hook при наличии.
+
 - `scripts/record-artifact.sh` — commit, dirty state, environment и SHA-256 artifact.
 - `scripts/check-extendscript.mjs` — быстрый parser sanity-check JSX/ExtendScript.
 - `scripts/scan-adobe-api.sh` — inventory PF/AEGP/SmartFX identifiers для compatibility audit.
@@ -20,6 +22,11 @@
 - `templates/RELEASE_CHECKLIST.md`
 - `templates/RETROSPECTIVE.md`
 - `templates/USER_GUIDE.md`\n- `templates/AE_RUNTIME_TEST_SAFETY.md`\n- `templates/BUILD_IDENTITY.md`
+- `templates/TEST_CASE.md`
+- `templates/QUALITY_METRICS.md`
+- `templates/SECURITY_CHECKLIST.md`
+- `templates/LOCALIZATION_CHECKLIST.md`
+- `templates/DOCS_STRUCTURE.md`
 
 ## Внедрение
 
@@ -32,3 +39,10 @@
 ## Ограничение
 
 Автоматизация помогает собрать Evidence, но не превращает статический результат в runtime PASS. Статический API/binary audit не равен VERIFIED, а локальная signing-проверка не заменяет реальный quarantined download → install → launch.
+
+
+## CI example
+
+- `examples/github-actions/ae-preflight.yml` — минимальный GitHub Actions пример, который запускает ту же preflight-команду, что и локальная разработка.
+
+CI не заменяет runtime AE verification, если runner не имеет целевого After Effects/runtime.

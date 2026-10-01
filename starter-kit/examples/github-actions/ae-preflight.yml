@@ -1,0 +1,25 @@
+name: AE Preflight
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  preflight:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make preflight executable
+        run: chmod +x starter-kit/scripts/preflight.sh
+
+      - name: Run project preflight
+        run: starter-kit/scripts/preflight.sh
+
+      - name: Reminder
+        run: |
+          echo "CI preflight is not a substitute for required runtime After Effects tests."
+          echo "Keep AE-only checks as separate VERIFIED/BLOCKED/NOT RUN evidence."
