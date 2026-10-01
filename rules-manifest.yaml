@@ -47,6 +47,9 @@ rule_groups:
   - id: CODE-SAFETY
     section: "14"
     source: core/ENGINEERING.md
+  - id: DEBUGGING
+    section: "16"
+    source: core/ENGINEERING.md
   - id: PERF
     section: "17-19"
     source: core/ENGINEERING.md

@@ -112,5 +112,61 @@
 
 Где важна целостность данных, использовать безопасную стратегию записи и восстановления.
 
+### Debugging by runtime
+
+Общий процесс расследования определён в [Engineering Core §16](../core/ENGINEERING.md). Для tools/panels дополнительно SHOULD локализовать ошибку по runtime boundary.
+
+#### ExtendScript / ScriptUI
+
+По возможности фиксировать:
+
+- message / error number;
+- file и line;
+- доступную stack information;
+- текущий project/comp/selection context;
+- состояние Undo Group;
+- входные arguments / IDs без чувствительных пользовательских данных.
+
+Не скрывать исходный exception общим `catch`, если после этого теряется причина сбоя. Если exception преобразуется в пользовательскую ошибку, диагностический Evidence SHOULD сохранять исходную техническую причину.
+
+#### CEP
+
+Разделять как минимум:
+
+1. panel/browser JavaScript;
+2. CEP ↔ ExtendScript bridge;
+3. host-side ExtendScript;
+4. helper/network/backend, если используется.
+
+Для async/bridge операций SHOULD использовать correlation/request ID, чтобы связать panel log, bridge request, host result и helper response одного действия.
+
+Ошибка panel JavaScript не является доказательством ошибки JSX; bridge timeout не является доказательством host crash; успешный callback не доказывает корректность host-side результата без проверки payload/contract.
+
+#### UXP
+
+Дополнительно проверять:
+
+- rejected Promise и место его обработки;
+- stale host context после `await`;
+- permission/sandbox failure;
+- lifecycle entrypoint;
+- concurrent invocation / stale operation;
+- host API `Min Version` и фактическую версию AE.
+
+Browser-like stack или JavaScript exception не следует трактовать как доказательство browser runtime semantics.
+
+#### Helper / IPC
+
+Связывать обе стороны операции через correlation ID и проверять:
+
+- request/response schema;
+- timeout/cancellation;
+- process identity/version;
+- stderr/stdout или structured logs;
+- partial response;
+- disconnect/restart;
+- protocol-version mismatch.
+
 ---
+
 

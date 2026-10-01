@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.1.0 — 2026-10-01
+
+Backward-compatible workflow/debugging update.
+
+- Добавлен **Controlled initiative**: сохранять запрошенный scope, но кратко сообщать о критической архитектурной/security/data-loss проблеме и предлагать альтернативу без молчаливого rewrite.
+- Добавлено правило представления ручных изменений: при реальном доступе редактировать repository и показывать настоящий Git diff; при ручной передаче пользователю предпочитать `File → Find → Replace → Verify` вместо псевдо-diff и нестабильных line numbers.
+- Добавлен evidence-driven **Debugging Protocol** в Engineering Core: symptom → identity → reproduction → Evidence → failure layer → facts/hypotheses → one-variable diagnostic experiment → minimal fix → regression → cleanup.
+- Добавлены runtime-specific debugging рекомендации для ExtendScript/ScriptUI, CEP, UXP и Helper/IPC.
+- Добавлен reusable `starter-kit/templates/DEBUGGING_RECORD.md`.
+- Добавлен Rule Group `DEBUGGING` для §16 в `rules-manifest.yaml`.
+- Self-test теперь гарантирует наличие Controlled initiative, manual patch guidance и Debugging Protocol.
+- `TEST/manifest/source/supply-chain/behavioural` checks остаются без изменения обязательной gate semantics.
+
 ## 2.0.0 — 2026-10-01
 
 Breaking process release: Risk Profile и Delivery Gate теперь независимы.
