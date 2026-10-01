@@ -1353,35 +1353,11 @@ Evidence старой версии можно использовать как и
 
 Поддержка Unicode paths и пользовательских имён должна проверяться даже для продукта только с английским UI, если такие данные входят в заявленный scope.
 
-### UXP и host support
+### UXP host support
 
-Перед выбором UXP подтвердить:
+Для UXP в этом разделе фиксируется только Compatibility Status целевой версии AE. Полный runtime / sandbox / permissions / lifecycle / packaging contract находится в §40 и намеренно не дублируется здесь.
 
-- поддержку целевой версией After Effects;
-- доступность необходимых host API;
-- доступность нужных manifest capabilities;
-- ограничения runtime.
-
-Общая документация UXP не является доказательством поддержки конкретным host-приложением.
-
-### UXP Sandbox / Permissions
-
-При использовании UXP отдельно проверять:
-
-- filesystem sandbox;
-- `localFileSystem`;
-- manifest permissions;
-- user-granted file / folder access;
-- сохранение и восстановление tokens;
-- restart;
-- отказ пользователя;
-- отозванные и недействительные permissions;
-- stale entries;
-- доступ вне разрешённой области.
-
-Не предполагать произвольный доступ к файловой системе.
-
-Отказ в доступе должен обрабатываться как штатная ситуация.
+Общая документация UXP или проверка в другом Adobe host не являются Evidence поддержки конкретной версии After Effects.
 
 ---
 
@@ -2002,7 +1978,7 @@ Executable macOS distributable в scope этого gate не считается 
 - **portable as-is** — код не зависит от платформы;
 - **platform adapter required** — нужен тонкий platform-specific слой;
 - **rewrite required** — механизм принципиально зависит от платформы;
-- **UNKNOWN / NOT VERIFIED** — данных недостаточно.
+- **undetermined** — данных недостаточно.
 
 ### Перенос native AE plugin
 
@@ -2234,6 +2210,7 @@ Test case должен проверять наблюдаемое требова�
 - [macOS/local preflight](starter-kit/scripts/preflight.sh)
 - [Windows preflight](starter-kit/scripts/preflight.ps1)
 - [Artifact identity + SHA-256](starter-kit/scripts/record-artifact.sh)
+- [Starter-kit self-test / consistency audit](starter-kit/scripts/self-test.mjs)
 - [ExtendScript sanity-check](starter-kit/scripts/check-extendscript.mjs)
 - [Adobe API inventory для compatibility audit](starter-kit/scripts/scan-adobe-api.sh)
 - [macOS binary audit](starter-kit/scripts/macos-binary-audit.sh)
@@ -2253,6 +2230,7 @@ Test case должен проверять наблюдаемое требова�
 - [Static API Compatibility Audit](starter-kit/templates/API_COMPATIBILITY_AUDIT.md)
 - [Build Identity contract](starter-kit/templates/BUILD_IDENTITY.md)
 - [AE Runtime Test Safety](starter-kit/templates/AE_RUNTIME_TEST_SAFETY.md)
+- [Validation Build Checklist](starter-kit/templates/VALIDATION_CHECKLIST.md)
 - [Release Checklist](starter-kit/templates/RELEASE_CHECKLIST.md)
 - [Cross-platform Porting Audit](starter-kit/templates/CROSS_PLATFORM_PORTING.md)
 - [Security Checklist](starter-kit/templates/SECURITY_CHECKLIST.md)
@@ -2273,6 +2251,7 @@ Test case должен проверять наблюдаемое требова�
 
 ### CI examples
 
+- [GitHub Actions: starter-kit self-test](.github/workflows/starter-kit-self-test.yml)
 - [GitHub Actions: AE preflight](starter-kit/examples/github-actions/ae-preflight.yml)
 - [GitHub Actions: cross-platform macOS + Windows preflight](starter-kit/examples/github-actions/cross-platform-preflight.yml)
 
