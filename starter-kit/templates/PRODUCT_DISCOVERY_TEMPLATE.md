@@ -167,7 +167,11 @@ Avoid vague criteria such as “easy”, “fast”, “professional” without 
 
 ### Assumptions
 
-- <assumption + what decision it affects>
+| Assumption | Impact / dependent decision | Owner / actual acceptance source | Blocking? | Allowed boundary / validation condition |
+| --- | --- | --- | --- | --- |
+| <bounded assumption> | <impact> | <actual source> | yes/no | <condition/date> |
+
+Recording an unknown does not resolve it. Critical unknowns block dependent design until evidence or an actually accepted defined alternative/scope resolves the dependency. Nonblocking assumptions remain explicitly bounded.
 
 ### Open Questions
 
@@ -182,7 +186,7 @@ Avoid vague criteria such as “easy”, “fast”, “professional” without 
 - [ ] Core scope is clear
 - [ ] Non-goals are explicit
 - [ ] Material constraints are known
-- [ ] Critical assumptions are confirmed or explicitly recorded
+- [ ] Critical unknowns are resolved by evidence or an accepted defined alternative/scope; recorded assumptions do not block dependent decisions
 - [ ] Success Criteria are testable
 - [ ] Remaining Open Questions do not block Product Spec / Technical Design / Production Plan
 

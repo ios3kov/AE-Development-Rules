@@ -156,6 +156,8 @@ Risk Profile и Delivery Gate выбираются отдельно.
 
 Для Validation Build **не требуется автоматически** полный публичный Release Gate, notarization, Authenticode, финальный installer, полный Regression Level 2, полная compatibility matrix или публичный distribution-channel test, если именно эти свойства не являются предметом текущей проверки.
 
+До передачи отличать обязательные pre-handoff prerequisites от intended user-validation вопроса и release-acceptance по §26. Недоступность обязательного safety prerequisite блокирует передачу; ещё не полученный ответ на безопасный пользовательский вопрос после выполненных prerequisites её не блокирует.
+
 **Release Candidate** — неизменяемый кандидат на финальную передачу / публикацию. Для него выполняется полный применимый Release Gate из §26 и platform-specific gates только там, где они действительно применимы к artifact.
 
 Если цель пользовательского теста — проверить именно финальную установку, подпись, quarantine/SmartScreen, updater или публичный package, соответствующий release/distribution gate становится частью этого теста.
@@ -910,4 +912,3 @@ Test reports и release records предпочтительно хранить о
 Этот раздел намеренно не дублирует WORKFLOW.md. Инженерные Test / Compatibility / Evidence статусы остаются нормативно определены в §10 этого документа.
 
 ---
-

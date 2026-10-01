@@ -18,11 +18,21 @@ Use this checklist for a **limited user validation build**. It is not a Release 
 
 ## Internal checks before handoff
 
+- [ ] Pre-handoff prerequisites identified before execution, including safety checks
+- [ ] Every mandatory pre-handoff prerequisite PASS or justified N/A; none BLOCKED / NOT RUN
 - [ ] Relevant fast/static checks completed
 - [ ] Main validation scenario has no mandatory Test: FAIL
 - [ ] No known critical data-loss/security/project-corruption issue
 - [ ] Known limitations listed
 - [ ] Required user steps are minimal and safe
+
+| Check / acceptance | Phase | Required? | Actual Test Status | Evidence / unresolved condition |
+| --- | --- | --- | --- | --- |
+| <safety/internal prerequisite> | pre-handoff | yes | <actual status> | <evidence> |
+| <specific user-only question> | user-validation | yes | NOT RUN | <user environment / success criterion> |
+| <final release check> | release-acceptance | yes | NOT RUN | <applies to final release> |
+
+A pending user-only question does not block this limited handoff after prerequisites pass. Missing mandatory prerequisites or a known mandatory FAIL for the tested scenario still block it. Do not relabel an accessible internal check to bypass the gate.
 
 ## Not automatic requirements
 

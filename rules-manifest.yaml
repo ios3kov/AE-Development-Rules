@@ -58,6 +58,11 @@
       "source": "core/PROCESS.md"
     },
     {
+      "id": "API-SOURCES",
+      "section": "3",
+      "source": "core/PROCESS.md"
+    },
+    {
       "id": "GIT",
       "section": "6",
       "source": "core/PROCESS.md"
@@ -173,7 +178,7 @@
           "CODE-SAFETY",
           "NATIVE-RUNTIME"
         ],
-        "notes": "CORE-SCOPE, GIT, IDENTITY, REGRESSION, EVIDENCE, CODE-SAFETY, NATIVE-RUNTIME"
+        "notes": "Minimal applicable scope, source/artifact identity, regression and Evidence; micro-helper scale remains permitted when eligible"
       },
       "standard": {
         "inherit": "light",
@@ -213,9 +218,13 @@
       "light": {
         "inherit": "",
         "rules": [
-          "CORE-SCOPE"
+          "CORE-SCOPE",
+          "GIT",
+          "IDENTITY",
+          "REGRESSION",
+          "EVIDENCE"
         ],
-        "notes": "CORE-SCOPE; micro-helper profile allowed when eligible"
+        "notes": "Minimal applicable scope, source/artifact identity, regression and Evidence; micro-helper scale remains permitted when eligible"
       },
       "standard": {
         "inherit": "light",
@@ -259,9 +268,13 @@
         "inherit": "",
         "rules": [
           "CORE-SCOPE",
-          "TOOL-RUNTIME"
+          "TOOL-RUNTIME",
+          "GIT",
+          "IDENTITY",
+          "REGRESSION",
+          "EVIDENCE"
         ],
-        "notes": "CORE-SCOPE, TOOL-RUNTIME"
+        "notes": "Minimal applicable scope, source/artifact identity, regression and Evidence; micro-helper scale remains permitted when eligible"
       },
       "standard": {
         "inherit": "light",
@@ -302,9 +315,13 @@
         "inherit": "",
         "rules": [
           "CORE-SCOPE",
-          "UXP"
+          "UXP",
+          "GIT",
+          "IDENTITY",
+          "REGRESSION",
+          "EVIDENCE"
         ],
-        "notes": "CORE-SCOPE, UXP"
+        "notes": "Minimal applicable scope, source/artifact identity, regression and Evidence; micro-helper scale remains permitted when eligible"
       },
       "standard": {
         "inherit": "light",
@@ -352,7 +369,7 @@
           "EVIDENCE",
           "CODE-SAFETY"
         ],
-        "notes": "CORE-SCOPE, GIT, IDENTITY, REGRESSION, EVIDENCE, CODE-SAFETY"
+        "notes": "Minimal applicable scope, source/artifact identity, regression and Evidence; micro-helper scale remains permitted when eligible"
       },
       "standard": {
         "inherit": "light",

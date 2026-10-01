@@ -46,7 +46,9 @@ This checklist is for a **Release Candidate**, not a normal Validation Build. Fo
 - [ ] Developer ID
 - [ ] Notarization Accepted
 - [ ] Stapling validated where applicable
-- [ ] codesign PASS
+- [ ] PKG container signature: pkgutil --check-signature PASS, where applicable
+- [ ] App/DMG/code signature: applicable codesign verification PASS
+- [ ] Executable payload/nested-code signatures checked separately from container
 - [ ] Gatekeeper PASS
 - [ ] Real quarantined download
 - [ ] Standard install

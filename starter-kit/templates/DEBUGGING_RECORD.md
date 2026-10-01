@@ -54,6 +54,12 @@
 
 ## Diagnostic experiment
 
+| Attempt / hypothesis | Changed condition / retry reason | Observed result / Evidence | Next discriminating action |
+| --- | --- | --- | --- |
+| <attempt> | <new data or bounded transient retry> | <actual result> | <strategy change or scoped blocker> |
+
+Do not repeat an unchanged failed action without a recorded basis; preserve rejected approaches so another session does not restart the same loop. See Workflow §8.
+
 - Hypothesis under test:
 - Single variable / smallest change:
 - Instrumentation added:

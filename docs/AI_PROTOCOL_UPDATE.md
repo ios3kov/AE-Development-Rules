@@ -1,5 +1,7 @@
 # AI protocol update — 5.0 candidate
 
+Historical seven-item update record, completed before the F01–F12 follow-up. Its counts/results refer to that original candidate. See the [current follow-up remediation](AI_PROTOCOL_REMEDIATION.md) for subsequent changes and acceptance.
+
 ## Goal and boundary
 
 Update the standard for an AI implementing the user's product. Preserve the existing engineering requirements and approved product decisions; make instruction priority, current-scope routing, continuation and recovery explicit.

@@ -2,20 +2,31 @@ export function compare(reference, actual, tolerance) {
   if (!Number.isFinite(tolerance) || tolerance < 0) throw new Error('explicit finite nonnegative tolerance required');
   for (const image of [reference, actual]) {
     const keys = ['width','height','channels','color_space','alpha','bit_depth','pixels'];
-    if (Object.keys(image).some(k => !keys.includes(k)) || keys.some(k => !(k in image))) throw new Error('invalid image fields');
+    if (Object.keys(image).some(k => !keys.includes(k)) || keys.some(k => !Object.hasOwn(image,k))) throw new Error('invalid image fields');
     if (!Number.isInteger(image.width) || !Number.isInteger(image.height) || image.width < 1 || image.height < 1 || image.width * image.height > 1048576 || image.channels !== 4 || ![8,16,32].includes(image.bit_depth) || !['straight','premultiplied'].includes(image.alpha) || typeof image.color_space !== 'string' || !image.color_space) throw new Error('invalid render metadata');
-    if (!Array.isArray(image.pixels) || image.pixels.length !== image.width*image.height*4 || image.pixels.some(v => typeof v !== 'number' || !Number.isFinite(v))) throw new Error('invalid pixels');
+    if (!Array.isArray(image.pixels) || image.pixels.length !== image.width*image.height*4) throw new Error('invalid pixels');
+    for (let i=0; i<image.pixels.length; i++) {
+      if (!Object.hasOwn(image.pixels,i) || typeof image.pixels[i] !== 'number' || !Number.isFinite(image.pixels[i])) throw new Error('invalid pixels');
+    }
   }
   for (const key of ['width','height','channels','color_space','alpha','bit_depth']) if (reference[key] !== actual[key]) throw new Error('render context mismatch: ' + key);
-  let maximum = 0, squared = 0, failures = 0;
+  let maximum = 0, scale = 0, scaledSquared = 0, failures = 0;
   const byChannel = [0,0,0,0];
   const differences = reference.pixels.map((v,i) => {
     const d = Math.abs(v-actual.pixels[i]);
-    maximum = Math.max(maximum,d); squared += d*d; byChannel[i%4] = Math.max(byChannel[i%4],d);
+    if (!Number.isFinite(d)) throw new Error('nonfinite render difference');
+    maximum = Math.max(maximum,d); byChannel[i%4] = Math.max(byChannel[i%4],d);
+    // Scaled sum of squares avoids overflow/underflow from squaring finite values.
+    if (d !== 0) {
+      if (scale < d) { scaledSquared = 1 + scaledSquared * (scale/d) ** 2; scale = d; }
+      else scaledSquared += (d/scale) ** 2;
+    }
     if (d > tolerance) failures++;
     return d;
   });
-  return { status:failures ? 'FAIL':'PASS', max_absolute_error:maximum, rmse:Math.sqrt(squared/differences.length), channel_max:byChannel, failed_samples:failures, tolerance, differences };
+  const rmse = scale * Math.sqrt(scaledSquared/differences.length);
+  if (![maximum,rmse,...byChannel].every(Number.isFinite)) throw new Error('nonfinite render metrics');
+  return { status:failures ? 'FAIL':'PASS', max_absolute_error:maximum, rmse, channel_max:byChannel, failed_samples:failures, tolerance, differences };
 }
 export function fixtures() {
   const image = fn => ({width:4,height:4,channels:4,color_space:'linear-sRGB',alpha:'straight',bit_depth:32,pixels:Array.from({length:16},(_,i)=>fn(i%4,Math.floor(i/4))).flat()});

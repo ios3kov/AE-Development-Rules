@@ -166,6 +166,8 @@ SHOULD избегать:
 
 Для сложного расследования рекомендуется [Debugging Record](../starter-kit/templates/DEBUGGING_RECORD.md), чтобы сохранить цепочку «симптом → Evidence → гипотеза → эксперимент → вывод → fix → regression».
 
+Повторные неудачные попытки вести по [Workflow §8](../WORKFLOW.md#8-stop-criteria): сохранённый отрицательный результат должен менять следующий шаг или обосновывать ограниченный retry.
+
 ### Non-interactive Render Safety
 
 Во время:
@@ -772,6 +774,8 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 ## 32. Методика составления test cases
 
 Каждый значимый риск или acceptance criterion должен иметь явную проверку либо документированную причину отсутствия проверки.
+
+Для значимых требований SHOULD вести в существующем plan/issue/spec компактную связь: product requirement ID и подтверждённый источник → implementation task → наблюдаемый acceptance criterion → check ID и Evidence/result. [Шаблон связи](../starter-kit/templates/REQUIREMENT_TRACEABILITY.md) встраивается в существующий документ. Новая задача должна отвечать требованию либо необходимому risk control; отдельная таблица для каждой мелкой правки не нужна. Registry REQUIREMENTS.json идентифицирует правила стандарта и не заменяет product requirements проекта.
 
 Минимальный test case содержит:
 
