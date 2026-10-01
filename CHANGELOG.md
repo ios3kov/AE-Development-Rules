@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.0 — 2026-10-01
+
+- Разделены **Validation Build / Validation Gate** и **Release Candidate / Release Gate**: пользовательская проверка больше не требует автоматически полного release ceremony.
+- Добавлена быстрая матрица применимости: Native / JSX / CEP / UXP / Helper × Light / Standard / Release-Critical.
+- Унифицированы независимые namespace статусов: **Test Status**, **Compatibility Status**, **Evidence Confidence**.
+- macOS/Windows signing gates привязаны к фактическому типу distributable; source-only artifacts не получают искусственных OS signing требований.
+- Рабочий ритм, статусы этапов и правила общения вынесены в отдельный [WORKFLOW.md](WORKFLOW.md).
+- UXP rules актуализированы по текущей документации Adobe: Min Version, async/lifecycle ограничения, pure CCX vs hybrid UXP packaging и native addon signing.
+- Добавлен отдельный Validation Build checklist; обновлены release, compatibility, retrospective и UXP templates.
+- Добавлен read-only starter-kit self-test: paths, local links, syntax, executable bits, status taxonomy и safety checks.
+- Добавлен cross-platform GitHub Actions self-test для Linux / macOS / Windows.
+- Проведены deduplication, reference audit и consistency cleanup основного стандарта и starter-kit.
+
+
 ## 1.1.0 — 2026-10-01
 
 - Добавлен явный минимальный профиль для micro-helper scripts.
