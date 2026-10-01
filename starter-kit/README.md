@@ -10,7 +10,7 @@
 - `scripts/check-extendscript.mjs` — быстрый parser sanity-check JSX/ExtendScript.
 - `scripts/scan-adobe-api.sh` — inventory PF/AEGP/SmartFX identifiers для compatibility audit.
 - `scripts/macos-binary-audit.sh` — Mach-O architectures, deployment target, linked libraries, symbols и signing.
-- `scripts/macos-bundle-verify.sh` — codesign, stapling, Gatekeeper и quarantine evidence.
+- `scripts/macos-bundle-verify.sh` — codesign, stapling, Gatekeeper и quarantine evidence.\n- `scripts/create-owned-test-workspace.sh` — создаёт уникальный fail-closed workspace для AE runtime tests.\n- `scripts/verify-native-effect-bundle-macos.sh` — проверяет структуру native effect bundle, AE exports, PiPL/resources, dependencies и подпись.
 
 ## Templates
 
@@ -19,7 +19,7 @@
 - `templates/API_COMPATIBILITY_AUDIT.md`
 - `templates/RELEASE_CHECKLIST.md`
 - `templates/RETROSPECTIVE.md`
-- `templates/USER_GUIDE.md`
+- `templates/USER_GUIDE.md`\n- `templates/AE_RUNTIME_TEST_SAFETY.md`\n- `templates/BUILD_IDENTITY.md`
 
 ## Внедрение
 
