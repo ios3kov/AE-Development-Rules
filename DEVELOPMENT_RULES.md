@@ -1883,9 +1883,149 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 
 **Разработка публичного macOS-продукта не считается полностью завершённой, пока пользователю нельзя отдать обычный подписанный и notarized дистрибутив без предупреждений Gatekeeper и без инструкций по обходу защиты macOS.**
 
+
 ---
 
-## 29. Контроль качества и инженерные метрики
+## 29. Cross-platform architecture и перенос macOS ↔ Windows
+
+Если продукт планируется для macOS и Windows, по умолчанию использовать **одну общую кодовую базу**, а не две постоянно расходящиеся ветки разработки.
+
+Предпочтительная структура:
+
+- общий platform-independent core;
+- минимальные platform adapters для macOS и Windows;
+- отдельные build configurations;
+- отдельные packaging / installer steps;
+- отдельные platform-specific tests;
+- единая shared test suite для общего поведения;
+- CI matrix по поддерживаемым платформам, где это технически возможно.
+
+Постоянные ветки вида `mac` и `windows` не использовать как основную архитектуру продукта, если нет доказанной необходимости.
+
+Допустимы временные feature / porting branches, но завершённые изменения должны возвращаться в общую основную ветку, чтобы исправления и функциональность не расходились между платформами.
+
+### Обязательный porting audit
+
+Перед переносом существующего продукта с одной платформы на другую определить:
+
+- platform-specific source files и build settings;
+- зависимости от macOS frameworks / Windows APIs;
+- filesystem paths и path semantics;
+- permissions и sandbox / security assumptions;
+- process launching / IPC;
+- dynamic libraries и runtime dependencies;
+- compiler / linker assumptions;
+- endian / integer / pointer-size assumptions, если применимо;
+- UI scaling / HiDPI;
+- Unicode / locale;
+- installer / update / uninstall;
+- code signing;
+- crash reporting / diagnostics;
+- GPU APIs и platform-specific acceleration;
+- Adobe SDK / host differences, реально влияющие на продукт.
+
+Результат porting audit должен разделять:
+
+- **portable as-is** — код не зависит от платформы;
+- **platform adapter required** — нужен тонкий platform-specific слой;
+- **rewrite required** — механизм принципиально зависит от платформы;
+- **UNKNOWN / NOT VERIFIED** — данных недостаточно.
+
+### Перенос native AE plugin
+
+Для native plugins / effects по применимости отдельно проверить:
+
+- macOS `.plugin` ↔ Windows `.aex`;
+- Xcode / clang ↔ MSVC toolchain;
+- bundle / resources / PiPL packaging;
+- exported entry points;
+- architecture scope;
+- linked frameworks ↔ DLL / import libraries;
+- deployment target / supported Windows version;
+- runtime libraries;
+- filesystem and Unicode behavior;
+- crash / exception boundaries;
+- CPU/GPU implementation parity;
+- MFR / SmartFX / aerender behavior в каждой платформе.
+
+Успешная сборка на второй платформе не считается доказательством совместимости.
+
+Для каждой платформы необходимы отдельные runtime Evidence и compatibility status.
+
+### Общий функциональный контракт
+
+Platform-specific реализации одного и того же пользовательского поведения должны иметь общий набор acceptance tests, где это возможно.
+
+Если macOS и Windows версии сознательно отличаются по функциональности:
+
+- различие должно быть документировано;
+- compatibility / feature matrix должна показывать его явно;
+- пользовательская документация должна описывать различие;
+- нельзя выдавать одну платформу за эквивалент другой без Evidence.
+
+---
+
+## 30. Публичный Windows-дистрибутив и release gate
+
+Для продукта, который публично распространяется на Windows, финальный release должен устанавливаться и запускаться стандартным пользовательским способом без необходимости отключать системные механизмы безопасности.
+
+### Обязательные требования
+
+Перед публичным Windows release по применимости:
+
+- собрать production artifact для заявленной архитектуры;
+- проверить PE / binary architecture и runtime dependencies;
+- подписать исполняемый код и installer действительным code-signing certificate;
+- использовать timestamping, чтобы подпись оставалась проверяемой после истечения сертификата;
+- проверить Authenticode signature стандартными Windows средствами, например SignTool / PowerShell;
+- проверить installer / package integrity;
+- зафиксировать signing identity, timestamp result и SHA-256 финального distributable;
+- убедиться, что signing / packaging не изменялись после финальной проверки без создания нового кандидата.
+
+### Реальная проверка распространения
+
+Проверять именно тот файл и канал, который получит пользователь.
+
+Необходимо:
+
+1. Получить финальный distributable через реальный или эквивалентный публичному канал доставки.
+2. Проверить его на чистом Windows test environment.
+3. Выполнить стандартную установку без ручного копирования скрытых dependencies.
+4. Запустить целевой After Effects и убедиться, что продукт загружается.
+5. Выполнить финальный smoke test.
+6. Проверить uninstall / update сценарий, если они входят в заявленный продукт.
+7. Убедиться, что нормальная установка не требует отключения Defender, SmartScreen, UAC или других системных защит.
+
+Нельзя считать Windows release gate пройденным, если штатная инструкция требует:
+
+- отключить Windows Defender;
+- отключить SmartScreen;
+- запускать систему с ослабленными security settings;
+- вручную копировать случайные runtime DLL из неизвестных источников;
+- отключать UAC;
+- игнорировать повреждённую / недействительную подпись;
+- использовать другие небезопасные обходы как нормальный installation path.
+
+SmartScreen reputation и предупреждения, зависящие от внешней репутационной системы, следует фиксировать отдельно от криптографической валидности подписи. Нельзя заявлять отсутствие таких предупреждений без реальной проверки на целевом канале распространения.
+
+### Финальный Windows artifact
+
+Пользователю передаётся именно тот package / installer / archive, который прошёл:
+
+- identity / hash фиксацию;
+- signing;
+- signature verification;
+- dependency / architecture audit;
+- чистую установку;
+- runtime загрузку в целевом After Effects;
+- финальный smoke test.
+
+Если обязательная подпись, целевая Windows-среда или реальная runtime-проверка недоступны, соответствующий публичный Windows release gate имеет статус **BLOCKED**, а не PASS.
+
+
+---
+
+## 31. Контроль качества и инженерные метрики
 
 Метрики использовать для обнаружения деградаций и улучшения процесса, а не как самоцель и не для оценки отдельных людей.
 
@@ -1917,7 +2057,7 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 
 ---
 
-## 30. Методика составления test cases
+## 32. Методика составления test cases
 
 Каждый значимый риск или acceptance criterion должен иметь явную проверку либо документированную причину отсутствия проверки.
 
@@ -2004,7 +2144,7 @@ Test case должен проверять наблюдаемое требова�
 
 ---
 
-## 31. Внедрение стандарта без лишней ручной работы
+## 33. Внедрение стандарта без лишней ручной работы
 
 Общий стандарт должен сопровождаться reusable automation и templates.
 
@@ -2015,7 +2155,7 @@ Test case должен проверять наблюдаемое требова�
 - Build Identity;
 - artifact hashing;
 - compatibility audit;
-- macOS binary / signing checks;
+- macOS / Windows binary, signing и release checks;
 - Test Records;
 - release checklist;
 - test-case templates;
