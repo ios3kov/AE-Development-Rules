@@ -2180,6 +2180,12 @@ Test case должен проверять наблюдаемое требова�
 - [Documentation Structure](starter-kit/templates/DOCS_STRUCTURE.md)
 - [Retrospective](starter-kit/templates/RETROSPECTIVE.md)
 - [User Guide](starter-kit/templates/USER_GUIDE.md)
+- [Standard Adoption / Baseline](starter-kit/templates/STANDARD_ADOPTION.md)
+- [Dependency / Security / SBOM Audit](starter-kit/templates/DEPENDENCY_SECURITY_AUDIT.md)
+- [Release Versioning / Changelog](starter-kit/templates/RELEASE_VERSIONING.md)
+- [Update Security](starter-kit/templates/UPDATE_SECURITY.md)
+- [Crash Diagnostics / Symbols](starter-kit/templates/CRASH_DIAGNOSTICS.md)
+- [Accessibility Checklist](starter-kit/templates/ACCESSIBILITY_CHECKLIST.md)
 
 ### CI examples
 
@@ -2189,6 +2195,202 @@ Test case должен проверять наблюдаемое требова�
 Проект может использовать другие инструменты, если они обеспечивают эквивалентный или более сильный контроль.
 
 При появлении в реальном AE-проекте удачного reusable script / test harness / release check необходимо после подтверждения рассмотреть его перенос в общий starter kit, чтобы следующие проекты не строили тот же механизм заново.
+
+---
+
+## 34. Версия стандарта и фиксация baseline
+
+Сам стандарт `AE-Development-Rules` должен иметь явную версию.
+
+Для значимого milestone / release AE-проекта фиксировать:
+
+- версию стандарта;
+- конкретный Git commit `AE-Development-Rules`;
+- дату принятия baseline;
+- проектные дополнения или отклонения, если они существуют.
+
+Проект не обязан автоматически переходить на каждое изменение общего стандарта посреди release cycle.
+
+Обновление baseline стандарта выполнять осознанно:
+
+1. посмотреть изменения правил;
+2. определить, какие новые требования применимы;
+3. обновить проектную автоматизацию / документацию;
+4. зафиксировать новый commit стандарта.
+
+Для нового проекта использовать актуальную стабильную версию стандарта, если нет документированной причины выбрать другую.
+
+Изменения самого стандарта версионировать по принципу:
+
+- **major** — несовместимое изменение обязательного процесса или смысла release gate;
+- **minor** — новое существенное требование, проверка или reusable capability без отмены существующего контракта;
+- **patch** — уточнение, исправление формулировки, template/script fix без изменения обязательного смысла.
+
+Версия стандарта не заменяет commit SHA: для воспроизводимости milestone хранить оба.
+
+---
+
+## 35. Dependencies, licenses, vulnerability audit и SBOM
+
+Все сторонние зависимости, попадающие в production artifact или необходимые для его выполнения, должны быть известны.
+
+Для release по применимости фиксировать:
+
+- название и точную версию зависимости;
+- источник;
+- лицензию;
+- способ pinning / lockfile;
+- входит ли зависимость в distributable;
+- известные обязательства по NOTICE / attribution / source offer;
+- известные security advisories, относящиеся к используемой версии.
+
+Не использовать dependency с несовместимой лицензией или известной критической уязвимостью без документированного решения.
+
+Для package ecosystems использовать применимый vulnerability scanner, например ecosystem-native audit или эквивалент, но конкретный scanner не является частью обязательного стандарта.
+
+Результат security audit должен различать:
+
+- **PASS** — известных blocking advisories в проверенном scope нет;
+- **FAIL** — найден blocking security issue;
+- **BLOCKED** — audit source / scanner недоступен;
+- **NOT RUN** — audit не выполнялся;
+- **N/A** — внешних production dependencies нет или audit неприменим с объяснением.
+
+Для dependency-heavy, multi-component или публично распространяемых продуктов рекомендуется формировать SBOM в стандартном машинно-читаемом формате, например CycloneDX или SPDX.
+
+SBOM не заменяет vulnerability audit и license review.
+
+Dependency update считать обычным production change: после обновления выполнить затронутые regression / compatibility / performance проверки.
+
+---
+
+## 36. Product versioning, changelog и migration contract
+
+У продукта должен быть один authoritative source версии, из которого по возможности генерируются:
+
+- bundle / executable metadata;
+- About / Diagnostics;
+- package / installer version;
+- release record;
+- user-visible version.
+
+Не поддерживать несколько вручную редактируемых несвязанных version strings.
+
+Для публичного продукта использовать предсказуемую versioning policy. SemVer рекомендуется, если его смысл соответствует продукту:
+
+- **major** — пользовательски или project-data несовместимое изменение;
+- **minor** — обратно совместимая новая функциональность;
+- **patch** — обратно совместимое исправление.
+
+Если используется другая схема, её смысл должен быть документирован.
+
+Отдельно учитывать совместимость:
+
+- parameter IDs / order / types;
+- serialized project data;
+- presets;
+- saved settings;
+- helper protocol;
+- installer/update state.
+
+Breaking project-file / preset / protocol change требует migration plan либо явного unsupported transition.
+
+Для каждого публичного release вести changelog или release notes с минимумом:
+
+- версия;
+- дата;
+- основные изменения;
+- исправления;
+- compatibility changes;
+- migration notes;
+- известные ограничения.
+
+Changelog не является Evidence и не должен заявлять больше, чем подтверждено release record.
+
+---
+
+## 37. Безопасность обновления продукта
+
+Если продукт умеет автоматически или полуавтоматически проверять, скачивать или устанавливать обновления, update path считается security-critical.
+
+По применимости требуется:
+
+- HTTPS или эквивалентный защищённый transport;
+- проверка origin / endpoint;
+- проверка подписи или криптографической целостности update artifact;
+- защита от path traversal и подмены destination;
+- запрет исполнения недоверенного downloaded content до успешной verification;
+- version / compatibility validation;
+- безопасное поведение при partial download;
+- rollback / recovery plan при failed update;
+- защита от downgrade, если downgrade создаёт известный security risk;
+- отсутствие secrets / permanent credentials в client artifact.
+
+Update metadata считать недоверенным входом до проверки.
+
+Нельзя считать hash, полученный из того же недоверенного канала рядом с artifact, полноценным доказательством подлинности без защищённого trust mechanism.
+
+Если обновление выполняется внешним installer / marketplace / package manager, документировать boundary ответственности и проверять собственную часть процесса.
+
+---
+
+## 38. Crash diagnostics, symbols и post-release debugging
+
+Для native plugins, helpers и других crash-capable компонентов заранее определить, как диагностировать production crash.
+
+По применимости сохранять для каждого release:
+
+- точный Build ID;
+- финальный binary hash;
+- macOS dSYM;
+- Windows PDB;
+- map files или другие symbols, если используются;
+- toolchain / optimization profile;
+- связь symbols с конкретным artifact.
+
+Symbols должны храниться так, чтобы их нельзя было перепутать между builds.
+
+Не публиковать private symbols пользователю без необходимости.
+
+Crash report / dump должен быть сопоставим с Build ID или другим однозначным identity.
+
+При сборе crash diagnostics соблюдать privacy:
+
+- не собирать содержимое пользовательского проекта без необходимости;
+- не отправлять пользовательские файлы автоматически;
+- удалять / редактировать secrets и чувствительные пути;
+- явно описывать telemetry / crash upload, если он существует.
+
+Исправление production crash должно по возможности включать:
+
+1. symbolication;
+2. воспроизводимый или минимальный failing case;
+3. regression test;
+4. проверку fix на идентифицированном artifact.
+
+---
+
+## 39. Accessibility и базовая доступность UI
+
+Для инструментов с собственным UI учитывать доступность пропорционально типу интерфейса и возможностям используемой AE UI-технологии.
+
+По применимости проверять:
+
+- keyboard navigation;
+- логичный focus order;
+- видимый focus state;
+- возможность выполнить основные действия без точного mouse-only interaction;
+- достаточный contrast и различимость состояний;
+- отсутствие передачи критического смысла только цветом;
+- читаемость при HiDPI / scaling;
+- resize без потери основных controls;
+- понятные labels / tooltips для неоднозначных controls;
+- достаточный hit target для интерактивных элементов;
+- поведение при системных accessibility settings, если runtime позволяет их учитывать.
+
+Не обещать screen-reader или другую accessibility support, которую конкретная AE UI-технология фактически не предоставляет или которая не была проверена.
+
+Accessibility limitation должна быть честно указана, если она существенно влияет на использование продукта.
 
 ---
 
