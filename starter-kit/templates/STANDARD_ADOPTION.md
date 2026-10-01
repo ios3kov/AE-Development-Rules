@@ -5,6 +5,10 @@
 - Standard commit: `<commit-sha>`
 - Adopted on: `<date>`
 - Project milestone / release:
+- Current Risk Profile: `Light | Standard | Critical`
+- Current Delivery Gate: `Development | Validation | Release`
+- Rules manifest schema/version:
+- Technology Lifecycle decisions:
 - Adoption owner:
 
 ## Project-specific additions
@@ -15,7 +19,7 @@
 
 For every deviation record:
 
-- Rule / section:
+- Rule ID / canonical section:
 - Reason:
 - Risk:
 - Compensating control:
