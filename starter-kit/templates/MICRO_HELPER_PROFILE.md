@@ -4,7 +4,7 @@
 
 ## Scope check
 
-Все пункты должны быть true, иначе использовать Standard или Release-Critical:
+Все пункты должны быть true, иначе повысить Risk Profile до Standard/Critical по фактическому риску:
 
 - [ ] Небольшой локальный script/helper
 - [ ] Нет network
@@ -26,4 +26,6 @@
 
 ## Escalation triggers
 
-Перевести в Standard / Release-Critical при появлении state, files/network/helpers, installer, публичного distribution, сложной async logic или существенного user-data risk.
+Повысить Risk Profile до Standard/Critical при появлении state, files/network/helpers, installer mechanics, сложной async logic или существенного user-data risk.
+
+Публичный distribution сам по себе не повышает Risk Profile: он переключает Delivery Gate на **Release** и включает применимый Release Gate.
