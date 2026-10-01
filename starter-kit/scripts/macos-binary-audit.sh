@@ -1,5 +1,6 @@
 #!/bin/zsh
 set -euo pipefail
+setopt noclobber
 
 if [[ $# -lt 1 || $# -gt 2 ]]; then
   echo "Usage: $0 <bundle-or-binary> [evidence-file]" >&2
@@ -29,6 +30,15 @@ resolve_binary() {
 }
 
 BIN="$(resolve_binary "$TARGET")"
+[[ ! -e "$OUT" && ! -L "$OUT" ]] || { echo "ERROR: evidence output exists" >&2; exit 2; }
+PARTIAL=0
+probe() {
+  local probe_exit=0
+  "$@" 2>&1 || probe_exit=$?
+  echo "probe_exit=$probe_exit"
+  if [[ "$probe_exit" -ne 0 ]]; then PARTIAL=1; fi
+}
+file "$BIN" | grep -q 'Mach-O' || { echo "INCOMPLETE: target is not Mach-O" >&2; exit 2; }
 
 {
   echo "# macOS binary compatibility evidence"
@@ -39,33 +49,34 @@ BIN="$(resolve_binary "$TARGET")"
   file "$BIN"
   echo
   echo "## architectures"
-  lipo -archs "$BIN" 2>&1 || true
+  probe lipo -archs "$BIN"
   echo
   echo "## build / deployment target"
   if command -v vtool >/dev/null; then
-    vtool -show-build "$BIN" 2>&1 || true
+    probe vtool -show-build "$BIN"
   else
-    otool -l "$BIN" 2>&1 | grep -A5 -E 'LC_BUILD_VERSION|LC_VERSION_MIN_MACOSX' || true
+    probe otool -l "$BIN"
   fi
   echo
   echo "## linked libraries"
-  otool -L "$BIN" 2>&1 || true
+  probe otool -L "$BIN"
   echo
   echo "## undefined external symbols"
-  nm -u "$BIN" 2>&1 || true
+  probe nm -u "$BIN"
   echo
   echo "## signing"
-  codesign -dv --verbose=4 "$TARGET" 2>&1 || true
-  codesign --verify --deep --strict --verbose=2 "$TARGET" 2>&1 || true
+  probe codesign -dv --verbose=4 "$TARGET"
+  probe codesign --verify --deep --strict --verbose=2 "$TARGET"
 } > "$OUT"
 
 {
   echo
   echo "## Collection status"
-  echo "collection_status=COMPLETE"
+  if [[ "$PARTIAL" -eq 0 ]]; then echo "collection_status=COMPLETE"; else echo "collection_status=PARTIAL"; fi
   echo "audit_verdict=NOT_ASSIGNED"
 } >> "$OUT"
 
 echo "Evidence: $OUT"
-echo "Evidence collection: COMPLETE"
+echo "Evidence collection: see per-probe statuses"
+[[ "$PARTIAL" -eq 0 ]] || exit 2
 echo "NOTE: exit code 0 means evidence collection completed; individual probe failures remain evidence and do not mean Compatibility: PASS/VERIFIED."

@@ -1,6 +1,7 @@
 # Reference Audit
 
 ## R0. Reference-driven development
+<!-- REQ: REF-001 -->
 
 Reference Audit — обязательный условный этап для задач, где пользователь выбрал **конкретный внешний продукт / artifact как референс, основу, аналог или parity target**.
 

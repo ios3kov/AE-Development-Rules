@@ -6,7 +6,7 @@
 
 ## Версия стандарта
 
-**Текущий стабильный baseline: v4.0.0**
+**Версия этой ветки: v4.1.0 (кандидат). Опубликованный стабильный baseline: v4.0.0.**
 
 - [VERSION](VERSION)
 - [CHANGELOG.md](CHANGELOG.md)
@@ -61,3 +61,13 @@
 - [starter-kit/README.md](starter-kit/README.md)
 
 Набор обобщает автоматизацию и Evidence-паттерны, уже использованные в наших AE-проектах.
+
+## Проверки и внедрение
+
+- [План и результаты исправления аудита](docs/AUDIT_REMEDIATION.md)
+- [Идентификаторы требований](REQUIREMENTS.json)
+- [Заполненные примеры Native, JSX и CEP](starter-kit/examples/adoption/README.md)
+- [Evidence lifecycle](core/EVIDENCE_LIFECYCLE.md)
+- [Порядок изменения стандарта](CONTRIBUTING.md)
+
+Скрипты требуют Node.js 22+; POSIX wrappers также требуют zsh. При копировании сохранять весь каталог `scripts`, включая `lib`, и соответствующие schemas/registry для project-record tooling.

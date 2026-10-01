@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.1.0 — Unreleased
+
+Audit remediation A01–A13; enforcement of existing safety/Evidence requirements and corrections to contradictory milestone/micro-helper routing. No new universal MUST is introduced. Previously compliant projects keep their requirements; tooling integration needs the migration below.
+
+- Exclusive immutable artifact records bind types, relative paths, modes, safe internal symlinks and payload hashes; verifier detects changes.
+- Missing tools/input and incomplete probes fail closed; API collector preserves explicit inventory coverage.
+- Dependency report history survives identical clock stamps; zsh hashing preserves PATH and traversal errors propagate.
+- Native helper states structural scope and refuses empty resources; PiPL semantics and AE load remain separate.
+- Explicit macOS stapling/applicability and Windows timestamp gates.
+- Strict manifest schema 3, routing scenario tests and stable requirement IDs.
+- Optional project-record validator, filled adoption examples and numeric RGBA fixtures/comparator.
+- Evidence lifecycle, deviation ownership, source claim registry and contribution/release governance.
+- CI declares required platform subsets and disables retained checkout credentials.
+
+### Tooling migration
+
+Copy scripts with their lib directory. Node 22+ is required. `rules-manifest.yaml` uses JSON notation (valid YAML 1.2); schema 3 replaces free-form rule lists with structured inheritance/rules. Existing artifact/binary evidence output directories/files cannot be reused. Dependency reports may share a history directory, with fresh UUID names and exclusive files. Binary collectors return 2 for incomplete collection. Configure macOS local/public and required/na stapling policy explicitly; a documented N/A requires AE_STAPLING_NA_REASON. Windows timestamp is required by default; LocalCheck intentionally excludes that public-release gate. Never upgrade a baseline in a frozen release cycle automatically.
+
 ## 4.0.0 — 2026-10-01
 
 Breaking process release: для задач, где пользователь явно выбирает конкретный внешний продукт/artifact как **референс, основу, аналог или parity target**, введён обязательный conditional **Reference Audit** до Technical Design соответствующего scope.
@@ -20,7 +38,9 @@ Breaking process release: для задач, где пользователь я�
 - `rules-manifest.yaml` обновлён до schema 2 и содержит conditional Rule Group `REFERENCE-AUDIT` с trigger `explicit_external_reference`.
 - Self-test блокирует release стандарта при потере trigger semantics, Reference Claim Status, Coverage Map, parity contract или Reference Specification template.
 
-### Migration from 3.x
+#Dependency collectors also preserve history on identical clock stamps; the POSIX collector no longer changes PATH via zsh’s special path variable and propagates directory traversal errors.
+
+## Migration from 3.x
 
 Проект, переходящий на 4.0, должен:
 

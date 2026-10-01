@@ -15,7 +15,7 @@ function fail(message) { errors.push(message); }
 function warn(message) { warnings.push(message); }
 function rel(p) { return path.relative(repoRoot, p).split(path.sep).join("/"); }
 function run(cmd, args, options = {}) {
-  return spawnSync(cmd, args, { cwd: repoRoot, encoding: "utf8", ...options });
+  return spawnSync(cmd, args, { cwd: repoRoot, encoding: "utf8", timeout: 120000, maxBuffer: 8 * 1024 * 1024, ...options });
 }
 function walk(dir) {
   const out = [];
@@ -52,6 +52,11 @@ const required = [
   "starter-kit/README.md",
   "starter-kit/scripts/generate-applicability.mjs",
   "starter-kit/tests/behavioral-smoke.mjs",
+  "starter-kit/tests/hardening.mjs",
+  "starter-kit/tests/contracts.mjs",
+  "starter-kit/schemas/rules-manifest.schema.json",
+  "REQUIREMENTS.json",
+  "CONTRIBUTING.md",
   "starter-kit/templates/REFERENCE_SPECIFICATION_TEMPLATE.md",
   "starter-kit/templates/PRODUCT_DISCOVERY_TEMPLATE.md",
   "starter-kit/templates/VALIDATION_CHECKLIST.md",
@@ -163,21 +168,6 @@ if (fs.existsSync(referenceTemplatePath)) {
   }
 }
 
-const manifestContractPath = path.join(repoRoot, "rules-manifest.yaml");
-if (fs.existsSync(manifestContractPath)) {
-  const manifestContract = fs.readFileSync(manifestContractPath, "utf8");
-  for (const requiredText of [
-    "schema_version: 2",
-    "id: REFERENCE-AUDIT",
-    "section: \"R0\"",
-    "source: REFERENCE_AUDIT.md",
-    "applicability: conditional",
-    "trigger: explicit_external_reference"
-  ]) {
-    if (!manifestContract.includes(requiredText)) fail("rules-manifest.yaml missing Reference Audit contract: " + requiredText);
-  }
-}
-
 const adoptionTemplatePath = path.join(repoRoot, "starter-kit", "templates", "STANDARD_ADOPTION.md");
 if (fs.existsSync(adoptionTemplatePath)) {
   const adoption = fs.readFileSync(adoptionTemplatePath, "utf8");
@@ -243,12 +233,14 @@ if (fs.existsSync(sourcesPath)) {
     const dateMatch = text.match(/^- Last verified: (\d{4}-\d{2}-\d{2})$/m);
     const intervalMatch = text.match(/^- Refresh interval days: (\d+)$/m);
     const urlMatch = text.match(/^- URL: https:\/\//m);
-    if (!dateMatch || !intervalMatch || !urlMatch) {
+    const claimMatch = text.match(/^- Claim: .+/m);
+    if (!dateMatch || !intervalMatch || !urlMatch || !claimMatch) {
       fail(id + " is missing URL/date/refresh interval");
       continue;
     }
     const ageDays = Math.floor((Date.now() - Date.parse(dateMatch[1] + "T00:00:00Z")) / 86400000);
     const interval = Number(intervalMatch[1]);
+    if (!Number.isFinite(ageDays) || interval <= 0 || new Date(dateMatch[1]).toISOString().slice(0,10) !== dateMatch[1]) { fail(id + " invalid date/interval"); continue; }
     if (ageDays < -1) fail(id + " Last verified date is in the future");
     if (ageDays > interval) fail(id + " source is stale: " + ageDays + " days > " + interval);
   }
@@ -381,7 +373,20 @@ for (const file of files.filter((p) => /\.ya?ml$/i.test(p))) {
 const behavioral = path.join(repoRoot, "starter-kit", "tests", "behavioral-smoke.mjs");
 if (fs.existsSync(behavioral)) {
   const r = run(process.execPath, [behavioral]);
+  process.stdout.write(r.stdout || "");
   if (r.status !== 0) fail("starter-kit behavioral smoke failed: " + (r.stderr || r.stdout).trim());
+}
+
+// Required subset is explicit for each runner. Structural checks are not semantic proof.
+const requirePosix = process.argv.includes("--require-posix");
+const requirePowerShell = process.argv.includes("--require-powershell");
+if (requirePosix && (process.platform === "win32" || run("zsh", ["--version"]).status !== 0)) fail("required POSIX runtime unavailable");
+if (requirePowerShell && !ps) fail("required PowerShell runtime unavailable");
+console.log("coverage: Node=RUN; POSIX=" + (process.platform !== "win32" && run("zsh", ["--version"]).status === 0 ? "RUN" : "NOT RUN") + "; PowerShell=" + (ps ? "RUN" : "NOT RUN"));
+for (const suite of ["hardening.mjs", "contracts.mjs"]) {
+  const r = run(process.execPath, [path.join(repoRoot, "starter-kit/tests", suite)]);
+  process.stdout.write(r.stdout || "");
+  if (r.status !== 0) fail(suite + ": " + (r.stderr || r.stdout).trim());
 }
 
 if (!dryRun) warn("self-test does not mutate repository files; --dry-run documents release intent");

@@ -9,7 +9,8 @@ if (-not $root) { throw "Run inside a Git repository" }
 
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 $stamp = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
-$report = Join-Path $OutputDir "dependency-evidence-$stamp.txt"
+$runId = [guid]::NewGuid().ToString()
+$report = Join-Path $OutputDir "dependency-evidence-$stamp-$runId.txt"
 
 $names = @(
     "package.json","package-lock.json","npm-shrinkwrap.json","pnpm-lock.yaml","yarn.lock",
@@ -21,6 +22,7 @@ $names = @(
 $lines = New-Object System.Collections.Generic.List[string]
 $lines.Add("# Dependency evidence")
 $lines.Add("utc=$stamp")
+$lines.Add("run_id=$runId")
 $lines.Add("repo=$root")
 $lines.Add("commit=$(git -C $root rev-parse HEAD)")
 $lines.Add("")
@@ -52,6 +54,10 @@ $lines.Add("This inventories local dependency sources only.")
 $lines.Add("Run an ecosystem-appropriate vulnerability scanner separately and record PASS/FAIL/BLOCKED/NOT RUN/N/A.")
 $lines.Add("For public dependency-heavy products, generate an SPDX or CycloneDX SBOM where practical.")
 
-$lines | Set-Content -Encoding UTF8 $report
+$outputPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($report)
+$stream = [System.IO.File]::Open($outputPath, [System.IO.FileMode]::CreateNew, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+$writer = [System.IO.StreamWriter]::new($stream, [System.Text.UTF8Encoding]::new($true))
+try { foreach ($line in $lines) { $writer.WriteLine($line) } }
+finally { $writer.Dispose() }
 Get-Content $report
 Write-Host "Evidence: $report"

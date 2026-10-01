@@ -5,6 +5,7 @@ Validation/Release gates и platform distribution requirements. Release — Deli
 Нумерация § сохранена глобально для стабильных ссылок из manifest/templates.
 
 ## 26. Validation Gate и Release Gate
+<!-- REQ: GATE-001 -->
 
 Передача тестового artifact пользователю для ограниченной проверки и финальный release — разные события.
 
@@ -103,6 +104,7 @@ Validation Build можно передать пользователю, когд�
 ---
 
 ## 28. Публичный macOS-дистрибутив без предупреждений Gatekeeper
+<!-- REQ: MAC-001 -->
 
 Этот gate применяется не «ко всему, что работает на macOS», а к **публичному distributable, содержащему исполняемый native code, app/helper, installer или другой artifact, для которого macOS code signing / notarization реально являются частью штатной доставки**.
 
@@ -265,6 +267,7 @@ Platform-specific реализации одного и того же польз�
 ---
 
 ## 30. Публичный Windows-дистрибутив и release gate
+<!-- REQ: WIN-001 -->
 
 Этот gate применяется к публичному Windows distributable, когда продукт содержит **PE/native executable code, helper/app, installer или иной компонент, для которого Authenticode / Windows security checks реально относятся к штатной доставке**.
 
@@ -330,3 +333,7 @@ SmartScreen reputation и предупреждения, зависящие от 
 
 ---
 
+
+## Source and tooling boundary
+
+Time-sensitive platform claims: [SRC-APPLE-NOTARIZATION / SRC-MICROSOFT-TIMESTAMP / SRC-ADOBE-CEP-DISTRIBUTION](../SOURCES.md). `macos-bundle-verify.sh` selects local/public scope and explicit required/N/A stapling policy. `windows-release-verify.ps1` requires timestamp evidence by default; LocalCheck is limited local verification. A structural native-bundle PASS does not verify PiPL contents, arbitrary custom entry contracts, dependency policy or AE registration. Project-specific gates remain responsible for these checks.

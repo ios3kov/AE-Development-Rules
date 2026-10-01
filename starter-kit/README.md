@@ -24,7 +24,8 @@ Self-test не меняет repository files. Он проверяет:
 - опасные destructive patterns;
 - legacy terminology;
 - immutable SHA pinning GitHub Actions;
-- behavioural smoke tests starter-kit scripts в изолированном temp workspace.
+- behavioural smoke tests и negative regressions A01–A13 в изолированном temp workspace;
+- строгие manifest/project-record schemas, routing scenarios, requirement markers и численные render fixtures.
 
 CI запускает тот же self-test на Linux, macOS и Windows через `.github/workflows/starter-kit-self-test.yml`.
 
@@ -47,7 +48,7 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 - `scripts/windows-binary-audit.ps1` — evidence collector для PE/dependencies/AuthentiCode; report содержит collection status, а exit 0 не означает compatibility PASS.
 - `scripts/windows-release-verify.ps1` — SHA-256/AuthentiCode/Zone.Identifier release evidence.
 - `scripts/create-owned-test-workspace.sh` — создаёт уникальный fail-closed workspace для AE runtime tests.
-- `scripts/verify-native-effect-bundle-macos.sh` — проверяет структуру native effect bundle, AE exports, PiPL/resources, dependencies и подпись.
+- `scripts/verify-native-effect-bundle-macos.sh` — проверяет ограниченный structural scope native effect bundle, ожидаемые exports, наличие непустых resources и подпись; PiPL semantics, dependency policy и реальная AE load требуют отдельных checks.
 
 ## Templates
 
@@ -111,3 +112,22 @@ CI не заменяет runtime AE verification, если runner не имее�
 - `examples/github-actions/cross-platform-preflight.yml` — минимальная macOS + Windows preflight matrix.
 
 Обе CI-ветки проверяют только то, что доступно runner. Runtime After Effects verification остаётся отдельным Evidence на каждой платформе.
+
+## Audit hardening tools
+
+Node.js 22+ is required. Copy complete scripts/lib dependencies, schemas and REQUIREMENTS.json when using record validation.
+
+- `record-artifact.mjs` and wrapper: exclusive new Evidence directory, canonical manifest with types/modes/safe internal symlinks. `SHA256.txt` hashes the canonical manifest; final package bytes have a separate file hash in the manifest.
+- `verify-artifact.mjs ARTIFACT artifact-record.json`: compare sealed payload; does not prove record authenticity. Never trust an attacker-controlled record as policy.
+- `validate-project-record.mjs RECORD.json`: validate the optional [schema](schemas/project-record.schema.json), check Evidence hashes/revision and required results. Record selection/approval remains trusted project policy; successful evaluation does not certify release.
+- [Filled adoption examples](examples/adoption/README.md), [render fixtures](examples/render/README.md), [requirement registry](../REQUIREMENTS.json).
+- `compare-render.mjs REFERENCE.json ACTUAL.json MAX_ABS_ERROR [NEW_DIFF.json]`: explicit tolerance, same dimensions/color/alpha/bpc; no implicit conversion.
+- `check-extendscript.mjs`: Node syntax subset plus target/targetengine/script/strict directives and literal relative includes. Unsupported directives, E4X and true ES3 checks need project-specific tooling; no JSX is executed.
+- `macos-bundle-verify.sh target new-report local|public required|na`: public mode requires quarantine; required stapling failure blocks; N/A needs AE_STAPLING_NA_REASON. App/pkg/dmg Gatekeeper assessment differs; a plugin alone needs separate distribution/host checks.
+- `windows-release-verify.ps1`: timestamp verification required by default; `-LocalCheck` permits explicitly limited local signature checking.
+- `preflight`: unstaged/staged checks and optional AE_PREFLIGHT_BASE_REF diff; missing Node/npm with package.json or non-executable present hooks block. A project check list must be selected before running.
+- Evidence collectors never reuse output paths. A binary collector exit 2 means incomplete collection; signing errors also remain visible as individual probe outcomes.
+
+Self-test coverage is printed. CI requires POSIX on Linux/macOS and PowerShell on Windows. A skipped platform check is NOT RUN; structural keyword checks only protect document structure. Semantic routing and A01–A13 negative fixtures run separately.
+
+CI требует POSIX runtime на Linux/macOS и PowerShell на Windows. В отчёте явно указаны RUN/NOT RUN и platform skips; платформенная проверка не считается выполненной на другом runner. Примеры CI передают базовый commit PR в preflight; локально тот же scope задаётся через `AE_PREFLIGHT_BASE_REF`.
