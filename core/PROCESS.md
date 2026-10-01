@@ -8,6 +8,14 @@
 
 При AI-assisted работе сначала применяется [AI_ENTRYPOINT.md](../AI_ENTRYPOINT.md). ИИ самостоятельно классифицирует запрос и выбирает применимые internal rules; пользователь не обязан знать или выбирать Risk Profile / Delivery Gate / Stage 0.
 
+## Reference Audit prerequisite
+
+Если пользователь явно обозначил конкретный внешний продукт/artifact как референс, основу, аналог или parity target, MUST применяться [Reference Audit](../REFERENCE_AUDIT.md) в соответствующем scope.
+
+Для whole-product analogue нельзя начинать Technical Design после поверхностного просмотра UI. Сначала требуется Reference Specification с Coverage Map, evidence-backed claims и parity acceptance tests.
+
+Общее описание класса продукта без конкретного reference target этот prerequisite не включает.
+
 ## Stage 0 prerequisite
 
 Перед Product Spec, Technical Design или Production Plan нового продукта / крупной новой функции MUST быть завершён применимый [Stage 0 — Product Discovery и Product Vision](../PRODUCT_DISCOVERY.md).
