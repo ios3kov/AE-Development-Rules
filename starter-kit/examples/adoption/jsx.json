@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "standard": {
+    "version": "4.1.0",
+    "commit": "58d14aa12375757f4e52396d951f1557ae4f453c"
+  },
+  "project": "jsx adoption example (illustrative; not executed)",
+  "components": [
+    "jsx"
+  ],
+  "risk": "light",
+  "delivery": "release",
+  "candidate": {
+    "commit": "0000000000000000000000000000000000000000",
+    "build_id": "illustrative-jsx-not-built",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "source_state": "CLEAN"
+  },
+  "checks": [
+    {
+      "id": "undo-smoke",
+      "requirement": "SAFE-001",
+      "required": true,
+      "revision": "0000000000000000000000000000000000000000",
+      "artifact_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "status": "NOT RUN",
+      "reason": "Demonstration record; target AE check has not run",
+      "evidence": []
+    }
+  ]
+}

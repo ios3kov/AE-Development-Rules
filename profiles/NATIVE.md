@@ -5,6 +5,7 @@
 Нумерация § сохранена глобально для стабильных ссылок из manifest/templates.
 
 ## 23. Дополнительные проверки Native Effects / Render Plugins
+<!-- REQ: RENDER-001 -->
 
 ### Render Context
 

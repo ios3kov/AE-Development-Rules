@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "requirements": [
+    {
+      "id": "ART-001",
+      "source": "core/PROCESS.md",
+      "section": "7",
+      "meaning": "Seal exact artifact entries after post-processing"
+    },
+    {
+      "id": "EVD-001",
+      "source": "core/PROCESS.md",
+      "section": "10",
+      "meaning": "Bind evidence to the checked candidate and scope"
+    },
+    {
+      "id": "SAFE-001",
+      "source": "core/PROCESS.md",
+      "section": "4",
+      "meaning": "Prove test ownership before mutation or cleanup"
+    },
+    {
+      "id": "GATE-001",
+      "source": "profiles/RELEASE.md",
+      "section": "26",
+      "meaning": "Required failures or unavailable checks block release"
+    },
+    {
+      "id": "MAC-001",
+      "source": "profiles/RELEASE.md",
+      "section": "28",
+      "meaning": "Apply signing, notarization and stapling by actual format"
+    },
+    {
+      "id": "WIN-001",
+      "source": "profiles/RELEASE.md",
+      "section": "30",
+      "meaning": "Verify signature and timestamp for public executables"
+    },
+    {
+      "id": "COMPAT-001",
+      "source": "core/ENGINEERING.md",
+      "section": "21",
+      "meaning": "Runtime evidence establishes verified compatibility"
+    },
+    {
+      "id": "RENDER-001",
+      "source": "profiles/NATIVE.md",
+      "section": "23",
+      "meaning": "Define numerical tolerance and verify pixel correctness"
+    },
+    {
+      "id": "REF-001",
+      "source": "REFERENCE_AUDIT.md",
+      "section": "R0",
+      "meaning": "Explicit reference requires scoped specification and parity"
+    },
+    {
+      "id": "ROUTE-001",
+      "source": "AI_ENTRYPOINT.md",
+      "section": "3",
+      "meaning": "Risk and delivery remain independent"
+    }
+  ]
+}

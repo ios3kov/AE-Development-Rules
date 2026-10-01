@@ -1,13 +1,22 @@
 #!/bin/zsh
 set -euo pipefail
+setopt noclobber
 
-if [[ $# -lt 1 || $# -gt 2 ]]; then
-  echo "Usage: $0 <signed-bundle> [evidence-file]" >&2
+if [[ $# -lt 1 || $# -gt 4 ]]; then
+  echo "Usage: $0 <target> [NEW-evidence-file] [local|public] [required|na]" >&2
   exit 2
 fi
 
 BUNDLE="$1"
 OUT="${2:-macos-bundle-verify.txt}"
+MODE="${3:-local}"
+STAPLING="${4:-required}"
+[[ "$MODE" == "local" || "$MODE" == "public" ]] || { echo "ERROR: invalid mode" >&2; exit 2; }
+[[ "$STAPLING" == "required" || "$STAPLING" == "na" ]] || { echo "ERROR: invalid stapling policy" >&2; exit 2; }
+if [[ "$STAPLING" == "na" && -z "${AE_STAPLING_NA_REASON:-}" ]]; then
+  echo "BLOCKED: N/A requires AE_STAPLING_NA_REASON" >&2; exit 2
+fi
+[[ ! -e "$OUT" && ! -L "$OUT" ]] || { echo "ERROR: evidence output exists" >&2; exit 2; }
 [[ -e "$BUNDLE" ]] || { echo "ERROR: bundle not found: $BUNDLE" >&2; exit 1; }
 
 FAIL=0
@@ -21,6 +30,7 @@ FAIL=0
   else
     echo "quarantine=missing"
     echo "WARNING: public distribution check must use the actually downloaded quarantined artifact."
+    if [[ "$MODE" == "public" ]]; then FAIL=1; fi
   fi
   echo
   echo "## codesign"
@@ -33,14 +43,23 @@ FAIL=0
   codesign -dv --verbose=4 "$BUNDLE" 2>&1 || true
   echo
   echo "## stapler"
-  if xcrun stapler validate "$BUNDLE" 2>&1; then
+  if [[ "$STAPLING" == "na" ]]; then
+    echo "stapler=N/A reason=$AE_STAPLING_NA_REASON"
+  elif xcrun stapler validate "$BUNDLE" 2>&1; then
     echo "stapler=PASS"
   else
-    echo "stapler=FAIL_OR_NOT_APPLICABLE"
+    echo "stapler=FAIL"
+    FAIL=1
   fi
   echo
   echo "## Gatekeeper"
-  if spctl --assess --verbose=4 "$BUNDLE" 2>&1; then
+  case "$BUNDLE" in
+    *.pkg) ASSESS_TYPE=install ;;
+    *.dmg) ASSESS_TYPE=open ;;
+    *.app) ASSESS_TYPE=execute ;;
+    *) echo "BLOCKED: assess final app/pkg/dmg; native plugin alone needs a project-specific host/distribution test"; FAIL=1; ASSESS_TYPE="" ;;
+  esac
+  if [[ -n "$ASSESS_TYPE" ]] && spctl --assess --type "$ASSESS_TYPE" --verbose=4 "$BUNDLE" 2>&1; then
     echo "spctl=PASS"
   else
     echo "spctl=FAIL"
@@ -50,5 +69,5 @@ FAIL=0
 
 cat "$OUT"
 [[ "$FAIL" -eq 0 ]] || exit 1
-echo "PASS: local signing/Gatekeeper checks passed."
+echo "PASS: selected $MODE signing/stapling/Gatekeeper checks passed."
 echo "NOTE: still requires real quarantined download -> install -> host launch smoke test."

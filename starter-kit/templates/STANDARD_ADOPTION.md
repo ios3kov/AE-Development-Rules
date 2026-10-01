@@ -25,6 +25,10 @@
 For every deviation record:
 
 - Rule ID / canonical section:
+- Deviation owner:
+- Accepted by (actual decision-maker):
+- Accepted on:
+- Release-blocking condition:
 - Reason:
 - Risk:
 - Compensating control:

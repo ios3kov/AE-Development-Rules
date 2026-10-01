@@ -424,6 +424,7 @@ Evidence старой версии можно использовать как и
 ---
 
 ## 21. Совместимость и применимость технологий
+<!-- REQ: COMPAT-001 -->
 
 ### Technology Lifecycle Status
 
@@ -1241,3 +1242,7 @@ Host-specific correctness — buffer ownership, suites, MFR, SmartFX, color mana
 Проверенная версия — не то же самое, что любая следующая сборка.  
 Передавать нужно именно тот artifact, для которого есть актуальные доказательства.**
 
+
+## Adoption and Evidence tools
+
+[Requirement registry](../REQUIREMENTS.json), [Evidence lifecycle](EVIDENCE_LIFECYCLE.md), [filled adoption examples](../starter-kit/examples/adoption/README.md) and [numeric render fixtures](../starter-kit/examples/render/README.md) provide optional reusable implementations of existing requirements. They do not make a new universal process mandatory. Manifest schema 3 uses structured inheritance and rule arrays in JSON notation, a YAML 1.2 subset. Project-record evaluation validates declared Evidence and identity; policy ownership, runtime correctness and approval remain separate.

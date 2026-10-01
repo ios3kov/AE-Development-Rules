@@ -12,7 +12,7 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "ae-rules-smoke-"));
 const errors = [];
 
 function run(cmd, args, opts = {}) {
-  return spawnSync(cmd, args, { encoding: "utf8", ...opts });
+  return spawnSync(cmd, args, { encoding: "utf8", timeout: 30000, ...opts });
 }
 function expect(condition, message) {
   if (!condition) errors.push(message);
@@ -58,7 +58,7 @@ try {
       expect(r.status === 0, "record-artifact should produce evidence");
       expect(fs.existsSync(path.join(evidence, "SHA256.txt")), "record-artifact should write SHA256 evidence");
 
-      const ownedRoot = path.join(tmp, "owned-workspaces");
+      const ownedRoot = path.join(fs.realpathSync(tmp), "owned-workspaces");
       r = run("zsh", [path.join(scripts, "create-owned-test-workspace.sh")], { cwd: repo, env: { ...process.env, AE_TEST_WORKSPACE_ROOT: ownedRoot } });
       expect(r.status === 0, "create-owned-test-workspace should create owned workspace");
       const workspace = (r.stdout || "").trim().split(/\r?\n/)[0];

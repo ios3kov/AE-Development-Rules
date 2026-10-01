@@ -33,6 +33,9 @@ echo "[PiPL/resources]"
 RSRC_COUNT="$(find "$BUNDLE/Contents/Resources" -maxdepth 1 -type f -name '*.rsrc' 2>/dev/null | wc -l | tr -d ' ')"
 [[ "$RSRC_COUNT" -gt 0 ]] || { echo "ERROR: no .rsrc/PiPL resource found" >&2; exit 1; }
 find "$BUNDLE/Contents/Resources" -maxdepth 1 -type f -name '*.rsrc' -print
+while IFS= read -r resource; do
+  [[ -s "$resource" ]] || { echo "FAIL: empty resource: $resource" >&2; exit 1; }
+done < <(find "$BUNDLE/Contents/Resources" -maxdepth 1 -type f -name '*.rsrc')
 
 echo "[dynamic dependencies]"
 otool -L "$BIN"
@@ -45,4 +48,4 @@ echo "[hashes]"
 shasum -a 256 "$BIN" "$PLIST"
 find "$BUNDLE/Contents/Resources" -maxdepth 1 -type f -name '*.rsrc' -exec shasum -a 256 {} \;
 
-echo "native effect bundle verification: PASS"
+echo "PASS: bundle structural checks only\npipl_semantics=NOT_RUN\nNOTE: resource contents, suite/flags contract, dependency policy and AE load require project-specific verification"

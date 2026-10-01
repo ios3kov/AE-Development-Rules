@@ -21,11 +21,27 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            flags: --require-posix
+          - os: macos-latest
+            flags: --require-posix
+          - os: windows-latest
+            flags: --require-powershell
 
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: "22"
+      - name: Check committed PR whitespace
+        if: github.event_name == 'pull_request'
+        run: git diff --check ${{ github.event.pull_request.base.sha }} HEAD
+      - name: Provision required POSIX runtime
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y zsh
       - name: Run standard self-test
-        run: node starter-kit/scripts/self-test.mjs --dry-run
+        run: node starter-kit/scripts/self-test.mjs --dry-run ${{ matrix.flags }}
