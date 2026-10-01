@@ -102,7 +102,6 @@ Critical не означает Release. Низкорисковый patch мож�
 Для смешанного продукта использовать объединение профилей его компонентов. Например, UXP panel с native helper проверяется как UXP + Helper, а native addon получает отдельные platform requirements.
 
 Организационный порядок работы и формат коротких статусов вынесены в [WORKFLOW.md](WORKFLOW.md).
----
 
 ---
 
