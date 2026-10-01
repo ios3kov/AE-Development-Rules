@@ -6,7 +6,7 @@
 
 ## Версия стандарта
 
-**Текущий стабильный baseline: v3.1.1**
+**Текущий стабильный baseline: v4.0.0**
 
 - [VERSION](VERSION)
 - [CHANGELOG.md](CHANGELOG.md)
