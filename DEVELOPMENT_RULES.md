@@ -122,6 +122,21 @@
 
 §26–28 относятся к финальной передаче / release и другим явно указанным там сценариям; они не должны механически применяться к каждой микроправке, если эта правка ещё не является кандидатом на передачу или release.
 
+### Адаптация для малых команд и solo-разработки
+
+Размер команды сам по себе не является причиной ослаблять требования безопасности, корректности или финального release gate.
+
+Для небольшой команды или одного разработчика:
+
+- использовать режимы Light / Standard / Release-Critical как основной механизм снижения процессного трения;
+- объединять роли разработки, review, QA и release допускается, если фактически выполненные проверки и Evidence остаются явными;
+- автоматизировать повторяемые проверки раньше, чем добавлять новые ручные ритуалы;
+- не требовать отдельный CI/CD сервер, если эквивалентные проверки воспроизводимо запускаются локально одной командой;
+- не создавать документы ради документов: достаточно минимальной записи, которая сохраняет решение, результат и Evidence;
+- критические проверки, связанные с сохранностью пользовательских данных, runtime-корректностью, artifact identity, compatibility и публичным release, не пропускать из-за размера команды.
+
+Если процесс оказывается слишком тяжёлым для конкретного проекта, сначала уменьшить scope и автоматизировать рутину, а не удалять проверку существенного риска.
+
 ---
 
 ## 2. Контролируемое и чистое тестирование
@@ -306,6 +321,30 @@ Research должен быть соразмерен задаче. Не повт�
 - безопасную очистку после завершения.
 
 Отсутствие явного результата не считается PASS.
+
+### Практическая автоматизация и CI
+
+Правила не привязаны к конкретному CI/CD продукту. Допустимы GitHub Actions, GitLab CI, Jenkins, Buildkite, локальные scripts или другая система, если она воспроизводимо выполняет требуемые проверки.
+
+Предпочтительно иметь одну понятную entry point команду, например `./scripts/preflight.sh`, которая запускает применимый набор быстрых проверок для текущего проекта.
+
+Для проектов по применимости автоматизировать:
+
+- build / package;
+- `git diff --check` и статические проверки;
+- unit / integration tests;
+- syntax / type checks;
+- Build Identity и SHA-256;
+- packaging sanity;
+- compatibility inventory;
+- безопасные non-interactive AE tests;
+- release checks, которые технически можно выполнить без ручного UI.
+
+Инструменты выбираются по стеку проекта. Например, pytest допустим для Python tooling, Node test runners / TypeScript для JS/TS, CTest или собственные harnesses для C/C++, но конкретный framework не является обязательным стандартом.
+
+CI должен вызывать те же scripts, которые можно запустить локально, а не содержать отдельную скрытую реализацию проверок.
+
+Автоматизация не должна превращать недоступный runtime test в PASS. Если CI не имеет After Effects или нужной платформы, соответствующая проверка остаётся BLOCKED / NOT RUN.
 
 ---
 
@@ -796,6 +835,34 @@ Test reports и release records предпочтительно хранить о
 
 Сторонние компоненты должны быть необходимыми, лицензируемыми и поддерживаемыми.
 
+### Защита пользователя и недоверенные входные данные
+
+Любые данные вне полного контроля инструмента считать потенциально недоверенными по применимости:
+
+- пути и имена файлов;
+- содержимое проектов и metadata;
+- импортируемые presets / configs / JSON / text;
+- drag-and-drop input;
+- network responses;
+- IPC / bridge messages;
+- environment variables;
+- данные helper-процессов.
+
+Необходимо:
+
+- валидировать тип, размер, диапазон и структуру входных данных;
+- нормализовать и проверять filesystem paths до чтения, записи, удаления или запуска;
+- защищаться от path traversal и записи вне разрешённой области;
+- не строить shell-команды конкатенацией недоверенных строк;
+- не выполнять полученный извне код, scripts или команды без явно предусмотренного доверенного механизма;
+- ограничивать размеры, количество элементов, retries и timeouts, чтобы malformed input не создавал runaway CPU/RAM/I/O;
+- применять least privilege к filesystem, network, helpers и permissions;
+- fail closed для опасных или неоднозначных операций;
+- требовать явного пользовательского действия перед необратимым destructive operation, если такое действие является частью продукта;
+- проверять update/download mechanism и целостность полученных artifacts, если продукт умеет обновляться или загружать executable content.
+
+UI не должен маскировать destructive действие под безобидную операцию. Название, scope и последствия должны быть понятны до выполнения.
+
 ---
 
 ## 15. Workarounds и технический долг
@@ -1189,6 +1256,26 @@ Evidence старой версии можно использовать как и
 Статический аудит может использоваться для определения **минимальной вероятно совместимой версии After Effects**, но без реального runtime-теста такую версию нельзя называть официально проверенной или подтверждённо поддерживаемой.
 
 Если в пользовательской документации версия обозначается как официально поддерживаемая, для неё должен существовать реальный runtime Evidence в соответствии с матрицей совместимости.
+### Unicode, локализация и региональные настройки
+
+Если инструмент работает с пользовательскими именами, файлами, путями или текстом, проверять по применимости:
+
+- Unicode и не-ASCII имена файлов, folders, comps, layers и project items;
+- кириллицу и другие не-Latin символы;
+- пробелы и специальные символы;
+- различия path separators и filesystem semantics между macOS / Windows;
+- locale-dependent decimal / thousands separators;
+- форматирование чисел, дат и времени;
+- локализованный интерфейс After Effects, если код зависит от UI names / menu text;
+- длину строк, clipping и resize локализованного UI;
+- encoding старых Adobe API / legacy buffers, где UTF-8 не гарантирован.
+
+Не парсить локализованный UI-текст, если существует стабильный ID / host API.
+
+Если продукт заявляет несколько языков интерфейса, для каждого заявленного языка проверить ключевые пользовательские сценарии и отсутствие сломанных строк / layout.
+
+Поддержка Unicode paths и пользовательских имён должна проверяться даже для продукта только с английским UI, если такие данные входят в заявленный scope.
+
 ### UXP и host support
 
 Перед выбором UXP подтвердить:
@@ -1453,6 +1540,25 @@ GPU fallback и отсутствие поддерживаемого GPU долж
 - не поддерживается.
 
 Секреты, персональные данные и чувствительные пользовательские материалы в документацию и публичное Evidence не включать.
+
+### Рекомендуемая структура документации
+
+Для проектов среднего и большого размера предпочтительно хранить canonical engineering documentation в Git рядом с кодом в Markdown или другом текстовом diff-friendly формате.
+
+Рекомендуемая структура:
+
+- `docs/ARCHITECTURE.md` — архитектура и ключевые границы;
+- `docs/STATUS.md` или milestone status records — текущее подтверждённое состояние;
+- `docs/COMPATIBILITY.md` — compatibility matrix;
+- `docs/TEST_RECORDS/` — test records и ссылки на Evidence;
+- `docs/RELEASES/` или release records — финальные кандидаты и release gates;
+- `docs/RETROSPECTIVE-<version>.md` — техническая ретроспектива;
+- `docs/USER_GUIDE.md` — пользовательское руководство;
+- `docs/AE_ENGINEERING_KNOWHOW.md` — reusable AE know-how, если проект является источником общих выводов.
+
+Sphinx, MkDocs, Wiki, сайт или другая система публикации могут использоваться дополнительно, но должен быть определён один canonical source of truth. Генерируемая публичная документация не должна расходиться с ним.
+
+Внутренние Evidence, crash dumps, чувствительные пути и данные пользователей не публиковать только ради единой структуры.
 
 ---
 
@@ -1776,6 +1882,149 @@ GPU fallback и отсутствие поддерживаемого GPU долж
 Если Developer ID, notarization или реальная Gatekeeper-проверка недоступны, статус публичного macOS release — **BLOCKED**, а не PASS.
 
 **Разработка публичного macOS-продукта не считается полностью завершённой, пока пользователю нельзя отдать обычный подписанный и notarized дистрибутив без предупреждений Gatekeeper и без инструкций по обходу защиты macOS.**
+
+---
+
+## 29. Контроль качества и инженерные метрики
+
+Метрики использовать для обнаружения деградаций и улучшения процесса, а не как самоцель и не для оценки отдельных людей.
+
+Не использовать строки кода, количество commits или число тестов как самостоятельную меру качества.
+
+Для активного продукта по применимости отслеживать:
+
+- escaped defects — ошибки, дошедшие до пользователя после release;
+- regression failures по milestone / release;
+- flaky tests и долю нестабильных проверок;
+- crash / hang incidents;
+- performance regressions относительно зафиксированного baseline;
+- открытые critical / high-severity defects;
+- повторно открытые bugs;
+- время от воспроизведения дефекта до подтверждённого fix;
+- количество обязательных ручных release-шагов, которые разумно автоматизировать.
+
+Метрика должна иметь:
+
+- чёткое определение;
+- источник данных;
+- период измерения;
+- сравнимый baseline;
+- объяснение, какое решение она помогает принимать.
+
+Не вводить numeric quality gate без заранее обоснованного threshold.
+
+Если метрика ухудшилась, исследовать причину. Нельзя улучшать показатель формально, например скрывая FAIL, удаляя сложные тесты или переклассифицируя реальные defects.
+
+---
+
+## 30. Методика составления test cases
+
+Каждый значимый риск или acceptance criterion должен иметь явную проверку либо документированную причину отсутствия проверки.
+
+Минимальный test case содержит:
+
+- Test Case ID;
+- требование / риск, который он проверяет;
+- тип проверки: static / unit / integration / runtime AE / performance / release;
+- применимый Build ID / artifact;
+- preconditions и начальное состояние;
+- fixture и доказательство ownership, если тест меняет AE/project/files;
+- шаги или ссылку на versioned test runner;
+- ожидаемый результат;
+- допустимую погрешность, где применимо;
+- фактический результат;
+- статус PASS / FAIL / BLOCKED / NOT RUN / N/A;
+- Evidence;
+- cleanup / recovery;
+- известные ограничения проверки.
+
+### Native effect / render plugin
+
+По применимости включать cases для:
+
+- effect application и default state;
+- parameter boundaries;
+- interactive render / RAM Preview / Render Queue / aerender;
+- SmartFX / MFR;
+- 8 / 16 / 32 bpc;
+- alpha / transparency / extended range;
+- ROI / downsample / pixel aspect;
+- cancellation / repeated render;
+- CPU/GPU parity;
+- save/reopen и cache invalidation;
+- malformed / extreme parameters.
+
+### Scripts / ScriptUI panels
+
+По применимости включать:
+
+- no project / no comp / no selection;
+- wrong selection type;
+- locked / deleted / changed items;
+- first run / repeat run / restart;
+- exception / early return;
+- Undo / Redo;
+- cancel;
+- saved / corrupted state;
+- Unicode paths / names;
+- missing files / permissions.
+
+### CEP / UXP
+
+По применимости включать:
+
+- panel open / close / reload / restart;
+- bridge request / response validation;
+- malformed / empty / delayed response;
+- timeout;
+- duplicate requests / retries;
+- host context changed during async operation;
+- permissions / sandbox;
+- stale state;
+- helper disconnect / recovery;
+- loaded Build Identity.
+
+### Helpers / background processes
+
+По применимости включать:
+
+- startup / shutdown / crash recovery;
+- IPC validation;
+- malformed / oversized messages;
+- permissions;
+- path validation;
+- duplicate instance;
+- timeout / cancellation;
+- cleanup orphaned processes/files;
+- version mismatch between helper and host component.
+
+Test case должен проверять наблюдаемое требование, а не внутреннюю реализацию без необходимости.
+
+Для повторяемых сценариев предпочтителен автоматический runner. Ручной case допустим, если UI/host limitation не позволяет надёжную автоматизацию.
+
+---
+
+## 31. Внедрение стандарта без лишней ручной работы
+
+Общий стандарт должен сопровождаться reusable automation и templates.
+
+Центральный `AE-Development-Rules` starter kit рекомендуется использовать как исходную точку для:
+
+- preflight;
+- CI;
+- Build Identity;
+- artifact hashing;
+- compatibility audit;
+- macOS binary / signing checks;
+- Test Records;
+- release checklist;
+- test-case templates;
+- retrospective;
+- user guide.
+
+Проект может использовать другие инструменты, если они обеспечивают эквивалентный или более сильный контроль.
+
+При появлении в реальном AE-проекте удачного reusable script / test harness / release check необходимо после подтверждения рассмотреть его перенос в общий starter kit, чтобы следующие проекты не строили тот же механизм заново.
 
 ---
 
