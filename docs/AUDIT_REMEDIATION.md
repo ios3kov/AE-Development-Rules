@@ -41,9 +41,9 @@ R8 additions: stable requirement markers/registry, optional project-record schem
 | Local macOS self-test | PASS | Node self-test: 98 files; smoke PASS; 9 hardening tests PASS, 2 Windows tests skipped; 6 contract groups PASS |
 | Manifest/routing/project-record/visual tests | PASS | 11 routing scenarios; mutation/stale-hash/status/context-negative cases in contracts.mjs |
 | Static re-audit | PASS in scanned scope | production-engineering code scanner: no findings; runtime/release not assessed |
-| Linux/macOS/Windows CI | NOT RUN | Pending candidate commit/PR; required runtime flags prevent silent omission |
+| Linux/macOS/Windows CI | See current PR checks | [PR #8](https://github.com/ios3kov/AE-Development-Rules/pull/8/checks); required runtime flags prevent silent omission. Initial Linux/macOS run passed; Windows found fixture exit propagation and was corrected before retry |
 | Actual AE load, notarization, Windows signing | N/A | No product or release candidate is being certified; wrapper contracts use isolated fixtures |
 
 Procedure: `node starter-kit/scripts/self-test.mjs --dry-run --require-posix` locally; CI selects `--require-posix` or `--require-powershell`. Test stubs establish wrapper behavior only. Source claims added for Apple notarization, Microsoft timestamping and Adobe CEP distribution were checked against primary documentation. Source-registry age checks alone do not revalidate those claims.
 
-Windows behavior is not inferred from the local macOS run. Exact commit and CI links are recorded at handoff. No merge, tag or public release is included.
+Windows behavior is not inferred from the local macOS run. Exact final commit and platform results are recorded in the PR and handoff. The first run is [36916966194](https://github.com/ios3kov/AE-Development-Rules/actions/runs/36916966194) for 11b56c5; its Windows failure is preserved. The nested PowerShell test harness now explicitly propagates collector exit codes. No merge, tag or public release is included.
