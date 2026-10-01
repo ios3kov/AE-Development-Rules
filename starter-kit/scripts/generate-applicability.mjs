@@ -68,8 +68,9 @@ function validate(manifest) {
   const groupMap = new Map(manifest.rule_groups.map((group) => [group.id, group]));
   for (const profile of manifest.artifact_profiles) {
     for (const key of ["light", "standard", "critical", "validation", "release"]) {
+      const allowedAcronyms = new Set(["AE", "OS", "IPC", "MFR", "UXP", "CEP"]);
       for (const match of String(profile[key] || "").matchAll(/\b([A-Z][A-Z-]+)\b/g)) {
-        if (!groupMap.has(match[1])) {
+        if (!groupMap.has(match[1]) && !allowedAcronyms.has(match[1])) {
           throw new Error("unknown rule group " + match[1] + " in profile " + profile.id);
         }
       }
