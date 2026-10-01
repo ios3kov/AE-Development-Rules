@@ -13,10 +13,13 @@ Audit remediation A01–A13; enforcement of existing safety/Evidence requirement
 - Optional project-record validator, filled adoption examples and numeric RGBA fixtures/comparator.
 - Evidence lifecycle, deviation ownership, source claim registry and contribution/release governance.
 - CI declares required platform subsets and disables retained checkout credentials.
+- Follow-up audit R01–R06: dirty Validation handoff blocks; macOS signatures use format-specific verification and DMG assessment context; JSX preprocessing preserves regex/comment/literal boundaries; API inventory includes uppercase extensions; strict schemas reject prototype-named unknown keys; internal milestones select Level 2 by risk and acceptance criteria.
 
 ### Tooling migration
 
 Copy scripts with their lib directory. Node 22+ is required. `rules-manifest.yaml` uses JSON notation (valid YAML 1.2); schema 3 replaces free-form rule lists with structured inheritance/rules. Existing artifact/binary evidence output directories/files cannot be reused. Dependency reports may share a history directory, with fresh UUID names and exclusive files. Binary collectors return 2 for incomplete collection. Configure macOS local/public and required/na stapling policy explicitly; a documented N/A requires AE_STAPLING_NA_REASON. Windows timestamp is required by default; LocalCheck intentionally excludes that public-release gate. Never upgrade a baseline in a frozen release cycle automatically.
+
+The JSX checker now includes pinned js-tokens 10.0.0 under scripts/lib/vendor, with its MIT license and provenance. Copy that complete directory when upgrading. Dirty Validation records now return BLOCKED/nonzero, enforcing the existing internal-only dirty-build rule. PKG signature Evidence is named pkgutil rather than codesign. No mandatory process requirement or record schema version changes in this follow-up; VERSION remains the unreleased 4.1.0 candidate.
 
 ## 4.0.0 — 2026-10-01
 

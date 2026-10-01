@@ -23,6 +23,6 @@ export function inspectRecord(record, schema, root, registry) {
     }
   }
   if (!record.checks.some(c => c.required)) throw new Error('record has no required checks');
-  if (record.delivery === 'release' && record.candidate.source_state !== 'CLEAN') blocked = true;
+  if (record.delivery !== 'development' && record.candidate.source_state !== 'CLEAN') blocked = true;
   return { recorded_policy: blocked ? 'BLOCKED' : 'PASS', release_readiness: 'NOT_ASSESSED', checks:checks.size };
 }

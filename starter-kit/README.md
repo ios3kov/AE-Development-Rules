@@ -44,7 +44,7 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 - `scripts/check-extendscript.mjs` — быстрый parser sanity-check JSX/ExtendScript.
 - `scripts/scan-adobe-api.sh` — inventory PF/AEGP/SmartFX identifiers для compatibility audit.
 - `scripts/macos-binary-audit.sh` — evidence collector для Mach-O architectures, deployment target, linked libraries, symbols и signing; exit 0 не означает compatibility PASS.
-- `scripts/macos-bundle-verify.sh` — codesign, stapling, Gatekeeper и quarantine evidence.
+- `scripts/macos-bundle-verify.sh` — format-specific signature, stapling, Gatekeeper и quarantine evidence: codesign для app/dmg, pkgutil для pkg.
 - `scripts/windows-binary-audit.ps1` — evidence collector для PE/dependencies/AuthentiCode; report содержит collection status, а exit 0 не означает compatibility PASS.
 - `scripts/windows-release-verify.ps1` — SHA-256/AuthentiCode/Zone.Identifier release evidence.
 - `scripts/create-owned-test-workspace.sh` — создаёт уникальный fail-closed workspace для AE runtime tests.
@@ -115,15 +115,15 @@ CI не заменяет runtime AE verification, если runner не имее�
 
 ## Audit hardening tools
 
-Node.js 22+ is required. Copy complete scripts/lib dependencies, schemas and REQUIREMENTS.json when using record validation.
+Node.js 22+ is required. Copy complete scripts/lib dependencies, including the vendored tokenizer and its license, schemas and REQUIREMENTS.json when using record validation. [Tokenizer provenance](scripts/lib/vendor/README.md) records the pinned source; no package installation is required.
 
 - `record-artifact.mjs` and wrapper: exclusive new Evidence directory, canonical manifest with types/modes/safe internal symlinks. `SHA256.txt` hashes the canonical manifest; final package bytes have a separate file hash in the manifest.
 - `verify-artifact.mjs ARTIFACT artifact-record.json`: compare sealed payload; does not prove record authenticity. Never trust an attacker-controlled record as policy.
-- `validate-project-record.mjs RECORD.json`: validate the optional [schema](schemas/project-record.schema.json), check Evidence hashes/revision and required results. Record selection/approval remains trusted project policy; successful evaluation does not certify release.
+- `validate-project-record.mjs RECORD.json`: validate the optional [schema](schemas/project-record.schema.json), check Evidence hashes/revision and required results. Dirty candidates are permitted only for Development and block Validation/Release handoff. Record selection/approval remains trusted project policy; successful evaluation does not certify release.
 - [Filled adoption examples](examples/adoption/README.md), [render fixtures](examples/render/README.md), [requirement registry](../REQUIREMENTS.json).
 - `compare-render.mjs REFERENCE.json ACTUAL.json MAX_ABS_ERROR [NEW_DIFF.json]`: explicit tolerance, same dimensions/color/alpha/bpc; no implicit conversion.
-- `check-extendscript.mjs`: Node syntax subset plus target/targetengine/script/strict directives and literal relative includes. Unsupported directives, E4X and true ES3 checks need project-specific tooling; no JSX is executed.
-- `macos-bundle-verify.sh target new-report local|public required|na`: public mode requires quarantine; required stapling failure blocks; N/A needs AE_STAPLING_NA_REASON. App/pkg/dmg Gatekeeper assessment differs; a plugin alone needs separate distribution/host checks.
+- `check-extendscript.mjs`: Node syntax subset plus target/targetengine/script/strict directives and literal relative includes. Tokenization distinguishes regex/division, comments, strings and templates so literal directive text is preserved. Unsupported directives, E4X and true ES3 checks need project-specific tooling; no JSX is executed.
+- `macos-bundle-verify.sh target new-report local|public required|na`: public mode requires quarantine; required stapling failure blocks; N/A needs AE_STAPLING_NA_REASON. PKG signatures use pkgutil; app/dmg use codesign. Gatekeeper uses execute/install/open by format, with primary-signature context for DMG. Package contents and actual host loading need separate checks.
 - `windows-release-verify.ps1`: timestamp verification required by default; `-LocalCheck` permits explicitly limited local signature checking.
 - `preflight`: unstaged/staged checks and optional AE_PREFLIGHT_BASE_REF diff; missing Node/npm with package.json or non-executable present hooks block. A project check list must be selected before running.
 - Evidence collectors never reuse output paths. A binary collector exit 2 means incomplete collection; signing errors also remain visible as individual probe outcomes.

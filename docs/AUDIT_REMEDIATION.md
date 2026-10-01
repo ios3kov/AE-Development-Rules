@@ -53,3 +53,20 @@ Adjacent A03 coverage: dependency collectors now use UUID report names and exclu
 The dependency regression also reproduced an existing zsh `path` variable collision that replaced PATH during hashing. The loop now uses manifest_file, and find/sort failures propagate outside process substitution.
 
 Verified CI baseline: [run 36917756681](https://github.com/ios3kov/AE-Development-Rules/actions/runs/36917756681) passed Linux/macOS/Windows for 11b9bdc8aacd7fa1d0aca12ba657cd3246c0d2cc, including fixed-clock dependency-history tests. Subsequent JSX subset refinement explicitly rejects absolute includes; its final result is available in current PR checks.
+
+## Follow-up audit remediation
+
+Baseline: main commit 05bd9a8d71c11280d972b96caf64b776f2a075d7. Scope: R01–R06 from the fresh whole-repository audit. These changes enforce existing contracts and clarify applicability; they introduce no new universal MUST or release of the standard.
+
+| Finding | Acceptance | Rule or requirement | Regression evidence |
+| --- | --- | --- | --- |
+| R01 | DIRTY blocks Validation and Release; Development remains permitted | IDENTITY §7, ART-001 | All six source-state/delivery combinations |
+| R02 | PKG uses pkgutil, app/dmg use codesign; Gatekeeper selects the matching format and DMG context; required failures block | MAC-DIST §28, MAC-001 | Command-routing fixtures plus failing pkgutil; existing stapling/quarantine contracts |
+| R03 | Valid regex/division before include passes; comments/strings/templates retain literal directives; malformed included code still fails | TESTABILITY §41; JSX subset tooling | Regex, control/return context, division, comments, strings and template fixtures |
+| R04 | Mixed lowercase/uppercase supported source extensions appear in inventory and symbols | COMPAT §21, COMPAT-001 | cpp, C, H and CPP mixed inventory |
+| R05 | Unknown prototype-named keys and inherited required values are rejected | Optional schema contract | constructor, toString, __proto__ and inherited required-field fixtures |
+| R06 | Internal milestone alone does not select Level 2; Release Candidate keeps Level 2 | REGRESSION §9 | Canonical clarification reconciled with §§1 and 11; existing routing scenarios |
+
+Before implementation, the new fixtures reproduced five failing groups against the baseline. After the fixes, the full local macOS self-test passed across 101 files, including 13 hardening tests and 7 contract groups, with 2 Windows-specific skips. A real unsigned, no-payload PKG fixture also confirmed pkgutil rejects an absent signature with exit 1; nothing was installed. Wrapper fixtures establish command selection and error handling, not real Apple signing or Adobe runtime semantics. Cross-platform CI must be evaluated against the final candidate commit before handoff.
+
+JSX tokenization uses the unchanged, integrity-checked js-tokens 10.0.0 source. Its license/provenance accompanies copied tooling; Node's parser still provides the final syntax decision. See [vendor record](../starter-kit/scripts/lib/vendor/README.md). Platform signature checks follow [Apple signature guidance](https://developer.apple.com/documentation/security/resolving-common-notarization-issues).

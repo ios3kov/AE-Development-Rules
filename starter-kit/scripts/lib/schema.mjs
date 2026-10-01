@@ -17,9 +17,9 @@ export function validate(value, schema, at = '$') {
     if (schema.uniqueItems && new Set(value.map(v => JSON.stringify(v))).size !== value.length) throw new Error(at + ': duplicate item');
     value.forEach((v, i) => validate(v, schema.items || {}, `${at}[${i}]`));
   } else if (value && typeof value === 'object') {
-    for (const key of schema.required || []) if (!(key in value)) throw new Error(at + ': missing ' + key);
+    for (const key of schema.required || []) if (!Object.hasOwn(value, key)) throw new Error(at + ': missing ' + key);
     for (const [key, v] of Object.entries(value)) {
-      if (schema.properties?.[key]) validate(v, schema.properties[key], at + '.' + key);
+      if (schema.properties && Object.hasOwn(schema.properties, key)) validate(v, schema.properties[key], at + '.' + key);
       else if (schema.additionalProperties === false) throw new Error(at + ': unknown key ' + key);
     }
   }

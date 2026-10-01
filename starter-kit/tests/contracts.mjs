@@ -4,6 +4,7 @@ import {loadManifest,route} from '../scripts/lib/applicability.mjs';
 import {inspectRecord} from '../scripts/lib/project-record.mjs';
 import {compare,fixtures} from '../scripts/lib/render.mjs';
 import {sha256} from '../scripts/lib/files.mjs';
+import {validate} from '../scripts/lib/schema.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
 const m=loadManifest(root),registry=read('REQUIREMENTS.json'),schema=read('starter-kit/schemas/project-record.schema.json');
@@ -38,16 +39,29 @@ test('A07/A09 routing scenarios keep milestone/risk/delivery and scoped referenc
 test('requirement registry resolves unique stable markers in canonical sources',()=>{
  const ids=new Set();for(const r of registry.requirements){assert.ok(!ids.has(r.id));ids.add(r.id);const text=fs.readFileSync(path.join(root,r.source),'utf8');assert.equal(text.split('<!-- REQ: '+r.id+' -->').length-1,1);}
 });
-test('project record blocks stale identity, changed/missing evidence, required failures and dirty release',()=>{
+test('project record blocks stale identity, changed/missing evidence, required failures and dirty handoff',()=>{
  const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'ae-record-'));try{
   fs.writeFileSync(path.join(tmp,'evidence.txt'),'fixture evidence');
   const record={schema_version:1,standard:{version:'4.1.0',commit:'1'.repeat(40)},project:'fixture',components:['jsx'],risk:'light',delivery:'validation',candidate:{commit:'2'.repeat(40),build_id:'fixture-1',sha256:'3'.repeat(64),source_state:'CLEAN'},checks:[{id:'smoke',requirement:'EVD-001',required:true,revision:'2'.repeat(40),artifact_sha256:'3'.repeat(64),status:'PASS',reason:'',evidence:[{path:'evidence.txt',sha256:sha256('fixture evidence')}]}]};
   assert.equal(inspectRecord(record,schema,tmp,registry).recorded_policy,'PASS');
   for(const mutate of [x=>x.checks[0].revision='4'.repeat(40),x=>x.checks[0].evidence=[],x=>x.checks[0].evidence[0].sha256='5'.repeat(64),x=>x.checks[0].requirement='INVALID',x=>x.checks[0].status='N/A',x=>x.checks.push(x.checks[0])]){const changed=structuredClone(record);mutate(changed);assert.throws(()=>inspectRecord(changed,schema,tmp,registry));}
   for(const status of ['FAIL','BLOCKED','NOT RUN']){const changed=structuredClone(record);changed.checks[0].status=status;assert.equal(inspectRecord(changed,schema,tmp,registry).recorded_policy,'BLOCKED');}
-  const dirty=structuredClone(record);dirty.delivery='release';dirty.candidate.source_state='DIRTY';assert.equal(inspectRecord(dirty,schema,tmp,registry).recorded_policy,'BLOCKED');
+  for(const delivery of ['development','validation','release']) for(const source_state of ['CLEAN','DIRTY']){
+   const candidate=structuredClone(record);candidate.delivery=delivery;candidate.candidate.source_state=source_state;
+   const expected=source_state==='DIRTY' && delivery!=='development' ? 'BLOCKED' : 'PASS';
+   assert.equal(inspectRecord(candidate,schema,tmp,registry).recorded_policy,expected,delivery+'/'+source_state);
+  }
   fs.writeFileSync(path.join(tmp,'evidence.txt'),'changed');assert.throws(()=>inspectRecord(record,schema,tmp,registry));
  }finally{fs.rmSync(tmp,{recursive:true,force:true});}
+});
+test('strict schema rejects prototype-named unknown keys and inherited required fields',()=>{
+ const strict={type:'object',properties:{safe:{type:'boolean'}},required:['safe'],additionalProperties:false};
+ assert.deepEqual(validate({safe:true},strict),{safe:true});
+ for(const key of ['unexpected','constructor','toString','__proto__']){
+  const value=JSON.parse('{"safe":true,"'+key+'":true}');
+  assert.throws(()=>validate(value,strict),/unknown key/,key);
+ }
+ assert.throws(()=>validate(Object.create({safe:true}),strict),/missing safe/);
 });
 test('render comparator detects alpha/extended range errors and rejects context/tolerance mismatch',()=>{
  const reference=fixtures()['float-range'];assert.equal(compare(reference,reference,0).status,'PASS');

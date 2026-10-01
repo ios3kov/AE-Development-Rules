@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve, isAbsolute } from "node:path";
+import jsTokens from "./lib/vendor/js-tokens.mjs";
 
 const input = process.argv[2];
 if (!input) {
@@ -21,10 +22,30 @@ async function preprocess(file, depth = 0) {
     const text = await readFile(file, "utf8");
     total += Buffer.byteLength(text);
     if (total > 8 * 1024 * 1024) throw new Error("include byte limit");
+    const lines = text.split(/\r?\n/);
+    const candidates = new Map();
+    let offset = 0;
+    // Turn candidate markers into line comments before tokenization. This
+    // preserves literal/comment boundaries without presenting #include as a
+    // JavaScript private identifier that changes regex/division context.
+    const lexicalSource = lines.map((line, index) => {
+      const directive = line.match(/^\s*#(\w+)\s*(.*?)\s*;?\s*$/);
+      const marker = directive ? line.indexOf('#') : -1;
+      const lexicalLine = marker < 0 ? line : line.slice(0, marker) + '//' + line.slice(marker + 1);
+      if (directive) candidates.set(offset + marker, { index, directive });
+      offset += lexicalLine.length + 1;
+      return lexicalLine;
+    }).join('\n');
+    const activeDirectives = new Map();
+    offset = 0;
+    for (const token of jsTokens(lexicalSource)) {
+      const candidate = candidates.get(offset);
+      if (candidate && token.type === 'SingleLineComment') activeDirectives.set(candidate.index, candidate.directive);
+      offset += token.value.length;
+    }
     const out = [];
-    let block = false, quote = null;
-    for (const line of text.split(/\r?\n/)) {
-      const directive = !block && !quote && line.match(/^\s*#(\w+)\s*(.*?)\s*;?\s*$/);
+    for (const [index, line] of lines.entries()) {
+      const directive = activeDirectives.get(index);
       if (directive) {
         const [, name, raw] = directive;
         if (name === "include") {
@@ -38,16 +59,6 @@ async function preprocess(file, depth = 0) {
         continue;
       }
       out.push(line);
-      // Keep directives inside comments/strings as source, never execute JSX.
-      for (let i = 0; i < line.length; i++) {
-        const c = line[i], n = line[i + 1];
-        if (block) { if (c === '*' && n === '/') { block = false; i++; } }
-        else if (quote) { if (c === '\\') i++; else if (c === quote) quote = null; }
-        else if (c === '/' && n === '/') break;
-        else if (c === '/' && n === '*') { block = true; i++; }
-        else if (c === '"' || c === "'") quote = c;
-      }
-      if (!line.endsWith("\\")) quote = null;
     }
     return out.join('\n');
   } finally { active.delete(file); }
