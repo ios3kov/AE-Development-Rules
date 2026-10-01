@@ -17,29 +17,64 @@
 
 ---
 
+## Нормативные ключевые слова
+
+Чтобы обязательность правил трактовалась одинаково:
+
+- **MUST / ОБЯЗАТЕЛЬНО / ДОЛЖЕН** — требование обязательно в применимом scope; пропуск требует явного статуса BLOCKED/N/A или документированного deviation.
+- **MUST NOT / НЕЛЬЗЯ / ЗАПРЕЩЕНО** — действие запрещено в применимом scope.
+- **SHOULD / СЛЕДУЕТ** — сильная рекомендация; отклонение допустимо при документированной технической причине.
+- **MAY / ДОПУСКАЕТСЯ** — разрешённый вариант, не обязательный сам по себе.
+- **APPLICABLE WHEN / ПО ПРИМЕНИМОСТИ / ГДЕ ПРИМЕНИМО** — требование становится MUST только когда указанный риск, component, platform или delivery path реально входит в scope.
+
+Слова без нормативного смысла не должны использоваться как скрытый gate. Если формулировка допускает несколько трактовок, приоритет имеет более узкий документированный scope и явный риск, а не максимальный объём ceremony.
+
+---
+
 ## Быстрая карта применимости
 
-Сначала определить **тип продукта** и **режим процесса**. Таблица ниже — навигатор, а не замена детальным требованиям.
+Стандарт использует **две независимые оси**:
 
-| Тип проекта | Light | Standard | Release / Critical |
+1. **Risk Profile:** Light / Standard / Critical — насколько рискованно текущее изменение.
+2. **Delivery Gate:** Development / Validation / Release — кому и для чего передаётся artifact.
+
+Critical не означает Release. Низкорисковый patch может идти в Release Gate, а критичное внутреннее изменение может оставаться Development до готовности.
+
+Карта ниже генерируется из [rules-manifest.yaml](rules-manifest.yaml). Rule Group ID — стабильный идентификатор группы требований; соответствующий § указан рядом.
+
+<!-- APPLICABILITY_TABLE:START -->
+### Risk Profile × artifact
+
+| Тип проекта | Light | Standard | Critical |
 |---|---|---|---|
-| Native plugin / effect | §1, §7–10, релевантные §14–19 и §23 | Light + baseline, реальные AE tests, Regression Level 1, compatibility/performance по риску | Standard + Regression Level 2, §20, §23, §26 и platform distribution gate только если применим |
-| JSX / ScriptUI | §1; для micro-helper допускается минимальный профиль | §7–10, §22, реальный AE smoke/integration test | Standard + §26; OS code signing не требуется для source-only artifact без executable installer/helper |
-| CEP | §1, релевантные §22 | Standard checks + bridge/lifecycle/package/runtime tests | §26 + distribution/package requirements; OS signing только для executable code/installer/helper |
-| UXP | §1 + §40 в применимом scope | §21, §22, §40 + host/Min Version/runtime tests | Standard + §26 + актуальные Adobe distribution requirements; OS signing только если artifact содержит executable code/installer/helper |
-| Helper / companion app | §1, §7–10, §14–19 по риску | Standard + IPC/files/network/runtime tests по scope | §26 + §28/§30 только для соответствующего публичного executable distributable |
+| Native plugin / effect | CORE-SCOPE (§1), GIT (§6), IDENTITY (§7), REGRESSION (§9), EVIDENCE (§10), CODE-SAFETY (§14), NATIVE-RUNTIME (§23) | light + BASELINE (§8), TEST-CONTROL (§2), COMPAT (§21), PERF (§17-19), real AE runtime tests | standard + REPRO (§20), deep risk-specific checks; Critical does not imply Release |
+| JSX / ScriptUI | CORE-SCOPE (§1); micro-helper profile allowed when eligible | GIT (§6), IDENTITY (§7), REGRESSION (§9), EVIDENCE (§10), TOOL-RUNTIME (§22), real AE smoke/integration test | standard + risk-specific CODE-SAFETY (§14) / PERF (§17-19) / COMPAT (§21) |
+| CEP | CORE-SCOPE (§1), TOOL-RUNTIME (§22) | GIT (§6), IDENTITY (§7), REGRESSION (§9), EVIDENCE (§10), COMPAT (§21), TOOL-RUNTIME (§22), bridge/lifecycle/package/runtime tests | standard + risk-specific security/IPC/helper checks |
+| UXP | CORE-SCOPE (§1), UXP (§40) | GIT (§6), IDENTITY (§7), REGRESSION (§9), EVIDENCE (§10), COMPAT (§21), TOOL-RUNTIME (§22), UXP (§40), host/Min Version/runtime tests | standard + risk-specific permissions/lifecycle/native-addon checks |
+| Helper / companion app | CORE-SCOPE (§1), GIT (§6), IDENTITY (§7), REGRESSION (§9), EVIDENCE (§10), CODE-SAFETY (§14) | light + BASELINE (§8), COMPAT (§21), PERF (§17-19), IPC/files/network/runtime tests | standard + REPRO (§20), DEPSEC (§35), security/data-loss checks |
 
-Правило выбора простое:
+### Delivery Gate × artifact
 
-1. Выбрать строку по фактическому типу artifact.
-2. Выбрать Light / Standard / Release-Critical по риску и цели текущего этапа.
-3. Добавить требования для реально затронутых рисков.
-4. Не выполнять platform/signing gate только потому, что проект запускается на этой ОС: gate должен быть применим именно к типу передаваемого artifact.
+| Тип проекта | Validation | Release |
+|---|---|---|
+| Native plugin / effect | GATES (§26) / Validation Gate | GATES (§26) / Release Gate + MAC-DIST (§28) or WIN-DIST (§30) when applicable |
+| JSX / ScriptUI | GATES (§26) / Validation Gate | GATES (§26) / Release Gate; OS signing only for executable installer/helper |
+| CEP | GATES (§26) / Validation Gate | GATES (§26) / Release Gate + Adobe distribution requirements; OS signing only for executable code |
+| UXP | GATES (§26) / Validation Gate | GATES (§26) / Release Gate + current Adobe distribution requirements; OS signing only for native addon/executable |
+| Helper / companion app | GATES (§26) / Validation Gate | GATES (§26) / Release Gate + MAC-DIST (§28) or WIN-DIST (§30) when applicable |
+<!-- APPLICABILITY_TABLE:END -->
 
-Для смешанного продукта использовать объединение требований его компонентов. Например, CEP/UXP panel с native helper требует отдельно проверить panel runtime и executable helper.
+Правило выбора:
+
+1. определить фактический тип artifact;
+2. выбрать Risk Profile по риску текущего изменения;
+3. выбрать Delivery Gate по текущей цели передачи;
+4. объединить требования строки artifact + Risk Profile + Delivery Gate;
+5. добавить требования для реально затронутых рисков, даже если они не перечислены в краткой карте.
+
+Для смешанного продукта использовать объединение профилей его компонентов. Например, UXP panel с native helper проверяется как UXP + Helper, а native addon получает отдельные platform requirements.
 
 Организационный порядок работы и формат коротких статусов вынесены в [WORKFLOW.md](WORKFLOW.md).
-
 ---
 
 ## 1. Применение правил и обязательность проверок
@@ -76,9 +111,9 @@
 
 Масштаб процесса должен соответствовать задаче. Не нужно превращать небольшую правку в полный аудит всего продукта, но нельзя сокращать проверки так, чтобы существенные риски оставались без контроля.
 
-### Режимы процесса по масштабу и риску
+### Risk Profile — масштаб и риск изменения
 
-Чтобы инженерная дисциплина не превращалась в лишнее трение, перед началом значимого этапа выбрать один из трёх режимов процесса.
+Перед значимым этапом выбрать один Risk Profile. Он определяет глубину инженерных проверок, но **не определяет факт release**.
 
 #### Light
 
@@ -87,20 +122,20 @@
 - небольших локальных исправлений с низким риском;
 - documentation-only изменений;
 - простых scripts / utilities с ограниченным scope;
-- мелких UI-правок, не меняющих архитектуру или критическое поведение.
+- мелких UI-правок без изменения архитектуры или критического поведения.
 
 Минимально требуется:
 
 - определить затронутый scope;
-- выполнить только релевантные проверки;
+- выполнить релевантные проверки;
 - пройти Regression Level 1 для изменений, влияющих на поведение или artifact;
 - обновить документацию, если изменение влияет на пользователя или процесс.
 
-Полный Regression Level 2, clean-install cycle, полный release gate и глубокий profiling для каждой такой правки не требуются, если изменение не затрагивает соответствующие риски.
+Полный Regression Level 2, clean-install cycle и глубокий profiling не требуются автоматически, если соответствующий риск отсутствует.
 
 #### Standard
 
-Использовать для обычной разработки функции, исправления воспроизводимого бага или изменения существующего поведения со средним риском.
+Использовать для обычной разработки функции, воспроизводимого bugfix или изменения существующего поведения со средним риском.
 
 Обычно требуется:
 
@@ -110,37 +145,54 @@
 - пройти Regression Level 1;
 - выполнить реальные проверки внутри After Effects для затронутого поведения;
 - обновить Evidence и документацию;
-- проверить затронутые сценарии совместимости и performance, если они применимы.
+- проверить затронутые compatibility/performance сценарии.
 
-#### Release / Critical
+#### Critical
 
-Использовать для:
+Использовать для высокорисковых изменений, например:
 
-- milestone / release;
-- финальной передачи Release Candidate / публичного release;
 - крупных архитектурных изменений;
-- performance-critical изменений;
-- изменений render path, MFR / SmartFX, threading, memory ownership;
-- изменений безопасности, signing, packaging, installer;
+- render path, MFR / SmartFX, threading, memory ownership;
+- security-sensitive logic;
+- installer/updater mechanics;
+- project-data / migration changes;
+- destructive filesystem behavior;
 - изменений, способных повредить пользовательские данные или проекты;
-- других изменений с высоким риском.
+- performance-critical изменений с существенным production impact.
 
-Требуется полный применимый цикл, включая:
+Critical требует полного набора проверок **затронутого риска**, обычно включая Regression Level 2, deeper diagnostics/profiling и расширенный recovery/rollback coverage.
 
-- Regression Level 2;
-- финальный gate;
-- Build / Artifact Identity;
-- clean build / clean package;
-- clean install / controlled environment;
-- реальные After Effects tests;
-- compatibility verification;
-- profiling / deep profiling, где требуется;
-- release documentation;
-- signing / notarization / Gatekeeper validation для публичного macOS release.
+Critical сам по себе не требует publication/signing ceremony, пока Delivery Gate остаётся Development или Validation и эти свойства не входят в предмет проверки.
 
-Выбранный режим не отменяет обязательную проверку реально затронутого риска.
+Если во время работы обнаружен более высокий риск, Risk Profile должен быть повышен.
 
-Если во время работы обнаружен более высокий риск, режим процесса должен быть повышен.
+### Delivery Gate — цель передачи
+
+Risk Profile и Delivery Gate выбираются отдельно.
+
+#### Development
+
+Внутренняя работа без передачи artifact пользователю как validation/release.
+
+- применяются требования выбранного Risk Profile;
+- Release Gate не запускается автоматически;
+- внутренние experiment/diagnostic artifacts должны оставаться идентифицируемыми, если на их Evidence ссылаются.
+
+#### Validation
+
+Ограниченная передача Validation Build для конкретного вопроса UX/runtime/уникального окружения.
+
+- применяется Validation Gate из §26;
+- Risk Profile сохраняется независимо;
+- полный Release Gate не требуется, если release-only свойства не являются предметом validation.
+
+#### Release
+
+Финальная передача / публикация Release Candidate.
+
+- применяется полный применимый Release Gate из §26;
+- platform distribution gates §28/§30 применяются только к соответствующим distributables;
+- даже низкорисковый patch release проходит Release Gate, потому что это свойство delivery, а не risk.
 
 ### Validation Build и Release Candidate — разные вещи
 
@@ -169,7 +221,7 @@
 
 Для небольшой команды или одного разработчика:
 
-- использовать режимы Light / Standard / Release-Critical как основной механизм снижения процессного трения;
+- использовать режимы Light / Standard / Critical как основной механизм снижения процессного трения;
 - объединять роли разработки, review, QA и release допускается, если фактически выполненные проверки и Evidence остаются явными;
 - автоматизировать повторяемые проверки раньше, чем добавлять новые ручные ритуалы;
 - не требовать отдельный CI/CD сервер, если эквивалентные проверки воспроизводимо запускаются локально одной командой;
@@ -190,7 +242,7 @@
 
 Для такого micro-helper не требуются отдельная сложная архитектурная документация, полный CI/CD, deep profiling, SBOM или release ceremony, если соответствующие риски отсутствуют.
 
-Если helper начинает хранить состояние, менять проекты массово, работать с файлами/network/helpers, распространяться публично или становиться частью production workflow, он выходит из micro-helper profile и переводится в подходящий Standard / Release-Critical режим.
+Если helper начинает хранить состояние, менять проекты массово, работать с файлами/network/helpers, распространяться публично или становиться частью production workflow, он выходит из micro-helper profile и переводится в подходящий Standard / Critical режим.
 
 ---
 
