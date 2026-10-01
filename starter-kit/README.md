@@ -17,6 +17,7 @@ Self-test не меняет repository files. Он проверяет:
 - local Markdown links и обязательные paths/modules;
 - уникальность глобальных §§1–41;
 - синхронизацию `rules-manifest.yaml` → applicability map;
+- conditional Reference Audit trigger / Coverage / parity contract;
 - freshness `SOURCES.md`;
 - shell/Node/PowerShell syntax;
 - executable bits на POSIX;
