@@ -293,9 +293,9 @@ for (const relativePath of [
 }
 
 // CI should avoid redundant branch matrices while preserving full PR/main coverage.
-const workflowPath = path.join(repoRoot, ".github", "workflows", "starter-kit-self-test.yml");
-if (fs.existsSync(workflowPath)) {
-  const workflow = fs.readFileSync(workflowPath, "utf8");
+const ciWorkflowPath = path.join(repoRoot, ".github", "workflows", "starter-kit-self-test.yml");
+if (fs.existsSync(ciWorkflowPath)) {
+  const workflow = fs.readFileSync(ciWorkflowPath, "utf8");
   for (const requiredText of [
     "branches: [main]",
     "pull_request:",
