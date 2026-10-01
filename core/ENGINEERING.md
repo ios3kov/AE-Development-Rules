@@ -876,7 +876,7 @@ Test case должен проверять наблюдаемое требова�
 
 ### CI examples
 
-- [GitHub Actions: starter-kit self-test](.github/workflows/starter-kit-self-test.yml)
+- [GitHub Actions: starter-kit self-test](../.github/workflows/starter-kit-self-test.yml)
 - [GitHub Actions: AE preflight](../starter-kit/examples/github-actions/ae-preflight.yml)
 - [GitHub Actions: cross-platform macOS + Windows preflight](../starter-kit/examples/github-actions/cross-platform-preflight.yml)
 
