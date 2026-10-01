@@ -104,3 +104,12 @@ test('A04 PowerShell preflight rejects staged errors and failing project hook',{
  fs.writeFileSync(readme,'fixture\n');assert.equal(run('git',['add','README.md']).status,0);fs.mkdirSync(path.join(repo,'scripts'),{recursive:true});const hook=path.join(repo,'scripts/project-preflight.ps1');
  fs.writeFileSync(hook,'exit 23');assert.notEqual(run(ps,['-NoProfile','-File',script]).status,0);fs.writeFileSync(hook,'Write-Host "fixture success"');assert.equal(run(ps,['-NoProfile','-File',script]).status,0);
 });
+
+test('A03 dependency reports preserve history when the clock stamp is identical',{skip:!posix&&!(ps&&process.platform==='win32')},()=>{
+ fs.writeFileSync(path.join(repo,'package.json'),'{"name":"fixture","version":"1.0.0"}\n');const out=path.join(tmp,'dependency-history');
+ let cmd,args,options={};
+ if(posix){const bin=path.join(tmp,'fixed-clock');fs.mkdirSync(bin);const date=path.join(bin,'date');fs.writeFileSync(date,'#!/bin/sh\necho 20261001T120000Z\n');fs.chmodSync(date,0o755);cmd='zsh';args=[path.join(scripts,'collect-dependency-evidence.sh'),out];options={env:{...process.env,PATH:bin+path.delimiter+process.env.PATH}};}
+ else {const harness=path.join(tmp,'dependency-fixture.ps1');fs.writeFileSync(harness,`param([string]$Script,[string]$OutputDir)\nfunction Get-Date { [datetime]'2026-10-01T12:00:00Z' }\n& $Script -OutputDir $OutputDir\n`);cmd=ps;args=['-NoProfile','-File',harness,path.join(scripts,'collect-dependency-evidence.ps1'),out];}
+ const first=run(cmd,args,options);assert.equal(first.status,0,first.stderr);const name=fs.readdirSync(out)[0],bytes=fs.readFileSync(path.join(out,name));
+ const second=run(cmd,args,options);assert.equal(second.status,0,second.stderr);assert.equal(fs.readdirSync(out).length,2);assert.deepEqual(fs.readFileSync(path.join(out,name)),bytes);
+});
