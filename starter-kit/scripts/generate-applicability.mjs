@@ -122,7 +122,7 @@ if (!markers.test(rules)) {
 }
 
 if (checkOnly) {
-  const current = rules.match(markers)[0];
+  const current = rules.match(markers)[0].replace(/\r\n/g, "\n");
   if (current !== generated) {
     console.error("FAIL: applicability table is out of sync with rules-manifest.yaml");
     process.exit(1);
