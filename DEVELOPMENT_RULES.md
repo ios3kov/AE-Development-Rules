@@ -32,6 +32,24 @@
 
 ---
 
+## Reference-driven development
+
+Если пользователь явно выбрал конкретный внешний продукт/artifact как референс, основу, аналог или parity target, применяется [REFERENCE_AUDIT.md](REFERENCE_AUDIT.md).
+
+Этот путь **условный**: он не включается для общей категории эффекта или случайного упоминания внешнего продукта.
+
+Для whole-product analogue Reference Audit MUST восстановить максимально полный доказуемый внешний контракт до Technical Design: UI/controls, functionality, presets, state/persistence, animation, render/output, edge cases, performance, packaging/integration и известные internal claims.
+
+Недоказанная внутренняя реализация не считается фактом. Существенные claims классифицируются как **PROVEN / OBSERVED / INFERRED / UNKNOWN**.
+
+Reusable Reference Specification: [starter-kit/templates/REFERENCE_SPECIFICATION_TEMPLATE.md](starter-kit/templates/REFERENCE_SPECIFICATION_TEMPLATE.md).
+
+Типовая цепочка:
+
+**Smart Entry → Reference Audit (если triggered) → Reference Specification → Product Discovery/Product Vision (если требуется) → Product Spec → Technical Design → Production Plan → Development → Parity Testing → Validation → Release**
+
+---
+
 ## Stage 0 — Product Discovery
 
 До выбора технической архитектуры для нового продукта, крупной функции или существенного product-direction change применяется [PRODUCT_DISCOVERY.md](PRODUCT_DISCOVERY.md).
@@ -93,6 +111,7 @@ Critical не означает Release. Низкорисковый patch мож�
 
 Правило выбора:
 
+0. определить, triggered ли conditional Reference Audit;
 1. определить фактический тип artifact;
 2. выбрать Risk Profile по риску текущего изменения;
 3. выбрать Delivery Gate по текущей цели передачи;
@@ -110,6 +129,7 @@ Critical не означает Release. Низкорисковый patch мож�
 `DEVELOPMENT_RULES.md` — индекс стандарта. Нормативный текст разделён по модулям; один Rule Group имеет один canonical location.
 
 - [AI Smart Entry](AI_ENTRYPOINT.md) — пользовательский вход в стандарт для AI-assisted работы.
+- [Reference Audit](REFERENCE_AUDIT.md) — conditional reference-driven path / §R0.
 - [Product Discovery](PRODUCT_DISCOVERY.md) — Stage 0 / §0.
 - [Process Core](core/PROCESS.md) — §§1–13, §27.
 - [Engineering Core](core/ENGINEERING.md) — §§14–21, §§24–25, §§31–39, §41.
