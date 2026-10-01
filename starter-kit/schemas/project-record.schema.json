@@ -107,6 +107,11 @@
           "required": {
             "type": "boolean"
           },
+          "phase": {
+            "type": "string",
+            "enum": ["pre-handoff", "user-validation", "release-acceptance"],
+            "description": "Optional phase. Missing phase preserves the legacy requirement in the current gate."
+          },
           "revision": {
             "type": "string",
             "pattern": "^[a-f0-9]{40}$"

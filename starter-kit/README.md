@@ -125,6 +125,7 @@ Node.js 22+ is required. Copy complete scripts/lib dependencies, including the v
 - `record-artifact.mjs` and wrapper: exclusive new Evidence directory, canonical manifest with types/modes/safe internal symlinks. `SHA256.txt` hashes the canonical manifest; final package bytes have a separate file hash in the manifest.
 - `verify-artifact.mjs ARTIFACT artifact-record.json`: compare sealed payload; does not prove record authenticity. Never trust an attacker-controlled record as policy.
 - `validate-project-record.mjs RECORD.json`: validate the optional [schema](schemas/project-record.schema.json), check Evidence hashes/revision and required results. Dirty candidates are permitted only for Development and block Validation/Release handoff. Record selection/approval remains trusted project policy; successful evaluation does not certify release.
+- Optional check `phase` separates Validation pre-handoff prerequisites from `user-validation` and `release-acceptance` questions. No phase retains the previous all-required gate. Required failed user validation blocks the candidate; Release evaluates every required check. At least one required current-gate prerequisite must exist. Upgrade schema and validator together; choosing safe applicability remains project policy.
 - [Filled adoption examples](examples/adoption/README.md), [render fixtures](examples/render/README.md), [requirement registry](../REQUIREMENTS.json).
 - `compare-render.mjs REFERENCE.json ACTUAL.json MAX_ABS_ERROR [NEW_DIFF.json]`: explicit tolerance, same dimensions/color/alpha/bpc; no implicit conversion.
 - `check-extendscript.mjs`: Node syntax subset plus target/targetengine/script/strict directives and literal relative includes. Tokenization distinguishes regex/division, comments, strings and templates so literal directive text is preserved. Unsupported directives, E4X and true ES3 checks need project-specific tooling; no JSX is executed.
@@ -134,6 +135,12 @@ Node.js 22+ is required. Copy complete scripts/lib dependencies, including the v
 - Evidence collectors never reuse output paths. A binary collector exit 2 means incomplete collection; signing errors also remain visible as individual probe outcomes.
 
 Self-test coverage is printed. CI requires POSIX on Linux/macOS and PowerShell on Windows. A skipped platform check is NOT RUN; structural keyword checks only protect document structure. Semantic routing and A01–A13 negative fixtures run separately.
+
+### AI follow-up evaluation
+
+[Controlled fixtures](fixtures/ai/README.md) cover 20 scenarios with 21 starting states. `prepare-ai-scenario.mjs ID NEW_DIRECTORY` creates an isolated synthetic repository and observer inputs; `inspect-ai-scenario.mjs DIRECTORY` observes file scope and illustrative outcomes. An external runner must enforce permissions and capture actual traces; these tools do not run/certify a model or provide an OS sandbox. Follow-up regressions cover F01/F05/F06/F08/F09/F10/F12. Actual agent behavior remains a separate recorded evaluation.
+
+Use [REQUIREMENT_TRACEABILITY.md](templates/REQUIREMENT_TRACEABILITY.md) as a compact optional section of the existing product plan; do not confuse product requirement IDs with the standard's REQUIREMENTS.json IDs.
 
 ### Routing context migration (5.0)
 
@@ -153,5 +160,7 @@ Self-test coverage is printed. CI requires POSIX on Linux/macOS and PowerShell o
 ```
 
 Here an older confirmed product contract exists, but does not cover the new scope: discovery is required. All three product flags are required booleans; do not infer coverage from file existence. If applicable Stage 0 is already complete and the current approved contract covers the requested new scope, set `contract_covers_scope: true`; no repeat interview is needed. A missing contract cannot cover scope. Audit/research/documentation do not become implementation merely because a product change is discussed. Manifest schema 3 and route output keys remain unchanged.
+
+Bugfix adds DEBUGGING; implementation/research adds API-SOURCES. Light profiles expose the applicable minimum Git, candidate identity, regression and Evidence sections even for JSX; apply their existing scope exceptions proportionally. The helper validates typed context and selects reading, not permissions, applicability approval or Stage 0 completion. Components must be a dense own list of known unique IDs.
 
 CI требует POSIX runtime на Linux/macOS и PowerShell на Windows. В отчёте явно указаны RUN/NOT RUN и platform skips; платформенная проверка не считается выполненной на другом runner. Примеры CI передают базовый commit PR в preflight; локально тот же scope задаётся через `AE_PREFLIGHT_BASE_REF`.

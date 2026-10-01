@@ -10,7 +10,8 @@ Breaking AI/process candidate. Adds mandatory trust, resume-state and scoped-aut
 - Reference BLOCKED no longer reads as permission to start dependent Technical Design.
 - Routing distinguishes contract existence, current-scope coverage and product-level changes, even when a change is called a bugfix. Already confirmed scope does not require a repeated interview.
 - Newly used/changed host APIs need exact target header/doc/signature/revision applicability records; unknown API contracts cannot be fabricated.
-- Adds 16 free-text agent-behavior evaluation scenarios and a reusable task-state template. Automated routing tests and actual model evaluation remain separate Evidence.
+- Adds 20 agent-behavior scenarios with 21 controlled fixtures (two Validation variants), preparation/file-inspection tools and a reusable task-state template. Automated helper tests and actual model evaluation remain separate Evidence.
+- Follow-up F01–F12: bugfix/API and minimal Light reading coverage; no-progress handling; blocking-assumption exit criteria; compact product traceability; pre-handoff/user-question/final-acceptance distinction; PKG/payload checklist alignment; adopted-baseline instructions. Reject reversed/unbounded section ranges, sparse components/pixels, nonfinite derived render metrics and blank N/A reasons.
 
 ### Migration to 5.0
 
@@ -22,7 +23,13 @@ Routing callers must now supply all three boolean fields: `product_contract`, `c
 
 For new/changed host API use, record the selected SDK/host sources and precise contract in the project's existing API inventory/research record. Existing unchanged calls do not require repeated inventory work without a new reason.
 
-AI behavior runs are configuration-specific and separate from starter-kit self-test. No live model or AE runtime result is claimed by the scenario catalogue. See [update record](docs/AI_PROTOCOL_UPDATE.md).
+Before repeating a failed approach, record a meaningful changed condition/new Evidence or a justified bounded transient retry. Recording a critical assumption alone cannot close a design dependency. Keep product requirement/task/acceptance/check links in existing project records where useful; the traceability template is optional.
+
+Project-record schema 1 adds optional check `phase`: `pre-handoff`, `user-validation`, `release-acceptance`. Upgrade the complete schema and validator together; older strict validators reject the new field. Records without phase retain the previous all-required-checks gate. Validation can defer only explicitly classified user/final questions; required pre-handoff prerequisites and dirty-source restrictions remain. Record selection, safety applicability and actual approval are trusted project policy, not certified by the helper. Release still evaluates all required checks. The output adds `deferred_checks`.
+
+Light route selection now exposes applicable minimal Git/identity/regression/Evidence sections; their scope remains proportional, not full product/AE certification for every edit. Bugfix adds DEBUGGING and implementation/research adds API-SOURCES. Route keys and manifest schema 3 remain unchanged. Invalid direct-library arrays/ranges and nonfinite derived render metrics now throw; valid very large finite samples use stable RMSE arithmetic.
+
+AI behavior runs are configuration-specific and separate from starter-kit self-test. No live model or AE runtime result is claimed by the scenario catalogue. See [original update](docs/AI_PROTOCOL_UPDATE.md), [follow-up remediation](docs/AI_PROTOCOL_REMEDIATION.md) and [fixture procedure](starter-kit/fixtures/ai/README.md).
 
 ## 4.1.0 — Unreleased work incorporated into 5.0.0
 

@@ -1,0 +1,65 @@
+{
+  "utc": "2026-10-01T21:07:33.109Z",
+  "head": "eab6d9b93fb818bf7abaa5c51c4e59bf485be224",
+  "main": "b27f45467e0a9152fc82c1072438dfed07f0c36e",
+  "observations": {
+    "F01": {
+      "selected": [
+        "CORE-SCOPE",
+        "GIT",
+        "IDENTITY",
+        "REGRESSION",
+        "EVIDENCE",
+        "CODE-SAFETY",
+        "NATIVE-RUNTIME",
+        "BASELINE",
+        "TEST-CONTROL",
+        "COMPAT",
+        "PERF"
+      ],
+      "debugging": false
+    },
+    "F08": {
+      "accepted": true
+    },
+    "F09": {
+      "sparse": {
+        "status": "PASS",
+        "max_absolute_error": null,
+        "rmse": null,
+        "channel_max": [
+          null,
+          null,
+          null,
+          null
+        ],
+        "failed_samples": 0,
+        "tolerance": 0
+      },
+      "serialized_accepted": false,
+      "dense_extreme_cli": {
+        "exit": 0,
+        "summary": {
+          "status": "PASS",
+          "max_absolute_error": 1e+200,
+          "rmse": null,
+          "channel_max": [
+            1e+200,
+            1e+200,
+            1e+200,
+            1e+200
+          ],
+          "failed_samples": 0,
+          "tolerance": 1e+201
+        }
+      }
+    },
+    "F10": {
+      "recorded_policy": "PASS",
+      "release_readiness": "NOT_ASSESSED",
+      "checks": 1
+    },
+    "stale_accepted": false,
+    "no_required_accepted": false
+  }
+}

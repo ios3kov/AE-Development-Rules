@@ -59,6 +59,12 @@ const required = [
   "starter-kit/tests/behavioral-smoke.mjs",
   "starter-kit/tests/hardening.mjs",
   "starter-kit/tests/contracts.mjs",
+  "starter-kit/tests/followup.mjs",
+  "starter-kit/fixtures/ai/README.md",
+  "starter-kit/fixtures/ai/cases.json",
+  "starter-kit/scripts/prepare-ai-scenario.mjs",
+  "starter-kit/scripts/inspect-ai-scenario.mjs",
+  "starter-kit/templates/REQUIREMENT_TRACEABILITY.md",
   "starter-kit/schemas/rules-manifest.schema.json",
   "REQUIREMENTS.json",
   "CONTRIBUTING.md",
@@ -393,7 +399,7 @@ const requirePowerShell = process.argv.includes("--require-powershell");
 if (requirePosix && (process.platform === "win32" || run("zsh", ["--version"]).status !== 0)) fail("required POSIX runtime unavailable");
 if (requirePowerShell && !ps) fail("required PowerShell runtime unavailable");
 console.log("coverage: Node=RUN; POSIX=" + (process.platform !== "win32" && run("zsh", ["--version"]).status === 0 ? "RUN" : "NOT RUN") + "; PowerShell=" + (ps ? "RUN" : "NOT RUN"));
-for (const suite of ["hardening.mjs", "contracts.mjs"]) {
+for (const suite of ["hardening.mjs", "contracts.mjs", "followup.mjs"]) {
   const r = run(process.execPath, [path.join(repoRoot, "starter-kit/tests", suite)]);
   process.stdout.write(r.stdout || "");
   if (r.status !== 0) fail(suite + ": " + (r.stderr || r.stdout).trim());

@@ -2,14 +2,14 @@
 
 Audit baseline: `b27f45467e0a9152fc82c1072438dfed07f0c36e` (5.0.0 candidate), 2026-10-01.
 
-Scope: record the five previously proposed follow-ups and identify additional concrete weaknesses in the AI instructions, canonical-rule selection and supporting tools. This record is an audit/backlog, not authorization to implement its items. Normative rules and runtime-tool behavior are unchanged by recording a finding.
+The observations below describe the original audit baseline, not current behavior. The user subsequently authorized all fixes and conditional merge with a backup. F01–F12 are implemented/clarified; see the [remediation and acceptance record](AI_PROTOCOL_REMEDIATION.md). Actual model evaluation remains NOT RUN, separately from delivering controlled fixtures.
 
 ## Classification
 
 - **CONFIRMED** — current behavior is reproduced or the absence/mismatch is directly established.
 - **AMBIGUITY** — current wording admits a material wrong interpretation; no live-model failure is claimed.
 - **IMPROVEMENT** — a useful additional mechanism, rather than proof that an existing requirement failed.
-- **OPEN** — recorded, not fixed. These are finding states, not Test Status.
+- **FIXED / CLARIFIED / IMPLEMENTED** — correction delivered, wording clarified or mechanism supplied. Finding states are not Test Status and do not certify a model or product.
 - **P1** — address a decision, scope or safety boundary before relying on it.
 - **P2** — improve reliability, consistency or verifiability.
 
@@ -17,18 +17,20 @@ Scope: record the five previously proposed follow-ups and identify additional co
 
 | ID | Priority | Classification | State | Item |
 | --- | --- | --- | --- | --- |
-| F01 | P2 | CONFIRMED | OPEN | Align text-defined bugfix routing with the selected DEBUGGING rule group |
-| F02 | P2 | IMPROVEMENT | OPEN | Define a no-progress/repeated-failure policy for AI attempts |
-| F03 | P1 | AMBIGUITY | OPEN | Distinguish recorded critical assumptions from permission to pass Stage 0 |
-| F04 | P2 | IMPROVEMENT | OPEN | Trace significant requirements through tasks, acceptance and Evidence |
-| F05 | P2 | IMPROVEMENT | OPEN | Turn free-text AI scenarios into reproducible controlled fixtures |
-| F06 | P1 | AMBIGUITY | OPEN | Distinguish pre-handoff validation checks from the question the user is meant to test |
-| F07 | P2 | AMBIGUITY | OPEN | Align macOS signature requirements/checklist with PKG versus nested-code verification |
-| F08 | P2 | CONFIRMED | OPEN | Reject reversed canonical-section ranges instead of silently checking zero sections |
-| F09 | P2 | CONFIRMED | OPEN | Reject sparse pixel arrays in the render comparison library |
-| F10 | P2 | CONFIRMED | OPEN | Reject whitespace-only N/A rationales in project records |
+| F01 | P2 | CONFIRMED | FIXED | Align text-defined bugfix routing with the selected DEBUGGING rule group |
+| F02 | P2 | IMPROVEMENT | IMPLEMENTED | Define a no-progress/repeated-failure policy for AI attempts |
+| F03 | P1 | AMBIGUITY | CLARIFIED | Distinguish recorded critical assumptions from permission to pass Stage 0 |
+| F04 | P2 | IMPROVEMENT | IMPLEMENTED | Trace significant requirements through tasks, acceptance and Evidence |
+| F05 | P2 | IMPROVEMENT | IMPLEMENTED | Turn free-text AI scenarios into reproducible controlled fixtures |
+| F06 | P1 | AMBIGUITY | CLARIFIED | Distinguish pre-handoff validation checks from the question the user is meant to test |
+| F07 | P2 | AMBIGUITY | CLARIFIED | Align macOS signature requirements/checklist with PKG versus nested-code verification |
+| F08 | P2 | CONFIRMED | FIXED | Reject reversed canonical-section ranges instead of silently checking zero sections |
+| F09 | P2 | CONFIRMED | FIXED | Reject sparse pixel arrays in the render comparison library |
+| F10 | P2 | CONFIRMED | FIXED | Reject whitespace-only N/A rationales in project records |
+| F11 | P2 | AMBIGUITY | CLARIFIED | Keep adopted rules explicit and pin milestone baseline identity |
+| F12 | P2 | CONFIRMED | FIXED | Reject sparse direct-library component lists |
 
-F01–F05 are the previously proposed items. F06–F10 were added by this follow-up audit. [Recorded tool observations](evidence/ai-followup-probes.json) bind the isolated probes to the audit baseline. F01/F08/F09/F10 are reproduced tool-contract findings; F03/F06/F07 are wording ambiguities; F02/F04/F05 are improvement proposals. None is recorded as fixed.
+F01–F05 are the previously proposed items. F06–F10 were added by this follow-up audit. [Recorded tool observations](evidence/ai-followup-probes.json) bind the isolated probes to the audit baseline. F01/F08/F09/F10 are reproduced tool-contract findings; F03/F06/F07 are wording ambiguities; F02/F04/F05 are improvement proposals. The original observations are retained below; the ledger states refer to subsequent remediation. F11/F12 and extended F09 were added in the repeat audit.
 
 ### F01 — Bugfix routing omits the diagnostic module
 
@@ -130,9 +132,27 @@ F01–F05 are the previously proposed items. F06–F10 were added by this follow
 
 **Acceptance:** Empty/whitespace-only N/A reasons reject. A substantive rationale remains structurally accepted; ownership, required-check selection and runtime correctness remain outside this validator's proof.
 
-## Audit result and repair order
+### F11 — README can imply automatic adoption / optional baseline identity
 
-The five earlier items are retained and five additional items are recorded. All ten remain OPEN. No normative rules or runtime scripts were changed in this audit; a recorded finding is not a completed repair.
+**Repeat-audit evidence:** README asked for current rules and described version/SHA recording as optional, while Engineering §34 requires conscious baseline adoption and identity for significant milestones/releases.
+
+**Correction / acceptance:** README and Smart Entry explicitly reread the applicable adopted baseline before each significant stage, pin version/commit/adoption date and keep mutable API facts current without silently upgrading a frozen standard. AI-EVAL-19 exercises the boundary; actual model run is NOT RUN.
+
+### F12 — Sparse components silently yield empty selection
+
+**Repeat-audit reproduction:** `route(manifest, {...validContext, components: new Array(1)})` returned an empty selected-rule list. Mapping/iteration skipped holes. JSON serialization produces null and is rejected; the hole is direct-library input, not JSON CLI behavior.
+
+**Correction / acceptance:** Validate an own string at every index before selection; empty, sparse, inherited, duplicate and unknown IDs reject. Dense mixed known components still work. See followup.mjs.
+
+### Extended F09 — Finite dense inputs overflow derived metrics
+
+**Repeat-audit reproduction:** Dense equal-context inputs around 1e200 passed the tolerance comparison but naive squared-error accumulation produced infinite RMSE (JSON null), including through the CLI. Finite maximum values with opposite signs can also overflow subtraction. These synthetic numeric probes are outside physically representative RGBA32F values; they expose the helper contract, not an AE runtime failure.
+
+**Correction / acceptance:** Stable scaled sum-of-squares retains finite RMSE for representable results; overflowing differences/derived metrics reject. [Repeat observations](evidence/ai-repeat-probes.json) retain original evidence. Dense/sparse and JSON CLI regressions are in followup.mjs.
+
+## Original audit result and repair order (historical)
+
+At the original audit, five earlier items and five additional items were recorded OPEN without runtime/normative changes. The repeat audit extended F09 and added F11/F12. The current correction state is the ledger above; the original repair order remains historical context.
 
 Recommended order:
 

@@ -1,6 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { validate } from './schema.mjs';
+function sections(value) {
+  if (value === 'R0') return ['R0'];
+  if (!/^(0|[1-9]\d*)(?:-(0|[1-9]\d*))?$/.test(value)) throw new Error('invalid section range');
+  const [start, end = start] = value.split('-').map(Number);
+  // Canonical headings are checked below; this bound prevents enormous allocations.
+  if (![start,end].every(n => Number.isSafeInteger(n) && n <= 1000) || start > end) throw new Error('invalid section range');
+  return Array.from({length:end-start+1}, (_,i) => String(start+i));
+}
 export function loadManifest(root) {
   // JSON is a YAML 1.2 subset; this file deliberately uses only JSON notation.
   const m = validate(JSON.parse(fs.readFileSync(path.join(root, 'rules-manifest.yaml'), 'utf8')), JSON.parse(fs.readFileSync(path.join(root, 'starter-kit/schemas/rules-manifest.schema.json'), 'utf8')));
@@ -18,7 +26,7 @@ export function loadManifest(root) {
     const source = path.resolve(root, g.source);
     if (!source.startsWith(root + path.sep)) throw new Error('canonical source escapes root');
     const text = fs.readFileSync(source, 'utf8');
-    for (const section of g.section.split('-').length === 1 ? [g.section] : Array.from({length:Number(g.section.split('-')[1])-Number(g.section.split('-')[0])+1},(_,i)=>String(Number(g.section.split('-')[0])+i))) {
+    for (const section of sections(g.section)) {
       if (!new RegExp('^## ' + section + '\\.', 'm').test(text)) throw new Error('missing canonical section ' + section);
     }
     if (g.applicability === 'conditional' && !g.trigger) throw new Error('conditional trigger missing');
@@ -42,6 +50,9 @@ export function route(manifest, context) {
   const allowed = ['audit','documentation','research','bugfix','improvement','new-product','major-feature'];
   if (!allowed.includes(context.task) || !['light','standard','critical'].includes(context.risk) || !['development','validation','release'].includes(context.delivery)) throw new Error('invalid routing context');
   if (!Array.isArray(context.components) || !context.components.length || new Set(context.components).size !== context.components.length) throw new Error('components required');
+  for (let i = 0; i < context.components.length; i++) {
+    if (!Object.hasOwn(context.components, i) || typeof context.components[i] !== 'string') throw new Error('dense component identifiers required');
+  }
   if (!['none','feature','ui','behavior','whole-product'].includes(context.reference)) throw new Error('invalid reference context');
   for (const key of ['product_contract','contract_covers_scope','changes_product_contract']) {
     if (typeof context[key] !== 'boolean') throw new Error('invalid product context: ' + key);
@@ -57,5 +68,6 @@ export function route(manifest, context) {
   const productChange = ['new-product','major-feature'].includes(context.task) || context.changes_product_contract;
   const discovery = implementation && productChange && !currentContract;
   const reference = context.reference !== 'none' && !['audit','documentation','research'].includes(context.task);
-  return { risk:context.risk, delivery:context.delivery, product_discovery:discovery, reference_audit:reference, implementation_task:implementation, rules:[...new Set([...selected.flat(),...(discovery ? ['PRODUCT-DISCOVERY'] : []),...(reference ? ['REFERENCE-AUDIT'] : [])])] };
+  const taskRules = [...(context.task === 'bugfix' ? ['DEBUGGING'] : []), ...(implementation || context.task === 'research' ? ['API-SOURCES'] : [])];
+  return { risk:context.risk, delivery:context.delivery, product_discovery:discovery, reference_audit:reference, implementation_task:implementation, rules:[...new Set([...selected.flat(),...taskRules,...(discovery ? ['PRODUCT-DISCOVERY'] : []),...(reference ? ['REFERENCE-AUDIT'] : [])])] };
 }
