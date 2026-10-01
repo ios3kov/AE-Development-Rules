@@ -25,46 +25,67 @@ delivery_gates:
 rule_groups:
   - id: CORE-SCOPE
     section: "1"
+    source: core/PROCESS.md
   - id: TEST-CONTROL
     section: "2"
+    source: core/PROCESS.md
   - id: GIT
     section: "6"
+    source: core/PROCESS.md
   - id: IDENTITY
     section: "7"
+    source: core/PROCESS.md
   - id: BASELINE
     section: "8"
+    source: core/PROCESS.md
   - id: REGRESSION
     section: "9"
+    source: core/PROCESS.md
   - id: EVIDENCE
     section: "10"
+    source: core/PROCESS.md
   - id: CODE-SAFETY
     section: "14"
+    source: core/ENGINEERING.md
   - id: PERF
     section: "17-19"
+    source: core/ENGINEERING.md
   - id: REPRO
     section: "20"
+    source: core/ENGINEERING.md
   - id: COMPAT
     section: "21"
+    source: core/ENGINEERING.md
   - id: TOOL-RUNTIME
     section: "22"
+    source: profiles/TOOLS.md
   - id: NATIVE-RUNTIME
     section: "23"
+    source: profiles/NATIVE.md
   - id: DOCS
     section: "24-25"
+    source: core/ENGINEERING.md
   - id: GATES
     section: "26"
+    source: profiles/RELEASE.md
   - id: MAC-DIST
     section: "28"
+    source: profiles/RELEASE.md
   - id: PORTING
     section: "29"
+    source: profiles/RELEASE.md
   - id: WIN-DIST
     section: "30"
+    source: profiles/RELEASE.md
   - id: DEPSEC
     section: "35"
+    source: core/ENGINEERING.md
   - id: UXP
     section: "40"
+    source: profiles/UXP.md
   - id: TESTABILITY
     section: "41"
+    source: core/ENGINEERING.md
 
 artifact_profiles:
   - id: native
