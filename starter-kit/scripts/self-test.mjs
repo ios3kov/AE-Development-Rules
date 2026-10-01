@@ -103,7 +103,7 @@ if (ps) {
   warn("PowerShell parser unavailable; .ps1 syntax check skipped");
 }
 
-const scriptFiles = files.filter((p) => p.startsWith(path.join(repoRoot, "starter-kit", "scripts")));
+const scriptFiles = files.filter((p) => p.startsWith(path.join(repoRoot, "starter-kit", "scripts")) && p !== __filename);
 const destructive = [
   { re: /\brm\s+-[^\n]*rf[^\n]*\s+\/(?:\s|$)/i, name: "rm -rf /" },
   { re: /\bgit\s+reset\s+--hard\b/i, name: "git reset --hard" },
