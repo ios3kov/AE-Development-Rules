@@ -137,6 +137,20 @@
 
 Если процесс оказывается слишком тяжёлым для конкретного проекта, сначала уменьшить scope и автоматизировать рутину, а не удалять проверку существенного риска.
 
+### Минимальный профиль для micro-helper
+
+Для однофайлового или очень небольшого helper-скрипта с низким риском, например короткой команды/горячей клавиши без installer, background process, network, project-data migration или destructive filesystem logic, допустим минимальный профиль:
+
+- Git commit или иная однозначно сохранённая версия source;
+- syntax / parser sanity-check, где применимо;
+- один реальный smoke test в целевой версии After Effects для основного сценария;
+- один негативный / безопасный case, если входные условия могут отсутствовать или быть неверными;
+- короткая запись результата и известных ограничений.
+
+Для такого micro-helper не требуются отдельная сложная архитектурная документация, полный CI/CD, deep profiling, SBOM или release ceremony, если соответствующие риски отсутствуют.
+
+Если helper начинает хранить состояние, менять проекты массово, работать с файлами/network/helpers, распространяться публично или становиться частью production workflow, он выходит из micro-helper profile и переводится в подходящий Standard / Release-Critical режим.
+
 ---
 
 ## 2. Контролируемое и чистое тестирование
@@ -2182,6 +2196,9 @@ Test case должен проверять наблюдаемое требова�
 - [Documentation Structure](starter-kit/templates/DOCS_STRUCTURE.md)
 - [Retrospective](starter-kit/templates/RETROSPECTIVE.md)
 - [User Guide](starter-kit/templates/USER_GUIDE.md)
+- [Micro-helper Profile](starter-kit/templates/MICRO_HELPER_PROFILE.md)
+- [UXP Engineering Checklist](starter-kit/templates/UXP_ENGINEERING.md)
+- [Host-independent Core / Testing Pyramid](starter-kit/templates/HOST_INDEPENDENT_CORE_TESTING.md)
 - [Standard Adoption / Baseline](starter-kit/templates/STANDARD_ADOPTION.md)
 - [Dependency / Security / SBOM Audit](starter-kit/templates/DEPENDENCY_SECURITY_AUDIT.md)
 - [Release Versioning / Changelog](starter-kit/templates/RELEASE_VERSIONING.md)
@@ -2393,6 +2410,216 @@ Crash report / dump должен быть сопоставим с Build ID ил�
 Не обещать screen-reader или другую accessibility support, которую конкретная AE UI-технология фактически не предоставляет или которая не была проверена.
 
 Accessibility limitation должна быть честно указана, если она существенно влияет на использование продукта.
+
+---
+
+## 40. UXP-specific engineering rules
+
+UXP считать отдельной runtime / security / lifecycle моделью, а не «тем же CEP/ExtendScript на современном JavaScript».
+
+Перед выбором UXP для After Effects обязательно подтвердить текущую поддержку целевой версии AE и требуемых host APIs по официальной документации Adobe. Для каждого используемого host member учитывать его `Min Version`, если Adobe её публикует.
+
+На момент baseline v1.1.0 документация After Effects UXP у Adobe всё ещё развивается; поэтому конкретные возможности должны подтверждаться для целевой версии host, а не переноситься из Photoshop / Premiere / общей UXP документации автоматически.
+
+Официальные starting points:
+
+- [After Effects UXP](https://developer.adobe.com/after-effects/uxp/)
+- [After Effects UXP API Reference](https://developer.adobe.com/after-effects/uxp/after-effects-api/)
+- [UXP Hub](https://developer.adobe.com/uxp/)
+- [UXP Manifest](https://developer.adobe.com/uxp/guides/explanation/concepts/manifest/)
+
+### Runtime assumptions
+
+UXP поддерживает современный JavaScript, но не является обычным browser runtime и не является Node.js runtime.
+
+Нельзя предполагать наличие API только потому, что он существует в Chrome, Safari или Node.js.
+
+Для каждого используемого web / JS / module API проверять UXP support в целевом runtime.
+
+Node.js tooling допустим на build/test этапе, но runtime plugin не должен случайно зависеть от Node-only APIs.
+
+Если используется TypeScript / bundler / framework, production bundle должен проверяться отдельно от исходного TypeScript/source.
+
+### Async / await и состояние
+
+Асинхронная операция должна иметь определённый lifecycle и ownership.
+
+По применимости:
+
+- ловить rejected Promises и host API errors;
+- не оставлять unhandled Promise rejection;
+- предусматривать timeout для внешних I/O / IPC / network операций;
+- не считать сохранённую selection / project / layer reference автоматически актуальной после `await`;
+- после длительного `await` повторно валидировать host context перед mutation;
+- предотвращать stale async result, который перезаписывает более новое состояние;
+- определять семантику duplicate click / concurrent command / re-entry;
+- использовать cancellation / operation token, если операция может устареть;
+- UI должен явно показывать busy/error state для длительных операций.
+
+### Manifest и permissions
+
+`manifest.json` является частью production contract.
+
+По применимости проверять:
+
+- host и minimum host version;
+- manifest version;
+- entrypoints;
+- requiredPermissions;
+- network domains;
+- local filesystem scope;
+- IPC / process-launch permissions;
+- plugin ID и distribution requirements.
+
+Запрашивать минимально необходимые permissions.
+
+Нельзя использовать `"all"` / broad wildcard permission только ради удобства без обоснования.
+
+Permission denial, revoked access и недоступный resource должны быть штатно обработаны.
+
+Изменение manifest / permissions считать behavior / packaging change и повторно проверять load / install / permission scenarios.
+
+### File system / storage
+
+Различать:
+
+- plugin install area;
+- plugin data / persistent storage;
+- temp storage;
+- user-selected external files/folders.
+
+Не хранить незаменимые пользовательские данные только во временном storage.
+
+Доступ за пределы sandbox выполнять через поддерживаемый permission model.
+
+Tokens / saved references должны проверяться на stale / revoked state после restart.
+
+### Network
+
+Если используется network:
+
+- объявить необходимые domains в manifest;
+- предпочитать HTTPS;
+- валидировать response schema и size;
+- иметь timeout / retry policy;
+- не блокировать UI бесконечным ожиданием;
+- не считать network permission доказательством доступности endpoint.
+
+### Lifecycle
+
+Для plugin/panel entrypoints проверять фактическое поведение `create / show / hide / destroy` в целевой версии AE.
+
+Не полагаться на cleanup callback для критического восстановления данных или безопасности без runtime Evidence, что callback действительно вызывается в нужных сценариях.
+
+Lifecycle handler не должен выполнять ненужно долгую работу.
+
+Listener / timer / subscription должны иметь явный owner и защиту от duplicate registration после reload / reopen.
+
+### UXP-specific test cases
+
+По применимости включать:
+
+- install / load through supported UXP tooling;
+- panel open / close / reopen;
+- reload;
+- restart After Effects;
+- manifest change → unload/reload;
+- permission grant / deny / revoke;
+- network allowed / blocked / timeout;
+- storage persistence;
+- stale token / stale async operation;
+- concurrent invocation;
+- malformed host/network data;
+- UI resize / scaling;
+- exact host / UXP runtime / plugin version in diagnostics.
+
+Статические browser tests не заменяют runtime UXP test внутри After Effects.
+
+---
+
+## 41. Host-independent core и testing pyramid
+
+По возможности отделять чистую бизнес-логику от Adobe host boundary.
+
+К host-independent core обычно относятся:
+
+- математика / geometry;
+- parsing / serialization;
+- validation;
+- deterministic state transitions;
+- command planning;
+- protocol schema;
+- packing / layout algorithms;
+- pure transformations данных;
+- compatibility decision logic, не требующая реального host.
+
+К host boundary относятся:
+
+- After Effects DOM / AEGP / PF API;
+- ExtendScript / CEP bridge;
+- UXP host module;
+- filesystem permissions;
+- render buffers;
+- panel lifecycle;
+- native OS APIs.
+
+### Основной принцип
+
+Большинство быстрых тестов должны выполняться без запуска After Effects, а минимально необходимое число тестов должно подтверждать интеграцию с реальным host.
+
+Рекомендуемая testing pyramid:
+
+1. **Pure unit tests** — быстрые, детерминированные, без AE.
+2. **Contract / adapter tests** — fake/mock host только для проверки собственного protocol / error handling.
+3. **Integration tests** — packaging / bridge / serialization / filesystem boundaries.
+4. **Runtime After Effects tests** — реальные host semantics.
+5. **Release / compatibility tests** — финальный artifact и заявленные platform/version scenarios.
+
+Mock / fake host не доказывает реальную семантику After Effects.
+
+### ExtendScript
+
+Для ExtendScript особенно полезно выносить чистую логику из JSX host calls.
+
+Если pure logic тестируется в Node/Jest/Vitest/`node:test` или другой внешней среде:
+
+- тестировать тот же source/сгенерированный artifact, а не вручную переписанную копию алгоритма;
+- учитывать, что ExtendScript имеет более старую JavaScript semantics;
+- если используется transpilation, отдельно проверять полученный ExtendScript artifact;
+- реальные host calls, Undo, selection, project mutation и serialization всё равно проверять внутри AE.
+
+### UXP / CEP
+
+Для UXP / CEP UI/controller code отделять:
+
+- pure state / validation / protocol;
+- transport / bridge;
+- host adapter;
+- view.
+
+Async state machine по возможности тестировать вне AE с controlled fake transport, а затем закрывать реальным host integration test.
+
+### Native plugins
+
+Для C/C++/Rust native effects отделять:
+
+- pure math / sampling / geometry;
+- pixel algorithms;
+- serialization;
+- host adapter / SDK callbacks;
+- GPU backend.
+
+Pure algorithms должны иметь unit/property/fuzz tests, если риск это оправдывает.
+
+Host-specific correctness — buffer ownership, suites, MFR, SmartFX, color management, render lifecycle — подтверждать отдельными AE tests.
+
+### Требование к архитектуре
+
+Не создавать abstraction layer только ради тестов, если она сложнее самой задачи.
+
+Для micro-helper допустим прямой host script без отдельного core, если логика тривиальна и покрыта минимальным профилем.
+
+Цель separation — сделать сложную логику дешёвой для тестирования, а не искусственно увеличить количество файлов и классов.
 
 ---
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0 — 2026-10-01
+
+- Добавлен явный минимальный профиль для micro-helper scripts.
+- Добавлены UXP-specific engineering rules: host API/Min Version, async state, manifest permissions, storage/network, lifecycle и runtime tests.
+- Добавлен host-independent core / testing pyramid для ExtendScript, CEP/UXP и native plugins.
+- Добавлены reusable templates для UXP, testing pyramid и micro-helper profile.
+- Исправлено форматирование starter-kit README.
+
+
 ## 1.0.1 — 2026-10-01
 
 - Добавлены прямые ссылки из стандарта на dependency-evidence scripts.

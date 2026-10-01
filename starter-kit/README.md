@@ -18,7 +18,9 @@
 - `scripts/macos-binary-audit.sh` — Mach-O architectures, deployment target, linked libraries, symbols и signing.
 - `scripts/macos-bundle-verify.sh` — codesign, stapling, Gatekeeper и quarantine evidence.
 - `scripts/windows-binary-audit.ps1` — PE/dependency/AuthentiCode evidence для Windows.
-- `scripts/windows-release-verify.ps1` — SHA-256/AuthentiCode/Zone.Identifier release evidence.\n- `scripts/create-owned-test-workspace.sh` — создаёт уникальный fail-closed workspace для AE runtime tests.\n- `scripts/verify-native-effect-bundle-macos.sh` — проверяет структуру native effect bundle, AE exports, PiPL/resources, dependencies и подпись.
+- `scripts/windows-release-verify.ps1` — SHA-256/AuthentiCode/Zone.Identifier release evidence.
+- `scripts/create-owned-test-workspace.sh` — создаёт уникальный fail-closed workspace для AE runtime tests.
+- `scripts/verify-native-effect-bundle-macos.sh` — проверяет структуру native effect bundle, AE exports, PiPL/resources, dependencies и подпись.
 
 ## Templates
 
@@ -34,13 +36,18 @@
 - `templates/API_COMPATIBILITY_AUDIT.md`
 - `templates/RELEASE_CHECKLIST.md`
 - `templates/RETROSPECTIVE.md`
-- `templates/USER_GUIDE.md`\n- `templates/AE_RUNTIME_TEST_SAFETY.md`\n- `templates/BUILD_IDENTITY.md`
+- `templates/USER_GUIDE.md`
+- `templates/AE_RUNTIME_TEST_SAFETY.md`
+- `templates/BUILD_IDENTITY.md`
 - `templates/TEST_CASE.md`
 - `templates/QUALITY_METRICS.md`
 - `templates/SECURITY_CHECKLIST.md`
 - `templates/LOCALIZATION_CHECKLIST.md`
 - `templates/DOCS_STRUCTURE.md`
 - `templates/CROSS_PLATFORM_PORTING.md`
+- `templates/MICRO_HELPER_PROFILE.md`
+- `templates/UXP_ENGINEERING.md`
+- `templates/HOST_INDEPENDENT_CORE_TESTING.md`
 
 ## Внедрение
 
