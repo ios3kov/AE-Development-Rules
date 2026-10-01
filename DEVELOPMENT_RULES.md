@@ -1878,15 +1878,29 @@ Validation Build можно передать пользователю, когд�
 
 ## 28. Публичный macOS-дистрибутив без предупреждений Gatekeeper
 
-Для любого продукта, который должен публично распространяться на macOS, финальный этап разработки включает создание **нормального пользовательского дистрибутива, который устанавливается и запускается без предупреждений Gatekeeper и без ручных обходов защиты macOS**.
+Этот gate применяется не «ко всему, что работает на macOS», а к **публичному distributable, содержащему исполняемый native code, app/helper, installer или другой artifact, для которого macOS code signing / notarization реально являются частью штатной доставки**.
 
-Тестовый artifact с ad-hoc подписью может использоваться во время разработки, но **не считается финальным публичным macOS-релизом**.
+Примеры, где gate обычно применим:
+
+- native `.plugin` / executable bundle;
+- helper / companion app;
+- installer / package с исполняемым кодом;
+- hybrid UXP plugin с macOS `.uxpaddon` native binary;
+- другой executable component, который macOS проверяет как код.
+
+Сам по себе source-only `.jsx`, HTML/JS/CSS panel или pure UXP `.ccx` без native binary **не делает Developer ID/notarization обязательными**. Для CEP / UXP package использовать требования Adobe к соответствующему формату распространения отдельно от OS code signing.
+
+По текущей документации Adobe UXP pure `.ccx` package не требует package-level digital signature или timestamp. Для hybrid UXP Adobe отдельно требует signing/notarization macOS `.uxpaddon` binaries.
+
+Если gate применим, финальный этап включает создание нормального пользовательского дистрибутива без небезопасных обходов Gatekeeper.
+
+Тестовый artifact с ad-hoc подписью может использоваться во время разработки, но **не считается финальным публичным macOS-release для executable artifact в scope этого gate**.
 
 ### Обязательные требования
 
-Перед публичным macOS release:
+Перед публичным macOS release **для artifact в scope этого gate**:
 
-- подписать финальный bundle и весь исполняемый вложенный код действительным **Apple Developer ID** сертификатом;
+- подписать финальный bundle и применимый исполняемый вложенный код действительным **Apple Developer ID** сертификатом;
 - использовать корректную и минимально необходимую signing configuration / entitlements;
 - отправить финальный distributable в **Apple Notary Service** и получить статус `Accepted`;
 - выполнить stapling notarization ticket для форматов, где Apple это поддерживает;
@@ -1920,7 +1934,7 @@ Validation Build можно передать пользователю, когд�
 
 ### Финальный artifact
 
-Публично передаваемый файл должен быть именно тем artifact, который прошёл:
+Для artifact в scope этого gate публично передаваемый файл должен быть именно тем artifact, который прошёл:
 
 - Developer ID signing;
 - notarization;
@@ -1929,6 +1943,8 @@ Validation Build можно передать пользователю, когд�
 - реальную установку из quarantined download;
 - финальный smoke test.
 
+Для source-only / pure package artifact вне scope этого gate применяются его format-specific install/package checks, а не искусственное требование Apple code signing.
+
 После любого изменения байтов bundle / installer / archive необходимо заново:
 
 - зафиксировать artifact identity;
@@ -1936,9 +1952,9 @@ Validation Build можно передать пользователю, когд�
 - повторить необходимые signing / notarization проверки;
 - повторить затронутые smoke / integration проверки.
 
-Если Developer ID, notarization или реальная Gatekeeper-проверка недоступны, статус публичного macOS release — **BLOCKED**, а не PASS.
+Если artifact находится в scope этого gate, а обязательные Developer ID, notarization или реальная Gatekeeper-проверка недоступны, соответствующий Test Status — **BLOCKED**, а не PASS.
 
-**Разработка публичного macOS-продукта не считается полностью завершённой, пока пользователю нельзя отдать обычный подписанный и notarized дистрибутив без предупреждений Gatekeeper и без инструкций по обходу защиты macOS.**
+Executable macOS distributable в scope этого gate не считается release-ready, пока его нельзя штатно установить и запустить без инструкций по отключению или обходу системной защиты.
 
 
 ---
@@ -2024,15 +2040,19 @@ Platform-specific реализации одного и того же польз�
 
 ## 30. Публичный Windows-дистрибутив и release gate
 
-Для продукта, который публично распространяется на Windows, финальный release должен устанавливаться и запускаться стандартным пользовательским способом без необходимости отключать системные механизмы безопасности.
+Этот gate применяется к публичному Windows distributable, когда продукт содержит **PE/native executable code, helper/app, installer или иной компонент, для которого Authenticode / Windows security checks реально относятся к штатной доставке**.
+
+Source-only JSX, HTML/JS/CSS panel или pure UXP `.ccx` без native executable не требуют Authenticode только потому, что используются на Windows. CEP ZXP signing и UXP CCX packaging являются отдельными format-specific требованиями Adobe.
+
+Если gate применим, финальный release должен устанавливаться и запускаться стандартным пользовательским способом без необходимости отключать системные механизмы безопасности.
 
 ### Обязательные требования
 
-Перед публичным Windows release по применимости:
+Перед публичным Windows release для artifact в scope этого gate:
 
 - собрать production artifact для заявленной архитектуры;
 - проверить PE / binary architecture и runtime dependencies;
-- подписать исполняемый код и installer действительным code-signing certificate;
+- подписать применимый исполняемый код и installer действительным code-signing certificate;
 - использовать timestamping, чтобы подпись оставалась проверяемой после истечения сертификата;
 - проверить Authenticode signature стандартными Windows средствами, например SignTool / PowerShell;
 - проверить installer / package integrity;
@@ -2067,17 +2087,19 @@ SmartScreen reputation и предупреждения, зависящие от 
 
 ### Финальный Windows artifact
 
-Пользователю передаётся именно тот package / installer / archive, который прошёл:
+Для artifact в scope этого gate пользователю передаётся именно тот package / installer / archive, который прошёл:
 
 - identity / hash фиксацию;
-- signing;
+- применимое signing;
 - signature verification;
 - dependency / architecture audit;
 - чистую установку;
 - runtime загрузку в целевом After Effects;
 - финальный smoke test.
 
-Если обязательная подпись, целевая Windows-среда или реальная runtime-проверка недоступны, соответствующий публичный Windows release gate имеет статус **BLOCKED**, а не PASS.
+Для source-only / pure package artifact вне scope этого gate использовать format-specific package/install verification без искусственного Authenticode requirement.
+
+Если artifact находится в scope этого gate, а обязательная подпись, целевая Windows-среда или реальная runtime-проверка недоступны, соответствующий Test Status — **BLOCKED**, а не PASS.
 
 
 ---
@@ -2462,7 +2484,7 @@ UXP считать отдельной runtime / security / lifecycle модел�
 
 Перед выбором UXP для After Effects обязательно подтвердить текущую поддержку целевой версии AE и требуемых host APIs по официальной документации Adobe. Для каждого используемого host member учитывать его `Min Version`, если Adobe её публикует.
 
-На момент baseline v1.1.0 документация After Effects UXP у Adobe всё ещё развивается; поэтому конкретные возможности должны подтверждаться для целевой версии host, а не переноситься из Photoshop / Premiere / общей UXP документации автоматически.
+На момент актуализации v1.2.0 документация After Effects UXP у Adobe продолжает расширяться; конкретные возможности нужно подтверждать для целевой версии host, а не переносить из Photoshop / Premiere / общей UXP документации автоматически. After Effects API Reference публикует `Min Version` для host members — эти значения входят в compatibility contract.
 
 Официальные starting points:
 
@@ -2470,6 +2492,8 @@ UXP считать отдельной runtime / security / lifecycle модел�
 - [After Effects UXP API Reference](https://developer.adobe.com/after-effects/uxp/after-effects-api/)
 - [UXP Hub](https://developer.adobe.com/uxp/)
 - [UXP Manifest](https://developer.adobe.com/uxp/guides/explanation/concepts/manifest/)
+- [UXP Entrypoints / lifecycle](https://developer.adobe.com/uxp/guides/explanation/concepts/entrypoints/)
+- [UXP package / distribution](https://developer.adobe.com/uxp/guides/how-to/distribution/package/)
 
 ### Runtime assumptions
 
@@ -2486,6 +2510,10 @@ Node.js tooling допустим на build/test этапе, но runtime plugin
 ### Async / await и состояние
 
 Асинхронная операция должна иметь определённый lifecycle и ownership.
+
+Текущая UXP документация отдельно ограничивает async lifecycle entrypoints: Promise support явно указан для plugin `destroy()` и panel `create()/show()/hide()/destroy()`. Не предполагать, что любой lifecycle callback можно безопасно превратить в долгую async-операцию.
+
+В актуальном UXP Entrypoints guide lifecycle methods имеют ограниченный timeout (сейчас документировано 300 ms). Поэтому lifecycle callback должен выполнять только короткую обязательную работу; длительные операции запускать через отдельный управляемый operation flow, а не удерживать lifecycle transition.
 
 По применимости:
 
@@ -2552,11 +2580,29 @@ Tokens / saved references должны проверяться на stale / revok
 
 Для plugin/panel entrypoints проверять фактическое поведение `create / show / hide / destroy` в целевой версии AE.
 
-Не полагаться на cleanup callback для критического восстановления данных или безопасности без runtime Evidence, что callback действительно вызывается в нужных сценариях.
+UXP platform documentation прямо предупреждает, что `hide()` и `destroy()` работают ненадёжно не во всех host-приложениях. Поэтому:
 
-Lifecycle handler не должен выполнять ненужно долгую работу.
+- не делать essential cleanup, сохранность данных или security invariant зависимыми только от `hide()` / `destroy()`;
+- подтверждать фактическое поведение именно в целевой версии After Effects;
+- при нескольких panels проверять, какой panel реально вызвал lifecycle event: общая UXP документация отмечает ограничения multi-panel lifecycle;
+- учитывать, что command entrypoints выполняются как команды и не имеют persistent panel lifecycle.
 
 Listener / timer / subscription должны иметь явный owner и защиту от duplicate registration после reload / reopen.
+
+Lifecycle handler должен быть коротким и укладываться в platform timeout. Долгий network / file / host workflow не выполнять как обязательную часть teardown callback.
+
+### Packaging / distribution
+
+Различать pure UXP и hybrid UXP:
+
+- pure UXP package распространяется как `.ccx`; по текущей Adobe UXP документации `.ccx` не требует package-level digital signature или timestamp;
+- package создавать поддерживаемым Adobe tooling, а не считать ручной ZIP эквивалентом production package;
+- plugin ID должен соответствовать выбранному distribution channel;
+- hybrid plugin с native `.uxpaddon` требует отдельной проверки platform/architecture layout и native binaries;
+- для macOS hybrid `.uxpaddon` выполнять Adobe-required Developer ID signing/notarization native binary;
+- installation test выполнять через реальный поддерживаемый `.ccx` flow / Creative Cloud Desktop для заявленного distribution channel.
+
+Не переносить CEP ZXP signing rules на UXP CCX и наоборот.
 
 ### UXP-specific test cases
 
