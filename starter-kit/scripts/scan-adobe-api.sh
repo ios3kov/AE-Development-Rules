@@ -21,4 +21,4 @@ grep -RhoE --include='*.c' --include='*.cc' --include='*.cpp' --include='*.cxx' 
 echo "Usage evidence: $USAGE"
 echo "Unique identifiers: $SYMBOLS"
 echo "NEXT: map relevant identifiers/suite revisions to minimum documented AE/SDK versions."
-echo "NOTE: this prepares evidence only; it does not assign VERIFIED or API-COMPATIBLE."
+echo "NOTE: this prepares evidence only; it does not assign Compatibility: VERIFIED or STATIC-COMPATIBLE."
