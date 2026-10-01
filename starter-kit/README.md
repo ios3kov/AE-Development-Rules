@@ -50,6 +50,7 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 
 ## Templates
 
+- `templates/REFERENCE_SPECIFICATION_TEMPLATE.md`
 - `templates/PRODUCT_DISCOVERY_TEMPLATE.md`
 - `templates/STANDARD_ADOPTION.md`
 - `templates/DEPENDENCY_SECURITY_AUDIT.md`
@@ -82,14 +83,15 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 
 При AI-assisted работе сначала использовать корневой `AI_ENTRYPOINT.md`: ИИ сам определяет нужный процесс по обычной формулировке пользователя.
 
-0. Для нового продукта / крупной функции, когда Smart Entry определил product-level неопределённость, пройти Stage 0 через `PRODUCT_DISCOVERY_TEMPLATE.md`.
-1. Скопировать нужные scripts/templates в AE-проект.
-2. Подключить релевантные scripts к build/test pipeline или CI.
-3. Инженерно зафиксировать выбранный ИИ/разработчиком **Risk Profile**: Light / Standard / Critical.
-4. Инженерно зафиксировать **Delivery Gate**: Development / Validation / Release. Не перекладывать этот выбор на нетехнического пользователя.
-5. Validation Build: использовать `VALIDATION_CHECKLIST.md`.
-6. Release Candidate: пройти полный применимый Release Gate из `profiles/RELEASE.md`.
-7. Не повышать Risk Profile только из-за факта release и не включать Release Gate только из-за Critical risk.
+1. Если пользователь явно выбрал конкретный внешний продукт/artifact как референс/основу/аналог — пройти `REFERENCE_SPECIFICATION_TEMPLATE.md` по [Reference Audit](../REFERENCE_AUDIT.md).
+2. Для нового продукта / крупной функции, когда Smart Entry определил product-level неопределённость, пройти Stage 0 через `PRODUCT_DISCOVERY_TEMPLATE.md`.
+3. Скопировать нужные scripts/templates в AE-проект.
+4. Подключить релевантные scripts к build/test pipeline или CI.
+5. Инженерно зафиксировать выбранный ИИ/разработчиком **Risk Profile**: Light / Standard / Critical.
+6. Инженерно зафиксировать **Delivery Gate**: Development / Validation / Release. Не перекладывать этот выбор на нетехнического пользователя.
+7. Validation Build: использовать `VALIDATION_CHECKLIST.md`.
+8. Release Candidate: пройти полный применимый Release Gate из `profiles/RELEASE.md`.
+9. Не повышать Risk Profile только из-за факта release и не включать Release Gate только из-за Critical risk.
 
 ## Ограничение
 
