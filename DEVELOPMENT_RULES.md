@@ -47,21 +47,21 @@ Critical не означает Release. Низкорисковый patch мож�
 
 | Тип проекта | Light | Standard | Critical |
 |---|---|---|---|
-| Native plugin / effect | CORE-SCOPE (§1), GIT (§6), IDENTITY (§7), REGRESSION (§9), EVIDENCE (§10), CODE-SAFETY (§14), NATIVE-RUNTIME (§23) | light + BASELINE (§8), TEST-CONTROL (§2), COMPAT (§21), PERF (§17-19), real AE runtime tests | standard + REPRO (§20), deep risk-specific checks; Critical does not imply Release |
-| JSX / ScriptUI | CORE-SCOPE (§1); micro-helper profile allowed when eligible | GIT (§6), IDENTITY (§7), REGRESSION (§9), EVIDENCE (§10), TOOL-RUNTIME (§22), real AE smoke/integration test | standard + risk-specific CODE-SAFETY (§14) / PERF (§17-19) / COMPAT (§21) |
-| CEP | CORE-SCOPE (§1), TOOL-RUNTIME (§22) | GIT (§6), IDENTITY (§7), REGRESSION (§9), EVIDENCE (§10), COMPAT (§21), TOOL-RUNTIME (§22), bridge/lifecycle/package/runtime tests | standard + risk-specific security/IPC/helper checks |
-| UXP | CORE-SCOPE (§1), UXP (§40) | GIT (§6), IDENTITY (§7), REGRESSION (§9), EVIDENCE (§10), COMPAT (§21), TOOL-RUNTIME (§22), UXP (§40), host/Min Version/runtime tests | standard + risk-specific permissions/lifecycle/native-addon checks |
-| Helper / companion app | CORE-SCOPE (§1), GIT (§6), IDENTITY (§7), REGRESSION (§9), EVIDENCE (§10), CODE-SAFETY (§14) | light + BASELINE (§8), COMPAT (§21), PERF (§17-19), IPC/files/network/runtime tests | standard + REPRO (§20), DEPSEC (§35), security/data-loss checks |
+| Native plugin / effect | CORE-SCOPE ([§1](core/PROCESS.md)), GIT ([§6](core/PROCESS.md)), IDENTITY ([§7](core/PROCESS.md)), REGRESSION ([§9](core/PROCESS.md)), EVIDENCE ([§10](core/PROCESS.md)), CODE-SAFETY ([§14](core/ENGINEERING.md)), NATIVE-RUNTIME ([§23](profiles/NATIVE.md)) | light + BASELINE ([§8](core/PROCESS.md)), TEST-CONTROL ([§2](core/PROCESS.md)), COMPAT ([§21](core/ENGINEERING.md)), PERF ([§17-19](core/ENGINEERING.md)), real AE runtime tests | standard + REPRO ([§20](core/ENGINEERING.md)), deep risk-specific checks; Critical does not imply Release |
+| JSX / ScriptUI | CORE-SCOPE ([§1](core/PROCESS.md)); micro-helper profile allowed when eligible | GIT ([§6](core/PROCESS.md)), IDENTITY ([§7](core/PROCESS.md)), REGRESSION ([§9](core/PROCESS.md)), EVIDENCE ([§10](core/PROCESS.md)), TOOL-RUNTIME ([§22](profiles/TOOLS.md)), real AE smoke/integration test | standard + risk-specific CODE-SAFETY ([§14](core/ENGINEERING.md)) / PERF ([§17-19](core/ENGINEERING.md)) / COMPAT ([§21](core/ENGINEERING.md)) |
+| CEP | CORE-SCOPE ([§1](core/PROCESS.md)), TOOL-RUNTIME ([§22](profiles/TOOLS.md)) | GIT ([§6](core/PROCESS.md)), IDENTITY ([§7](core/PROCESS.md)), REGRESSION ([§9](core/PROCESS.md)), EVIDENCE ([§10](core/PROCESS.md)), COMPAT ([§21](core/ENGINEERING.md)), TOOL-RUNTIME ([§22](profiles/TOOLS.md)), bridge/lifecycle/package/runtime tests | standard + risk-specific security/IPC/helper checks |
+| UXP | CORE-SCOPE ([§1](core/PROCESS.md)), UXP ([§40](profiles/UXP.md)) | GIT ([§6](core/PROCESS.md)), IDENTITY ([§7](core/PROCESS.md)), REGRESSION ([§9](core/PROCESS.md)), EVIDENCE ([§10](core/PROCESS.md)), COMPAT ([§21](core/ENGINEERING.md)), TOOL-RUNTIME ([§22](profiles/TOOLS.md)), UXP ([§40](profiles/UXP.md)), host/Min Version/runtime tests | standard + risk-specific permissions/lifecycle/native-addon checks |
+| Helper / companion app | CORE-SCOPE ([§1](core/PROCESS.md)), GIT ([§6](core/PROCESS.md)), IDENTITY ([§7](core/PROCESS.md)), REGRESSION ([§9](core/PROCESS.md)), EVIDENCE ([§10](core/PROCESS.md)), CODE-SAFETY ([§14](core/ENGINEERING.md)) | light + BASELINE ([§8](core/PROCESS.md)), COMPAT ([§21](core/ENGINEERING.md)), PERF ([§17-19](core/ENGINEERING.md)), IPC/files/network/runtime tests | standard + REPRO ([§20](core/ENGINEERING.md)), DEPSEC ([§35](core/ENGINEERING.md)), security/data-loss checks |
 
 ### Delivery Gate × artifact
 
 | Тип проекта | Validation | Release |
 |---|---|---|
-| Native plugin / effect | GATES (§26) / Validation Gate | GATES (§26) / Release Gate + MAC-DIST (§28) or WIN-DIST (§30) when applicable |
-| JSX / ScriptUI | GATES (§26) / Validation Gate | GATES (§26) / Release Gate; OS signing only for executable installer/helper |
-| CEP | GATES (§26) / Validation Gate | GATES (§26) / Release Gate + Adobe distribution requirements; OS signing only for executable code |
-| UXP | GATES (§26) / Validation Gate | GATES (§26) / Release Gate + current Adobe distribution requirements; OS signing only for native addon/executable |
-| Helper / companion app | GATES (§26) / Validation Gate | GATES (§26) / Release Gate + MAC-DIST (§28) or WIN-DIST (§30) when applicable |
+| Native plugin / effect | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)) / Release Gate + MAC-DIST ([§28](profiles/RELEASE.md)) or WIN-DIST ([§30](profiles/RELEASE.md)) when applicable |
+| JSX / ScriptUI | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)) / Release Gate; OS signing only for executable installer/helper |
+| CEP | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)) / Release Gate + Adobe distribution requirements; OS signing only for executable code |
+| UXP | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)) / Release Gate + current Adobe distribution requirements; OS signing only for native addon/executable |
+| Helper / companion app | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)) / Release Gate + MAC-DIST ([§28](profiles/RELEASE.md)) or WIN-DIST ([§30](profiles/RELEASE.md)) when applicable |
 <!-- APPLICABILITY_TABLE:END -->
 
 Правило выбора:
