@@ -6,7 +6,7 @@
 
 ## Версия стандарта
 
-**Текущий стабильный baseline: v2.1.0**
+**Текущий стабильный baseline: v3.0.0**
 
 - [VERSION](VERSION)
 - [CHANGELOG.md](CHANGELOG.md)
@@ -15,6 +15,7 @@
 
 ## Главные документы
 
+- [PRODUCT_DISCOVERY.md](PRODUCT_DISCOVERY.md) — обязательный Stage 0 для нового продукта / крупной новой функции: interview → Product Vision → Scope → User Flows → Success Criteria.
 - [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) — нормативный индекс, ключевые определения и сгенерированная applicability map.
 - [core/PROCESS.md](core/PROCESS.md) — общий процесс, testing, Git, identity, regression и Evidence.
 - [core/ENGINEERING.md](core/ENGINEERING.md) — safety, performance, compatibility/maturity, docs, dependencies и engineering controls.
@@ -25,6 +26,8 @@
 - [LICENSE](LICENSE) — MIT license.
 
 ## Как использовать в AE-проектах
+
+Для нового продукта / крупной новой функции сначала пройти Stage 0 и зафиксировать Product Vision / Scope.
 
 Каждый AE-проект должен:
 

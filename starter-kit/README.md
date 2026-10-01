@@ -50,6 +50,7 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 
 ## Templates
 
+- `templates/PRODUCT_DISCOVERY_TEMPLATE.md`
 - `templates/STANDARD_ADOPTION.md`
 - `templates/DEPENDENCY_SECURITY_AUDIT.md`
 - `templates/RELEASE_VERSIONING.md`
@@ -79,6 +80,7 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 
 ## Внедрение
 
+0. Для нового продукта / крупной функции пройти Stage 0 через `PRODUCT_DISCOVERY_TEMPLATE.md`.
 1. Скопировать нужные scripts/templates в AE-проект.
 2. Подключить релевантные scripts к build/test pipeline или CI.
 3. Выбрать **Risk Profile**: Light / Standard / Critical.

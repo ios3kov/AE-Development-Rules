@@ -32,6 +32,7 @@ const required = [
   "README.md",
   "DEVELOPMENT_RULES.md",
   "WORKFLOW.md",
+  "PRODUCT_DISCOVERY.md",
   "VERSION",
   "CHANGELOG.md",
   "LICENSE",
@@ -49,6 +50,7 @@ const required = [
   "starter-kit/README.md",
   "starter-kit/scripts/generate-applicability.mjs",
   "starter-kit/tests/behavioral-smoke.mjs",
+  "starter-kit/templates/PRODUCT_DISCOVERY_TEMPLATE.md",
   "starter-kit/templates/VALIDATION_CHECKLIST.md",
   "starter-kit/templates/DEBUGGING_RECORD.md",
   "starter-kit/templates/RELEASE_CHECKLIST.md",
@@ -105,6 +107,29 @@ for (let id = 1; id <= 41; id++) {
   if (owners.length > 1) fail("duplicate canonical section §" + id + ": " + owners.join(", "));
 }
 
+
+// Stage 0 product discovery added in v3 must remain discoverable.
+const discoveryPath = path.join(repoRoot, "PRODUCT_DISCOVERY.md");
+const discoveryTemplatePath = path.join(repoRoot, "starter-kit", "templates", "PRODUCT_DISCOVERY_TEMPLATE.md");
+if (fs.existsSync(discoveryPath)) {
+  const discovery = fs.readFileSync(discoveryPath, "utf8");
+  for (const requiredText of [
+    "## 0. Product Discovery и Product Vision",
+    "## 0.4. Классификация требований",
+    "## 0.6. Product Vision",
+    "## 0.8. User flows до архитектуры",
+    "## 0.9. Success Criteria",
+    "## 0.11. Exit criteria"
+  ]) {
+    if (!discovery.includes(requiredText)) fail("PRODUCT_DISCOVERY.md missing Stage 0 contract: " + requiredText);
+  }
+}
+if (fs.existsSync(discoveryTemplatePath)) {
+  const template = fs.readFileSync(discoveryTemplatePath, "utf8");
+  for (const requiredText of ["## 2. Interview — first pass", "## 4. Requirement ledger", "## 5. Product Vision", "## 11. Stage 0 exit check"]) {
+    if (!template.includes(requiredText)) fail("PRODUCT_DISCOVERY_TEMPLATE.md missing required section: " + requiredText);
+  }
+}
 
 // Workflow/debugging guidance added in v2.1 must remain discoverable.
 const workflowPath = path.join(repoRoot, "WORKFLOW.md");

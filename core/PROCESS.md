@@ -4,6 +4,14 @@
 
 Нумерация § сохранена глобально для стабильных ссылок из manifest/templates.
 
+## Stage 0 prerequisite
+
+Перед Product Spec, Technical Design или Production Plan нового продукта / крупной новой функции MUST быть завершён применимый [Stage 0 — Product Discovery и Product Vision](../PRODUCT_DISCOVERY.md).
+
+Stage 0 можно считать уже выполненным, если существует актуальный подтверждённый Product Vision / requirements contract и новая работа не меняет пользовательскую ценность, core workflows или product scope.
+
+Для локального bugfix/refactor/малой UI-правки Stage 0 повторно не проводится без нового product-level вопроса.
+
 ## 1. Применение правил и обязательность проверок
 
 Перед началом каждого значимого этапа сверяться с этим документом, выбирать применимые требования и фиксировать scope проверки. Правила рабочего ритма, статусов этапов и общения находятся в [WORKFLOW.md](../WORKFLOW.md).

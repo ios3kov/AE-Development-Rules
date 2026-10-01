@@ -4,6 +4,22 @@
 
 Этот документ описывает **как вести работу и сообщать статус**. Инженерные требования к тестам, compatibility и Evidence определены в [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md).
 
+## 0. До технического планирования
+
+Для нового продукта, крупной новой функции или изменения product direction сначала проверить, завершён ли [Stage 0 — Product Discovery](PRODUCT_DISCOVERY.md).
+
+Если Product Vision / core scope ещё не подтверждены, техническое планирование SHOULD не начинаться с архитектуры или списка implementation tasks.
+
+Во время discovery:
+
+- сначала использовать уже известный контекст;
+- задавать только вопросы, способные materially изменить продукт;
+- не отправлять большую анкету без необходимости;
+- отличать Confirmed Requirement / Derived Requirement / Assumption / Open Question / Idea / Non-goal;
+- после достаточной ясности собрать Product Vision, Product Scope, Core User Flows и Success Criteria.
+
+После Stage 0 переходить к Product Spec → Technical Design → Production Plan.
+
 ## 1. Работа логичными блоками
 
 Разработку вести законченными блоками.
