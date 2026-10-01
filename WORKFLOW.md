@@ -8,7 +8,9 @@
 
 ## 0. До технического планирования
 
-Сначала применить [AI Smart Entry](AI_ENTRYPOINT.md): определить тип запроса, использовать уже известный контекст и решить, нужен ли Stage 0.
+Сначала применить [AI Smart Entry](AI_ENTRYPOINT.md): определить тип запроса, использовать уже известный контекст, проверить наличие explicit external reference и решить, нужен ли Stage 0.
+
+Если конкретный внешний продукт/artifact выбран как референс/основа/аналог, применить [Reference Audit](REFERENCE_AUDIT.md). Для соответствующего reference-driven scope Technical Design не начинается, пока Reference Specification не достигла exit criteria либо critical gaps не зафиксированы как BLOCKED.
 
 Для нового продукта, крупной новой функции или изменения product direction сначала проверить, завершён ли [Stage 0 — Product Discovery](PRODUCT_DISCOVERY.md).
 
@@ -22,7 +24,7 @@
 - отличать Confirmed Requirement / Derived Requirement / Assumption / Open Question / Idea / Non-goal;
 - после достаточной ясности собрать Product Vision, Product Scope, Core User Flows и Success Criteria.
 
-После Stage 0 переходить к Product Spec → Technical Design → Production Plan.
+После применимых Reference Audit / Stage 0 переходить к Product Spec → Technical Design → Production Plan. Эти этапы MAY уточнять друг друга итеративно, но применимые exit criteria должны быть закрыты до технического проектирования соответствующего scope.
 
 ## 1. Работа логичными блоками
 
