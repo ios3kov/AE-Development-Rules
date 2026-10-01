@@ -1,0 +1,68 @@
+{
+  "baseline": "b27f45467e0a9152fc82c1072438dfed07f0c36e",
+  "observed_at": "2026-10-01T20:54:16.471Z",
+  "scope": "Isolated tool-contract probes; no Adobe host or live model execution",
+  "bugfix_context": {
+    "task": "bugfix",
+    "components": [
+      "native"
+    ],
+    "risk": "standard",
+    "delivery": "development",
+    "reference": "none",
+    "product_contract": true,
+    "contract_covers_scope": true,
+    "changes_product_contract": false
+  },
+  "bugfix_rule_selection": {
+    "risk": "standard",
+    "delivery": "development",
+    "product_discovery": false,
+    "reference_audit": false,
+    "implementation_task": true,
+    "rules": [
+      "CORE-SCOPE",
+      "GIT",
+      "IDENTITY",
+      "REGRESSION",
+      "EVIDENCE",
+      "CODE-SAFETY",
+      "NATIVE-RUNTIME",
+      "BASELINE",
+      "TEST-CONTROL",
+      "COMPAT",
+      "PERF"
+    ]
+  },
+  "reversed_section_range": {
+    "accepted": true,
+    "section": "19-17"
+  },
+  "sparse_pixels": {
+    "status": "PASS",
+    "failed_samples": 0,
+    "max_absolute_error": null,
+    "rmse": "NaN",
+    "present_pixel_values": 0,
+    "total_slots": 64
+  },
+  "serialized_sparse_pixels": {
+    "accepted": false,
+    "error": "invalid pixels"
+  },
+  "whitespace_only_na_reason": {
+    "required_checks": 1,
+    "reason_character_codes": [
+      32,
+      9,
+      10,
+      32
+    ],
+    "input": "Illustrative native record; all checks set to N/A with whitespace-only reasons and no Evidence",
+    "result": {
+      "recorded_policy": "PASS",
+      "release_readiness": "NOT_ASSESSED",
+      "checks": 1
+    }
+  }
+}

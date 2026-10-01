@@ -72,5 +72,6 @@
 - [Сценарии оценки поведения ИИ](docs/AI_BEHAVIOR_SCENARIOS.md)
 - [Шаблон состояния продолжающейся задачи](starter-kit/templates/AI_TASK_STATE.md)
 - [Изменения протокола ИИ и проверка обновления](docs/AI_PROTOCOL_UPDATE.md)
+- [Дальнейший аудит и список доработок протокола ИИ](docs/AI_PROTOCOL_BACKLOG.md)
 
 Скрипты требуют Node.js 22+; POSIX wrappers также требуют zsh. При копировании сохранять весь каталог `scripts`, включая `lib`, и соответствующие schemas/registry для project-record tooling.
