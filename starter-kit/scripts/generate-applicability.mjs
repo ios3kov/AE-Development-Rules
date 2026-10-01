@@ -54,6 +54,10 @@ function validate(manifest) {
     if (ids.has(group.id)) throw new Error("duplicate rule group id: " + group.id);
     ids.add(group.id);
 
+    if (group.applicability === "conditional" && !group.trigger) {
+      throw new Error("conditional rule group requires trigger: " + group.id);
+    }
+
     const sourcePath = path.join(root, group.source);
     if (!fs.existsSync(sourcePath)) throw new Error("missing canonical rule source: " + group.source);
 
