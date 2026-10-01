@@ -10,6 +10,7 @@ Use this checklist for a **limited user validation build**. It is not a Release 
 
 ## Artifact identity
 
+- [ ] Source state clean; user handoff excludes dirty experimental builds
 - [ ] Git commit / source version recorded
 - [ ] Build ID or equivalent identity recorded
 - [ ] Artifact hash recorded where practical

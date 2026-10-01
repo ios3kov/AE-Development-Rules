@@ -18,6 +18,12 @@ if [[ "$STAPLING" == "na" && -z "${AE_STAPLING_NA_REASON:-}" ]]; then
 fi
 [[ ! -e "$OUT" && ! -L "$OUT" ]] || { echo "ERROR: evidence output exists" >&2; exit 2; }
 [[ -e "$BUNDLE" ]] || { echo "ERROR: bundle not found: $BUNDLE" >&2; exit 1; }
+case "$BUNDLE" in
+  *.pkg) ASSESS_TYPE=install ;;
+  *.dmg) ASSESS_TYPE=open ;;
+  *.app) ASSESS_TYPE=execute ;;
+  *) echo "BLOCKED: assess final app/pkg/dmg; native plugin alone needs a project-specific host/distribution test" >&2; exit 2 ;;
+esac
 
 FAIL=0
 {
@@ -33,14 +39,23 @@ FAIL=0
     if [[ "$MODE" == "public" ]]; then FAIL=1; fi
   fi
   echo
-  echo "## codesign"
-  if codesign --verify --deep --strict --verbose=2 "$BUNDLE"; then
-    echo "codesign=PASS"
+  echo "## signature"
+  if [[ "$ASSESS_TYPE" == "install" ]]; then
+    if pkgutil --check-signature "$BUNDLE"; then
+      echo "pkgutil=PASS"
+    else
+      echo "pkgutil=FAIL"
+      FAIL=1
+    fi
   else
-    echo "codesign=FAIL"
-    FAIL=1
+    if codesign --verify --deep --strict --verbose=2 "$BUNDLE"; then
+      echo "codesign=PASS"
+    else
+      echo "codesign=FAIL"
+      FAIL=1
+    fi
+    codesign -dv --verbose=4 "$BUNDLE" 2>&1 || true
   fi
-  codesign -dv --verbose=4 "$BUNDLE" 2>&1 || true
   echo
   echo "## stapler"
   if [[ "$STAPLING" == "na" ]]; then
@@ -53,13 +68,11 @@ FAIL=0
   fi
   echo
   echo "## Gatekeeper"
-  case "$BUNDLE" in
-    *.pkg) ASSESS_TYPE=install ;;
-    *.dmg) ASSESS_TYPE=open ;;
-    *.app) ASSESS_TYPE=execute ;;
-    *) echo "BLOCKED: assess final app/pkg/dmg; native plugin alone needs a project-specific host/distribution test"; FAIL=1; ASSESS_TYPE="" ;;
-  esac
-  if [[ -n "$ASSESS_TYPE" ]] && spctl --assess --type "$ASSESS_TYPE" --verbose=4 "$BUNDLE" 2>&1; then
+  ASSESS_ARGS=(--assess --type "$ASSESS_TYPE" --verbose=4)
+  if [[ "$ASSESS_TYPE" == "open" ]]; then
+    ASSESS_ARGS+=(--context context:primary-signature)
+  fi
+  if spctl "${ASSESS_ARGS[@]}" "$BUNDLE" 2>&1; then
     echo "spctl=PASS"
   else
     echo "spctl=FAIL"

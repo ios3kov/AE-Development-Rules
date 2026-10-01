@@ -38,6 +38,27 @@ test('A06 JSX directives, include cycles and missing/invalid includes',()=>{
  fs.unlinkSync(inc);assert.notEqual(node('check-extendscript.mjs',[source]).status,0);
  fs.writeFileSync(inc,'var value=1;');fs.writeFileSync(source,'#include "'+inc.split(path.sep).join('/')+'"\n');const absolute=node('check-extendscript.mjs',[source]);assert.equal(absolute.status,2);assert.match(absolute.stderr,/literal relative path/);
 });
+test('R03 JSX regex/division and literal directive text retain correct lexical boundaries',()=>{
+ const source=path.join(tmp,'lexical.jsx'),inc=path.join(tmp,'lexical.jsxinc');
+ fs.writeFileSync(inc,'var included=1;\n');
+ const prefixes=[
+  'var re = /[/*]/;',
+  'var re = /[\\/]/; // /',
+  'function f(){ return /[/*]/; }',
+  'if (true) /[/*]/.test("/");',
+  'var n = 8 / 2; /* real comment */',
+  'var n = 8 / 2; /* real comment\n#include "missing.jsxinc"\n*/',
+  'var text = `\n#include "missing.jsxinc"\n`;',
+  'var text = "#include \\"missing.jsxinc\\"";'
+ ];
+ for(const prefix of prefixes){
+  fs.writeFileSync(source,'#target aftereffects\n'+prefix+'\n#include "lexical.jsxinc"\nincluded++;\n');
+  const result=node('check-extendscript.mjs',[source]);assert.equal(result.status,0,prefix+'\n'+result.stderr);
+ }
+ fs.writeFileSync(inc,'var = ;');
+ fs.writeFileSync(source,'var re = /[/*]/;\n#include "lexical.jsxinc"\n');
+ assert.notEqual(node('check-extendscript.mjs',[source]).status,0,'invalid include after regex must still fail');
+});
 test('A10 API scan rejects invalid scope and records complete candidate inventory',()=>{
  const src=path.join(tmp,'source');fs.mkdirSync(src);
  assert.notEqual(node('scan-adobe-api.mjs',[src,path.join(tmp,'empty-api')]).status,0);
@@ -45,6 +66,15 @@ test('A10 API scan rejects invalid scope and records complete candidate inventor
  const out=path.join(tmp,'api');assert.equal(node('scan-adobe-api.mjs',[src,out]).status,0);assert.match(fs.readFileSync(path.join(out,'adobe-api-symbols.txt'),'utf8'),/PF_Cmd_RENDER/);
  assert.notEqual(node('scan-adobe-api.mjs',[src,out]).status,0);
  if(process.platform!=='win32' && process.getuid?.()!==0){fs.chmodSync(file,0);try{assert.notEqual(node('scan-adobe-api.mjs',[src,path.join(tmp,'unreadable-api')]).status,0);}finally{fs.chmodSync(file,0o644);}}
+});
+test('R04 API inventory includes supported extensions in either case',()=>{
+ const src=path.join(tmp,'source-case');fs.mkdirSync(src);
+ const files={'lower.cpp':'PF_Cmd_RENDER','upper.C':'PF_Cmd_SMART_PRE_RENDER','header.H':'AEGP_GetLayerName','other.CPP':'PF_Cmd_SMART_RENDER'};
+ for(const [name,symbol] of Object.entries(files))fs.writeFileSync(path.join(src,name),'int value = '+symbol+';\n');
+ const out=path.join(tmp,'api-case');const result=node('scan-adobe-api.mjs',[src,out]);assert.equal(result.status,0,result.stderr);
+ const inventory=JSON.parse(fs.readFileSync(path.join(out,'inventory.json'),'utf8'));
+ assert.deepEqual(inventory.candidates.map(c=>c.path).sort(),Object.keys(files).sort());
+ const symbols=fs.readFileSync(path.join(out,'adobe-api-symbols.txt'),'utf8');for(const symbol of Object.values(files))assert.ok(symbols.includes(symbol),symbol);
 });
 const posix=process.platform!=='win32'&&run('zsh',['--version']).status===0;
 test('A04 preflight rejects staged errors, failing project checks and non-executable hooks',{skip:!posix},()=>{
@@ -79,6 +109,31 @@ test('A12 required stapling failure blocks; explicit N/A needs a reason',{skip:!
  assert.notEqual(run('zsh',[script,app,path.join(tmp,'staple-fail'),'public','required'],{env}).status,0);
  assert.notEqual(run('zsh',[script,app,path.join(tmp,'staple-na'),'local','na'],{env}).status,0);
  assert.equal(run('zsh',[script,app,path.join(tmp,'staple-na-reason'),'local','na'],{env:{...env,AE_STAPLING_NA_REASON:'project format excludes stapling'}}).status,0);
+});
+test('R02 macOS app/pkg/dmg verification selects format-specific commands',{skip:!posix},()=>{
+ const bin=path.join(tmp,'format-stubs');fs.mkdirSync(bin);const trace=path.join(tmp,'format-trace');
+ const bodies={
+  codesign:'case "$*" in *.pkg*) exit 7;; esac\nexit 0',
+  pkgutil:'[ "$1" = "--check-signature" ] || exit 8\n[ "${AE_FIXTURE_BAD_PKG:-0}" = "0" ] || exit 9\nexit 0',
+  spctl:'case "$*" in *.dmg*) case "$*" in *"--context context:primary-signature"*) exit 0;; *) exit 10;; esac;; esac\nexit 0',
+  xattr:'exit 0',xcrun:'exit 0'
+ };
+ for(const [name,body] of Object.entries(bodies)){
+  const file=path.join(bin,name);fs.writeFileSync(file,'#!/bin/sh\nprintf "%s\\n" "$0 $*" >> "$AE_TEST_TRACE"\n'+body+'\n');fs.chmodSync(file,0o755);
+ }
+ const env={...process.env,PATH:bin+path.delimiter+process.env.PATH,AE_TEST_TRACE:trace};
+ const script=path.join(scripts,'macos-bundle-verify.sh');
+ for(const extension of ['app','pkg','dmg']){
+  const target=path.join(tmp,'format.'+extension);fs.writeFileSync(target,'fixture');fs.writeFileSync(trace,'');
+  const result=run('zsh',[script,target,path.join(tmp,'format-'+extension+'.txt'),'public','required'],{env});
+  assert.equal(result.status,0,result.stdout+result.stderr);
+  const calls=fs.readFileSync(trace,'utf8');
+  if(extension==='pkg'){assert.match(calls,/pkgutil --check-signature/);assert.ok(!calls.includes('codesign '));assert.match(calls,/spctl --assess --type install/);}
+  else {assert.match(calls,/codesign --verify/);assert.ok(!calls.includes('pkgutil '));}
+  if(extension==='dmg')assert.match(calls,/--context context:primary-signature/);
+ }
+ const failed=run('zsh',[script,path.join(tmp,'format.pkg'),path.join(tmp,'format-bad-pkg.txt'),'public','required'],{env:{...env,AE_FIXTURE_BAD_PKG:'1'}});
+ assert.notEqual(failed.status,0);assert.match(failed.stdout,/pkgutil=FAIL/);
 });
 test('A01 empty resource cannot pass structural bundle check',{skip:process.platform!=='darwin'},()=>{
  const bundle=path.join(tmp,'Fake.plugin'),contents=path.join(bundle,'Contents');fs.mkdirSync(path.join(contents,'MacOS'),{recursive:true});fs.mkdirSync(path.join(contents,'Resources'));

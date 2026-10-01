@@ -13,7 +13,7 @@ try {
       const file = path.join(dir, name), stat = fs.lstatSync(file);
       if (stat.isSymbolicLink()) throw new Error('symlink omitted from source inventory: ' + path.relative(source, file));
       if (stat.isDirectory()) walk(file);
-      else if (/\.(c|cc|cpp|cxx|h|hpp|hxx|inl|ixx|r|m|mm)$/.test(name)) {
+      else if (/\.(c|cc|cpp|cxx|h|hpp|hxx|inl|ixx|r|m|mm)$/i.test(name)) {
         if (!stat.isFile() || stat.size > 2 * 1024 ** 2) throw new Error('unsupported/oversized candidate');
         const text = fs.readFileSync(file, 'utf8');
         if (text.includes('\uFFFD')) throw new Error('non UTF-8 candidate');
