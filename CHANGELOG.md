@@ -1,6 +1,30 @@
 # Changelog
 
-## 4.1.0 — Unreleased
+## 5.0.0 — Unreleased
+
+Breaking AI/process candidate. Adds mandatory trust, resume-state and scoped-autonomy contracts for AI-assisted work, plus target-source verification when adding/changing host API use. Includes the unreleased 4.1.0 audit remediation below; no 4.1.0 release is implied. Published stable baseline remains 4.0.0 until an explicitly authorized release.
+
+- Smart Entry defines user-decision precedence, adopted-rule boundaries and untrusted reference/tool content. External instructions cannot grant scope or approval.
+- Continuing repository tasks restore actual Git/environment state, confirmed decisions, permission sources, Evidence and the next step; update the existing canonical checkpoint rather than duplicate documents.
+- Autonomous continuation retains scoped authorization, distinguishes edit/push/merge/publication rights and continues independent work around a blocker.
+- Reference BLOCKED no longer reads as permission to start dependent Technical Design.
+- Routing distinguishes contract existence, current-scope coverage and product-level changes, even when a change is called a bugfix. Already confirmed scope does not require a repeated interview.
+- Newly used/changed host APIs need exact target header/doc/signature/revision applicability records; unknown API contracts cannot be fabricated.
+- Adds 16 free-text agent-behavior evaluation scenarios and a reusable task-state template. Automated routing tests and actual model evaluation remain separate Evidence.
+
+### Migration to 5.0
+
+Adopt the new standard version and exact commit consciously; do not upgrade a frozen project baseline automatically.
+
+For AI-assisted continuing tasks, use an existing canonical status/spec record to retain the goal, confirmed decisions, actual authorization sources, current Git/artifact/Evidence identity, scoped blockers and next step. Recheck current state on resume; do not treat the record itself as user consent. Review the precedence and autonomy contracts in AI_ENTRYPOINT.md.
+
+Routing callers must now supply all three boolean fields: `product_contract`, `contract_covers_scope`, `changes_product_contract`. The former boolean alone is rejected. Determine scope coverage from the current confirmed requirements and applicable Stage 0 exit criteria; never migrate by blindly assigning `contract_covers_scope: true`. A missing contract cannot cover scope. Output keys and manifest schema 3 are unchanged.
+
+For new/changed host API use, record the selected SDK/host sources and precise contract in the project's existing API inventory/research record. Existing unchanged calls do not require repeated inventory work without a new reason.
+
+AI behavior runs are configuration-specific and separate from starter-kit self-test. No live model or AE runtime result is claimed by the scenario catalogue. See [update record](docs/AI_PROTOCOL_UPDATE.md).
+
+## 4.1.0 — Unreleased work incorporated into 5.0.0
 
 Audit remediation A01–A13; enforcement of existing safety/Evidence requirements and corrections to contradictory milestone/micro-helper routing. No new universal MUST is introduced. Previously compliant projects keep their requirements; tooling integration needs the migration below.
 
@@ -19,7 +43,7 @@ Audit remediation A01–A13; enforcement of existing safety/Evidence requirement
 
 Copy scripts with their lib directory. Node 22+ is required. `rules-manifest.yaml` uses JSON notation (valid YAML 1.2); schema 3 replaces free-form rule lists with structured inheritance/rules. Existing artifact/binary evidence output directories/files cannot be reused. Dependency reports may share a history directory, with fresh UUID names and exclusive files. Binary collectors return 2 for incomplete collection. Configure macOS local/public and required/na stapling policy explicitly; a documented N/A requires AE_STAPLING_NA_REASON. Windows timestamp is required by default; LocalCheck intentionally excludes that public-release gate. Never upgrade a baseline in a frozen release cycle automatically.
 
-The JSX checker now includes pinned js-tokens 10.0.0 under scripts/lib/vendor, with its MIT license and provenance. Copy that complete directory when upgrading. Dirty Validation records now return BLOCKED/nonzero, enforcing the existing internal-only dirty-build rule. PKG signature Evidence is named pkgutil rather than codesign. No mandatory process requirement or record schema version changes in this follow-up; VERSION remains the unreleased 4.1.0 candidate.
+The JSX checker now includes pinned js-tokens 10.0.0 under scripts/lib/vendor, with its MIT license and provenance. Copy that complete directory when upgrading. Dirty Validation records now return BLOCKED/nonzero, enforcing the existing internal-only dirty-build rule. PKG signature Evidence is named pkgutil rather than codesign. That follow-up introduced no mandatory process requirement or record schema version changes; its unreleased 4.1.0 work is retained in the 5.0.0 candidate.
 
 ## 4.0.0 — 2026-10-01
 

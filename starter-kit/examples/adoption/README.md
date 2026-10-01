@@ -1,6 +1,6 @@
 # Filled adoption examples
 
-These are complete illustrative contracts. The products and candidate IDs are examples, not tested deliverables. All required runtime checks intentionally remain NOT RUN. Zero commit/hash values identify unbuilt example candidates; replace them with actual identity before adoption. The baseline version 4.1.0 is the proposed remediation revision; its final standard commit must be recorded after acceptance.
+These are complete illustrative contracts. The products and candidate IDs are examples, not tested deliverables. All required runtime checks intentionally remain NOT RUN. Zero commit/hash values identify unbuilt example candidates; replace them with actual identity before adoption. The recorded baseline version 4.1.0 is the earlier unreleased remediation example, not the current 5.0.0 candidate or an accepted release. On actual adoption, consciously select the baseline, record its exact commit and apply its migration; these historical illustrative records are not rewritten as new Evidence.
 
 ## Native effect
 

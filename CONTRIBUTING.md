@@ -6,6 +6,8 @@ For each change record the problem, affected stable Rule/Requirement IDs, applic
 
 Run `node starter-kit/scripts/self-test.mjs --dry-run` and the required platform subset. A skipped runtime is NOT RUN. Tests with mocked commands establish wrapper logic, not Apple/Microsoft/Adobe runtime semantics. Do not label a static scanner as release certification.
 
+For AI instruction/routing changes, reconcile the [behavior scenarios](docs/AI_BEHAVIOR_SCENARIOS.md), affected routing regressions and task-state/migration examples. When assessing an actual AI configuration, retain observed model/tool traces against the exact standard and fixture revisions. Passing structural or typed-context tests does not constitute a model behavior run.
+
 Use [§34 versioning](core/ENGINEERING.md) and state the impact on already compliant projects. Breaking mandatory process changes require a major version and migration notes. Clarifications, enforcement of existing requirements and optional capabilities must describe tooling migration where formats or exit codes change. Keep previous project baselines frozen until consciously adopted.
 
 Before authorized publication, reconcile VERSION, CHANGELOG and README; verify the exact candidate SHA with the required CI matrix and review migration notes. Create an annotated version tag pointing to the approved commit only as part of the explicitly authorized release. Branch protection and release permissions are account settings and are not configured by this document.

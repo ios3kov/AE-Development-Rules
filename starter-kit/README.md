@@ -27,6 +27,8 @@ Self-test не меняет repository files. Он проверяет:
 - behavioural smoke tests и negative regressions A01–A13 в изолированном temp workspace;
 - строгие manifest/project-record schemas, routing scenarios, requirement markers и численные render fixtures.
 
+Self-test не запускает модель ИИ. [Сценарии поведения ИИ](../docs/AI_BEHAVIOR_SCENARIOS.md) проверяются по фактическим действиям конкретной конфигурации отдельно; наличие сценариев и PASS routing helper не доказывают поведение модели.
+
 CI запускает тот же self-test на Linux, macOS и Windows через `.github/workflows/starter-kit-self-test.yml`.
 
 ## Scripts
@@ -52,6 +54,7 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 
 ## Templates
 
+- `templates/AI_TASK_STATE.md` — встраивается в существующий canonical status для продолжающейся задачи; отдельный файл не обязателен.
 - `templates/REFERENCE_SPECIFICATION_TEMPLATE.md`
 - `templates/PRODUCT_DISCOVERY_TEMPLATE.md`
 - `templates/STANDARD_ADOPTION.md`
@@ -84,6 +87,8 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 ## Внедрение
 
 При AI-assisted работе сначала использовать корневой `AI_ENTRYPOINT.md`: ИИ сам определяет нужный процесс по обычной формулировке пользователя.
+
+Для продолжающейся repository-задачи сохранять решения, границы действий и актуальное состояние в существующей документации по [Smart Entry §2.2](../AI_ENTRYPOINT.md#22-восстановление-и-сохранение-состояния-задачи). При новом/изменённом host API проверять точный контракт по выбранным SDK headers / официальным docs; [API audit template](templates/API_COMPATIBILITY_AUDIT.md) хранит ссылки и ограничения.
 
 1. Если пользователь явно выбрал конкретный внешний продукт/artifact как референс/основу/аналог — пройти `REFERENCE_SPECIFICATION_TEMPLATE.md` по [Reference Audit](../REFERENCE_AUDIT.md).
 2. Для нового продукта / крупной функции, когда Smart Entry определил product-level неопределённость, пройти Stage 0 через `PRODUCT_DISCOVERY_TEMPLATE.md`.
@@ -129,5 +134,24 @@ Node.js 22+ is required. Copy complete scripts/lib dependencies, including the v
 - Evidence collectors never reuse output paths. A binary collector exit 2 means incomplete collection; signing errors also remain visible as individual probe outcomes.
 
 Self-test coverage is printed. CI requires POSIX on Linux/macOS and PowerShell on Windows. A skipped platform check is NOT RUN; structural keyword checks only protect document structure. Semantic routing and A01–A13 negative fixtures run separately.
+
+### Routing context migration (5.0)
+
+`scripts/lib/applicability.mjs` exports `route(manifest, context)`. Callers classify the user's request before calling it; the helper does not interpret free text, verify exit criteria or authorize actions.
+
+```json
+{
+  "task": "major-feature",
+  "components": ["jsx"],
+  "risk": "standard",
+  "delivery": "development",
+  "reference": "none",
+  "product_contract": true,
+  "contract_covers_scope": false,
+  "changes_product_contract": true
+}
+```
+
+Here an older confirmed product contract exists, but does not cover the new scope: discovery is required. All three product flags are required booleans; do not infer coverage from file existence. If applicable Stage 0 is already complete and the current approved contract covers the requested new scope, set `contract_covers_scope: true`; no repeat interview is needed. A missing contract cannot cover scope. Audit/research/documentation do not become implementation merely because a product change is discussed. Manifest schema 3 and route output keys remain unchanged.
 
 CI требует POSIX runtime на Linux/macOS и PowerShell на Windows. В отчёте явно указаны RUN/NOT RUN и platform skips; платформенная проверка не считается выполненной на другом runner. Примеры CI передают базовый commit PR в preflight; локально тот же scope задаётся через `AE_PREFLIGHT_BASE_REF`.

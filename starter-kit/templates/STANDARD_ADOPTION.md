@@ -10,6 +10,10 @@
 - Stage 0 status: `COMPLETE | EXISTING PRODUCT CONTRACT | N/A`
 - Product Discovery / Product Vision reference:
 - Product Vision / requirements baseline date:
+- Does the confirmed contract cover the current requested scope / applicable Stage 0 exit criteria?:
+- Does the current request change product value / core workflows / scope?:
+- Canonical AI task-state / decision record, for continuing AI-assisted work:
+- Authorization sources and explicit action boundaries (references, not invented approval):
 - Current Risk Profile: `Light | Standard | Critical`
 - Current Delivery Gate: `Development | Validation | Release`
 - Rules manifest schema/version:

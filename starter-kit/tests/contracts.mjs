@@ -18,7 +18,7 @@ test('A05 manifest rejects empty/missing profiles, fields, duplicate IDs and unk
  }finally{fs.rmSync(tmp,{recursive:true,force:true});}
 });
 test('A07/A09 routing scenarios keep milestone/risk/delivery and scoped reference independent',()=>{
- const common={components:['jsx'],risk:'light',delivery:'development',reference:'none',product_contract:true};
+ const common={components:['jsx'],risk:'light',delivery:'development',reference:'none',product_contract:true,contract_covers_scope:true,changes_product_contract:false};
  const cases=[
   [{task:'audit',reference:'whole-product'},false,false,false],
   [{task:'research'},false,false,false],
@@ -26,15 +26,33 @@ test('A07/A09 routing scenarios keep milestone/risk/delivery and scoped referenc
   [{task:'bugfix'},false,false,true],
   [{task:'improvement',delivery:'release'},false,false,true],
   [{task:'improvement',components:['native'],risk:'critical'},false,false,true],
-  [{task:'new-product',reference:'feature',product_contract:false},true,true,true],
-  [{task:'new-product',reference:'ui',product_contract:false},true,true,true],
+  [{task:'new-product',reference:'feature',product_contract:false,contract_covers_scope:false},true,true,true],
+  [{task:'new-product',reference:'ui',product_contract:false,contract_covers_scope:false},true,true,true],
   [{task:'improvement',reference:'behavior'},false,true,true],
-  [{task:'new-product',reference:'whole-product',product_contract:false},true,true,true],
-  [{task:'new-product',components:['uxp','helper'],risk:'standard',delivery:'validation',product_contract:false},true,false,true]
+  [{task:'new-product',reference:'whole-product',product_contract:false,contract_covers_scope:false},true,true,true],
+  [{task:'new-product',components:['uxp','helper'],risk:'standard',delivery:'validation',product_contract:false,contract_covers_scope:false},true,false,true]
  ];
  for(const [patch,discovery,reference,implementation] of cases){const context={...common,...patch};const result=route(m,context);assert.equal(result.risk,context.risk);assert.equal(result.delivery,context.delivery);assert.equal(result.product_discovery,discovery);assert.equal(result.reference_audit,reference);assert.equal(result.implementation_task,implementation);assert.equal(result.rules.includes('GATES'),context.delivery!=='development');}
  assert.throws(()=>route(m,{...common,task:'bugfix',components:['invalid']}));
  const process=fs.readFileSync(path.join(root,'core/PROCESS.md'),'utf8');assert.ok(!process.includes('Для milestone / Release Candidate дополнительно:'));assert.ok(!process.includes('распространяться публично или становиться частью production workflow'));
+});
+test('AI routing evaluates the confirmed current scope rather than contract existence or task label',()=>{
+ const common={components:['jsx'],risk:'light',delivery:'development',reference:'none',product_contract:true,contract_covers_scope:false,changes_product_contract:true};
+ for(const task of ['new-product','major-feature','improvement','bugfix']){
+  const result=route(m,{...common,task});
+  assert.equal(result.product_discovery,true,task+' must resolve changed scope');
+  assert.ok(result.rules.includes('PRODUCT-DISCOVERY'));
+  const confirmed=route(m,{...common,task,contract_covers_scope:true});
+  assert.equal(confirmed.product_discovery,false,task+' must reuse an already confirmed current scope');
+ }
+ for(const task of ['new-product','major-feature']) assert.equal(route(m,{...common,task,changes_product_contract:false}).product_discovery,true,task+' uncovered by the old contract');
+ for(const task of ['audit','documentation','research']) assert.equal(route(m,{...common,task,reference:'whole-product'}).product_discovery,false,task+' must not authorize implementation');
+ assert.equal(route(m,{...common,task:'bugfix',changes_product_contract:false}).product_discovery,false,'a local bugfix does not need a discovery interview merely because documentation is incomplete');
+ for(const key of ['product_contract','contract_covers_scope','changes_product_contract']){
+  const missing={...common,task:'major-feature'};delete missing[key];assert.throws(()=>route(m,missing),key+' is required');
+  for(const value of [null,'true',1]) assert.throws(()=>route(m,{...common,task:'major-feature',[key]:value}),key+' must be boolean');
+ }
+ assert.throws(()=>route(m,{...common,task:'new-product',product_contract:false,contract_covers_scope:true}),'a missing contract cannot cover the scope');
 });
 test('requirement registry resolves unique stable markers in canonical sources',()=>{
  const ids=new Set();for(const r of registry.requirements){assert.ok(!ids.has(r.id));ids.add(r.id);const text=fs.readFileSync(path.join(root,r.source),'utf8');assert.equal(text.split('<!-- REQ: '+r.id+' -->').length-1,1);}

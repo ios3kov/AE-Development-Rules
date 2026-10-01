@@ -1,12 +1,12 @@
 # AE Development Rules
 
-Единый инженерный стандарт разработки инструментов для Adobe After Effects.
+Правила для ИИ, который разрабатывает наш продукт для Adobe After Effects: от пользовательской цели и подтверждённых решений до кода, проверок и передачи результата. Инженерные требования также применимы к разработчикам и командам.
 
 Этот репозиторий является **центральным источником правил для всех наших AE-проектов**: native plugins/effects, scripts, ScriptUI, CEP/UXP, helper-приложений и связанных компонентов.
 
 ## Версия стандарта
 
-**Версия этой ветки: v4.1.0 (кандидат). Опубликованный стабильный baseline: v4.0.0.**
+**Версия этой ветки: v5.0.0 (кандидат). Опубликованный стабильный baseline: v4.0.0.**
 
 - [VERSION](VERSION)
 - [CHANGELOG.md](CHANGELOG.md)
@@ -23,7 +23,7 @@
 
 ## Главные документы
 
-- [AI_ENTRYPOINT.md](AI_ENTRYPOINT.md) — умный вход: переводит обычный пользовательский запрос на язык стандарта.
+- [AI_ENTRYPOINT.md](AI_ENTRYPOINT.md) — вход и протокол ИИ: намерение, приоритет решений, восстановление контекста, маршрутизация и автономность.
 - [REFERENCE_AUDIT.md](REFERENCE_AUDIT.md) — обязательная декомпозиция конкретного внешнего референса, когда пользователь выбрал его как основу/аналог.
 - [PRODUCT_DISCOVERY.md](PRODUCT_DISCOVERY.md) — обязательный Stage 0 для нового продукта / крупной новой функции: interview → Product Vision → Scope → User Flows → Success Criteria.
 - [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) — нормативный индекс, ключевые определения и сгенерированная applicability map.
@@ -69,5 +69,8 @@
 - [Заполненные примеры Native, JSX и CEP](starter-kit/examples/adoption/README.md)
 - [Evidence lifecycle](core/EVIDENCE_LIFECYCLE.md)
 - [Порядок изменения стандарта](CONTRIBUTING.md)
+- [Сценарии оценки поведения ИИ](docs/AI_BEHAVIOR_SCENARIOS.md)
+- [Шаблон состояния продолжающейся задачи](starter-kit/templates/AI_TASK_STATE.md)
+- [Изменения протокола ИИ и проверка обновления](docs/AI_PROTOCOL_UPDATE.md)
 
 Скрипты требуют Node.js 22+; POSIX wrappers также требуют zsh. При копировании сохранять весь каталог `scripts`, включая `lib`, и соответствующие schemas/registry для project-record tooling.
