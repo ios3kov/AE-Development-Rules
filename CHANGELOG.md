@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.1.1 — 2026-10-01
+
+Maintenance / optimization cleanup без изменения process contract.
+
+- Исправлен legacy-термин `API-COMPATIBLE` в `scan-adobe-api.sh`; актуальный static status — `STATIC-COMPATIBLE`.
+- Self-test теперь проверяет legacy terminology не только в Markdown, но и в scripts/manifests.
+- macOS/Windows binary audit helpers явно разделяют **evidence collection** и **audit verdict**: exit code 0 больше нельзя ошибочно трактовать как Compatibility PASS/VERIFIED.
+- Windows binary audit отмечает неполный сбор PE/dependency evidence как `collection_status=PARTIAL`.
+- AI Smart Entry сокращён без изменения маршрутизации и обязательной семантики.
+- Удалён двойной section separator из `DEVELOPMENT_RULES.md`.
+- Full Linux/macOS/Windows self-test matrix теперь запускается на PR, `main` и вручную; промежуточные branch pushes не создают лишние полные runs.
+- Добавлен `concurrency / cancel-in-progress`, чтобы новый commit отменял устаревший run того же PR/ref.
+- Self-test защищает audit semantics и оптимизированную CI policy от случайной регрессии.
+
 ## 3.1.0 — 2026-10-01
 
 Backward-compatible usability update: добавлен **AI Smart Entry** — пользователь больше не должен знать или выбирать внутренние инженерные режимы стандарта.
