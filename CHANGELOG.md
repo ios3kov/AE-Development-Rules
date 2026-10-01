@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.0.0 — 2026-10-01
+
+Breaking process release: Risk Profile и Delivery Gate теперь независимы.
+
+- Разделены оси **Risk Profile: Light / Standard / Critical** и **Delivery Gate: Development / Validation / Release**.
+- Удалено смешанное понятие `Release / Critical`: Critical больше не означает release, а Release Gate применяется независимо от риска изменения.
+- `DEVELOPMENT_RULES.md` превращён из большого монолита в компактный нормативный индекс; canonical rules разнесены по `core/` и `profiles/`.
+- Добавлены стабильные Rule Group IDs и machine-readable `rules-manifest.yaml`; applicability map генерируется и проверяется автоматически.
+- Добавлен отдельный **Technology Lifecycle Status**: PREVIEW / BETA / GA / DEPRECATED / RETIRED.
+- Зафиксирован текущий Adobe transition context: AE UXP — PREVIEW до фактического public beta; CEP — DEPRECATED для новой долгоживущей архитектуры с migration/exit plan.
+- Добавлен `SOURCES.md` с last-verified date и refresh interval; stale time-sensitive source блокирует self-test.
+- Добавлен нормативный словарь MUST / MUST NOT / SHOULD / MAY / APPLICABLE WHEN.
+- Regression Level 1 отвязан от каждого commit и привязан к integration checkpoint / merge-ready commit.
+- Starter-kit self-test теперь проверяет структуру §§1–41, manifest sync, source freshness, links, syntax, executable bits, terminology, SHA-pinning Actions и запускает behavioural smoke tests.
+- Добавлены behavioural fixtures для ExtendScript check, API scan, artifact evidence, owned workspace, preflight, dependency evidence и fail-closed negative paths platform tools.
+- GitHub Actions и примеры pinned на immutable full commit SHA и обновлены до v6.
+- Добавлена MIT license.
+- Уточнён versioning contract стандарта: изменение обязательной process/gate semantics, делающее прежний compliant project non-compliant, требует major version.
+
+### Migration from 1.2
+
+Проект, переходящий на 2.0, должен:
+
+1. заменить старый `Release-Critical` выбор на два независимых значения: Risk Profile + Delivery Gate;
+2. обновить ссылки на canonical modules / Rule Group IDs;
+3. для UXP/CEP зафиксировать Technology Lifecycle decision и актуальный source baseline;
+4. обновить project templates из starter-kit при следующем подходящем checkpoint.
+
 ## 1.2.0 — 2026-10-01
 
 - Разделены **Validation Build / Validation Gate** и **Release Candidate / Release Gate**: пользовательская проверка больше не требует автоматически полного release ceremony.

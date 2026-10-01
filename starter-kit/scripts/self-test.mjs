@@ -14,7 +14,9 @@ const warnings = [];
 function fail(message) { errors.push(message); }
 function warn(message) { warnings.push(message); }
 function rel(p) { return path.relative(repoRoot, p).split(path.sep).join("/"); }
-
+function run(cmd, args, options = {}) {
+  return spawnSync(cmd, args, { cwd: repoRoot, encoding: "utf8", ...options });
+}
 function walk(dir) {
   const out = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -26,17 +28,27 @@ function walk(dir) {
   return out;
 }
 
-function run(cmd, args) {
-  return spawnSync(cmd, args, { cwd: repoRoot, encoding: "utf8" });
-}
-
 const required = [
   "README.md",
   "DEVELOPMENT_RULES.md",
   "WORKFLOW.md",
   "VERSION",
   "CHANGELOG.md",
+  "LICENSE",
+  "SOURCES.md",
+  "rules-manifest.yaml",
+  "core/PROCESS.md",
+  "core/ENGINEERING.md",
+  "profiles/TOOLS.md",
+  "profiles/NATIVE.md",
+  "profiles/RELEASE.md",
+  "profiles/UXP.md",
+  "profiles/JSX.md",
+  "profiles/CEP.md",
+  "profiles/HELPER.md",
   "starter-kit/README.md",
+  "starter-kit/scripts/generate-applicability.mjs",
+  "starter-kit/tests/behavioral-smoke.mjs",
   "starter-kit/templates/VALIDATION_CHECKLIST.md",
   "starter-kit/templates/RELEASE_CHECKLIST.md",
   "starter-kit/templates/UXP_ENGINEERING.md"
@@ -56,6 +68,7 @@ if (fs.existsSync(versionPath)) {
 
 const files = walk(repoRoot);
 
+// Local Markdown links.
 for (const file of files.filter((p) => p.endsWith(".md"))) {
   const body = fs.readFileSync(file, "utf8");
   const linkRe = /!?\[[^\]]*\]\(([^)]+)\)/g;
@@ -71,21 +84,79 @@ for (const file of files.filter((p) => p.endsWith(".md"))) {
   }
 }
 
-const shellScripts = files.filter((p) => p.endsWith(".sh"));
-if (process.platform !== "win32") {
-  for (const file of shellScripts) {
-    const mode = fs.statSync(file).mode;
-    if ((mode & 0o111) === 0) fail(rel(file) + " is not executable");
-    const r = run("bash", ["-n", file]);
-    if (r.status !== 0) fail(rel(file) + ": bash -n failed: " + (r.stderr || r.stdout).trim());
+// Canonical numbered sections must exist exactly once across modules.
+const canonicalModules = files.filter((p) =>
+  p.endsWith(".md") &&
+  (p.startsWith(path.join(repoRoot, "core") + path.sep) || p.startsWith(path.join(repoRoot, "profiles") + path.sep))
+);
+const sectionOwners = new Map();
+for (const file of canonicalModules) {
+  const body = fs.readFileSync(file, "utf8");
+  for (const match of body.matchAll(/^## (\d+)\./gm)) {
+    const id = Number(match[1]);
+    if (!sectionOwners.has(id)) sectionOwners.set(id, []);
+    sectionOwners.get(id).push(rel(file));
+  }
+}
+for (let id = 1; id <= 41; id++) {
+  const owners = sectionOwners.get(id) || [];
+  if (owners.length === 0) fail("missing canonical section §" + id);
+  if (owners.length > 1) fail("duplicate canonical section §" + id + ": " + owners.join(", "));
+}
+
+// Applicability manifest must generate the exact checked-in table and point to real sections.
+const generator = path.join(repoRoot, "starter-kit", "scripts", "generate-applicability.mjs");
+if (fs.existsSync(generator)) {
+  const r = run(process.execPath, [generator, "--check"]);
+  if (r.status !== 0) fail("applicability manifest check failed: " + (r.stderr || r.stdout).trim());
+}
+
+// Source freshness registry.
+const sourcesPath = path.join(repoRoot, "SOURCES.md");
+if (fs.existsSync(sourcesPath)) {
+  const body = fs.readFileSync(sourcesPath, "utf8");
+  const heads = [...body.matchAll(/^### (SRC-[A-Z0-9-]+)/gm)];
+  if (heads.length === 0) fail("SOURCES.md contains no registered sources");
+  for (let i = 0; i < heads.length; i++) {
+    const id = heads[i][1];
+    const start = heads[i].index;
+    const end = i + 1 < heads.length ? heads[i + 1].index : body.length;
+    const text = body.slice(start, end);
+    const dateMatch = text.match(/^- Last verified: (\d{4}-\d{2}-\d{2})$/m);
+    const intervalMatch = text.match(/^- Refresh interval days: (\d+)$/m);
+    const urlMatch = text.match(/^- URL: https:\/\//m);
+    if (!dateMatch || !intervalMatch || !urlMatch) {
+      fail(id + " is missing URL/date/refresh interval");
+      continue;
+    }
+    const ageDays = Math.floor((Date.now() - Date.parse(dateMatch[1] + "T00:00:00Z")) / 86400000);
+    const interval = Number(intervalMatch[1]);
+    if (ageDays < -1) fail(id + " Last verified date is in the future");
+    if (ageDays > interval) fail(id + " source is stale: " + ageDays + " days > " + interval);
   }
 }
 
+// Shell syntax + executable mode.
+const shellScripts = files.filter((p) => p.endsWith(".sh"));
+if (process.platform !== "win32") {
+  const zshProbe = run("zsh", ["--version"]);
+  const shell = !zshProbe.error && zshProbe.status === 0 ? "zsh" : "bash";
+  if (process.platform === "darwin" && shell !== "zsh") fail("zsh unavailable on macOS runner");
+  for (const file of shellScripts) {
+    const mode = fs.statSync(file).mode;
+    if ((mode & 0o111) === 0) fail(rel(file) + " is not executable");
+    const r = run(shell, ["-n", file]);
+    if (r.status !== 0) fail(rel(file) + ": " + shell + " -n failed: " + (r.stderr || r.stdout).trim());
+  }
+}
+
+// Node syntax.
 for (const file of files.filter((p) => p.endsWith(".mjs"))) {
   const r = run(process.execPath, ["--check", file]);
   if (r.status !== 0) fail(rel(file) + ": node --check failed: " + (r.stderr || r.stdout).trim());
 }
 
+// PowerShell syntax when available.
 const psFiles = files.filter((p) => p.endsWith(".ps1"));
 let ps = null;
 for (const candidate of ["pwsh", "powershell"]) {
@@ -103,7 +174,10 @@ if (ps) {
   warn("PowerShell parser unavailable; .ps1 syntax check skipped");
 }
 
-const scriptFiles = files.filter((p) => p.startsWith(path.join(repoRoot, "starter-kit", "scripts")) && p !== __filename);
+// Fail closed on obviously destructive starter-kit shell patterns.
+const scriptFiles = files.filter((p) =>
+  p.startsWith(path.join(repoRoot, "starter-kit", "scripts")) && p !== __filename
+);
 const destructive = [
   { re: /\brm\s+-[^\n]*rf[^\n]*\s+\/(?:\s|$)/i, name: "rm -rf /" },
   { re: /\bgit\s+reset\s+--hard\b/i, name: "git reset --hard" },
@@ -119,9 +193,11 @@ for (const file of scriptFiles) {
   }
 }
 
-const taxonomyFiles = files.filter((p) =>
+// Active docs must use current terminology.
+const activeDocs = files.filter((p) =>
   p.endsWith(".md") &&
-  (p === path.join(repoRoot, "DEVELOPMENT_RULES.md") || p.includes(path.join("starter-kit", "templates")))
+  !p.endsWith(path.join("CHANGELOG.md")) &&
+  !p.endsWith(path.join("SOURCES.md"))
 );
 const legacyTerms = [
   "API-COMPATIBLE",
@@ -129,18 +205,36 @@ const legacyTerms = [
   "PROVEN / VERIFIED",
   "OBSERVED / RESEARCH",
   "UNKNOWN / NOT VERIFIED",
-  "supported / verified"
+  "supported / verified",
+  "Release / Critical",
+  "Release-Critical"
 ];
-for (const file of taxonomyFiles) {
+for (const file of activeDocs) {
   const body = fs.readFileSync(file, "utf8");
   for (const term of legacyTerms) {
-    if (body.includes(term)) fail(rel(file) + " contains legacy status term: " + term);
+    if (body.includes(term)) fail(rel(file) + " contains legacy terminology: " + term);
   }
 }
 
-if (!dryRun) {
-  warn("self-test is read-only; --dry-run is recommended in CI to make that intent explicit");
+// GitHub Actions dependencies must be immutable.
+for (const file of files.filter((p) => /\.ya?ml$/i.test(p))) {
+  const body = fs.readFileSync(file, "utf8");
+  for (const match of body.matchAll(/uses:\s*([^@\s]+)@([^\s#]+)/g)) {
+    const action = match[1];
+    const ref = match[2];
+    if (action.startsWith("./")) continue;
+    if (!/^[0-9a-f]{40}$/i.test(ref)) fail(rel(file) + " action is not pinned to full SHA: " + action + "@" + ref);
+  }
 }
+
+// Behavioural tests exercise the starter-kit scripts against isolated temp fixtures.
+const behavioral = path.join(repoRoot, "starter-kit", "tests", "behavioral-smoke.mjs");
+if (fs.existsSync(behavioral)) {
+  const r = run(process.execPath, [behavioral]);
+  if (r.status !== 0) fail("starter-kit behavioral smoke failed: " + (r.stderr || r.stdout).trim());
+}
+
+if (!dryRun) warn("self-test does not mutate repository files; --dry-run documents release intent");
 
 for (const message of warnings) console.warn("WARN: " + message);
 if (errors.length) {

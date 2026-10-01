@@ -8,9 +8,13 @@
 - Manifest version:
 - Plugin ID:
 - Build ID:
+- Technology Lifecycle Status: `PREVIEW | BETA | GA | DEPRECATED | RETIRED`
+- Lifecycle source ID / last verified date:
 
 ## Host support
 
+- [ ] Technology Lifecycle Status checked against SOURCES.md
+- [ ] PREVIEW/BETA use has documented acceptance + fallback/exit plan
 - [ ] Required AE UXP APIs exist in target AE
 - [ ] Min Version checked for every version-sensitive host API
 - [ ] No capability inferred from another Adobe host without AE evidence

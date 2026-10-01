@@ -1,6 +1,8 @@
 # Compatibility Matrix
 
-Use only **Compatibility Status** from `DEVELOPMENT_RULES.md §10`.
+Technology Lifecycle Status is tracked separately from Compatibility Status; do not merge them into one value.
+
+Use only **Compatibility Status** from `core/PROCESS.md §10`.
 
 | Component | Configuration | Compatibility Status | Build ID | Date | Scope / Evidence / limitation |
 | --- | --- | --- | --- | --- | --- |

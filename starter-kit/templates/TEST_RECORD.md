@@ -3,6 +3,8 @@
 ## Identity
 
 - Test Run ID: `<unique-id>`
+- Risk Profile: `Light | Standard | Critical`
+- Delivery Gate: `Development | Validation | Release`
 - Date/time UTC: `<timestamp>`
 - Git commit: `<sha>`
 - Source state: `CLEAN | DIRTY`

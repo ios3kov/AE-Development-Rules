@@ -12,13 +12,26 @@
 node starter-kit/scripts/self-test.mjs --dry-run
 ```
 
-Self-test read-only: проверяет local Markdown links, обязательные paths/templates, shell/Node/PowerShell syntax где tooling доступен, executable bits на POSIX, опасные destructive patterns и legacy status terminology.
+Self-test не меняет repository files. Он проверяет:
+
+- local Markdown links и обязательные paths/modules;
+- уникальность глобальных §§1–41;
+- синхронизацию `rules-manifest.yaml` → applicability map;
+- freshness `SOURCES.md`;
+- shell/Node/PowerShell syntax;
+- executable bits на POSIX;
+- опасные destructive patterns;
+- legacy terminology;
+- immutable SHA pinning GitHub Actions;
+- behavioural smoke tests starter-kit scripts в изолированном temp workspace.
 
 CI запускает тот же self-test на Linux, macOS и Windows через `.github/workflows/starter-kit-self-test.yml`.
 
 ## Scripts
 
-- `scripts/self-test.mjs` — self-consistency / safety audit starter-kit и документации.
+- `scripts/self-test.mjs` — structural / freshness / supply-chain / behavioural audit стандарта.
+- `scripts/generate-applicability.mjs` — генерирует/проверяет applicability map из `rules-manifest.yaml`.
+- `tests/behavioral-smoke.mjs` — безопасно запускает core starter-kit scripts на временных fixtures.
 - `scripts/collect-dependency-evidence.sh` — hashes dependency manifests/lockfiles и фиксирует доступные audit/SBOM tools на macOS/Linux.
 - `scripts/collect-dependency-evidence.ps1` — Windows PowerShell эквивалент.
 
@@ -67,10 +80,11 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 
 1. Скопировать нужные scripts/templates в AE-проект.
 2. Подключить релевантные scripts к build/test pipeline или CI.
-3. Light: запускать только проверки затронутого scope.
-4. Standard: добавить runtime AE evidence.
-5. Validation Build: использовать `VALIDATION_CHECKLIST.md`, не подменяя его Release Gate.
-6. Release / Critical: пройти полный применимый gate из `DEVELOPMENT_RULES.md`.
+3. Выбрать **Risk Profile**: Light / Standard / Critical.
+4. Выбрать **Delivery Gate**: Development / Validation / Release.
+5. Validation Build: использовать `VALIDATION_CHECKLIST.md`.
+6. Release Candidate: пройти полный применимый Release Gate из `profiles/RELEASE.md`.
+7. Не повышать Risk Profile только из-за факта release и не включать Release Gate только из-за Critical risk.
 
 ## Ограничение
 

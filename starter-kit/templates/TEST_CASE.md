@@ -4,7 +4,9 @@
 
 - Requirement / risk:
 - Component type: `native effect | script/panel | CEP/UXP | helper`
-- Test type: `static | unit | integration | runtime AE | performance | release`
+- Risk Profile: `Light | Standard | Critical`
+- Delivery Gate: `Development | Validation | Release`
+- Test type: `static | unit | integration | runtime AE | performance | distribution`
 
 ## Identity
 
