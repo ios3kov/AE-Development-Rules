@@ -4,6 +4,15 @@
 
 Этот репозиторий является **центральным источником правил для всех наших AE-проектов**: native plugins/effects, scripts, ScriptUI, CEP/UXP, helper-приложений и связанных компонентов.
 
+## Версия стандарта
+
+**Текущий стабильный baseline: v1.0.0**
+
+- [VERSION](VERSION)
+- [CHANGELOG.md](CHANGELOG.md)
+
+Для release проекта фиксируйте и версию стандарта, и конкретный commit SHA.
+
 ## Главный документ
 
 - [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) — обязательный процесс разработки, проверки, документирования и выпуска.

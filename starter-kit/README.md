@@ -6,6 +6,9 @@
 
 ## Scripts
 
+- `scripts/collect-dependency-evidence.sh` — hashes dependency manifests/lockfiles и фиксирует доступные audit/SBOM tools на macOS/Linux.
+- `scripts/collect-dependency-evidence.ps1` — Windows PowerShell эквивалент.
+
 - `scripts/preflight.sh` — единая macOS/local entry point для быстрых проверок; вызывает project-specific hook при наличии.
 - `scripts/preflight.ps1` — Windows PowerShell preflight с тем же назначением.
 
@@ -18,6 +21,13 @@
 - `scripts/windows-release-verify.ps1` — SHA-256/AuthentiCode/Zone.Identifier release evidence.\n- `scripts/create-owned-test-workspace.sh` — создаёт уникальный fail-closed workspace для AE runtime tests.\n- `scripts/verify-native-effect-bundle-macos.sh` — проверяет структуру native effect bundle, AE exports, PiPL/resources, dependencies и подпись.
 
 ## Templates
+
+- `templates/STANDARD_ADOPTION.md`
+- `templates/DEPENDENCY_SECURITY_AUDIT.md`
+- `templates/RELEASE_VERSIONING.md`
+- `templates/UPDATE_SECURITY.md`
+- `templates/CRASH_DIAGNOSTICS.md`
+- `templates/ACCESSIBILITY_CHECKLIST.md`
 
 - `templates/TEST_RECORD.md`
 - `templates/COMPATIBILITY_MATRIX.md`
