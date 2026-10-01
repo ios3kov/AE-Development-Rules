@@ -10,15 +10,25 @@
 
 ## What is proven to work?
 
-For each item record status, context, solution/pattern, evidence, scope, limitations and whether it is reusable.
+For each item record context, solution/pattern, evidence, scope, limitations and whether it is reusable.
 
-Allowed labels: **PROVEN / VERIFIED**, **USER-REPORTED**, **OBSERVED / RESEARCH**.
+Use **Evidence Confidence** only:
+
+- **PROVEN**
+- **USER-REPORTED**
+- **OBSERVED**
+- **UNVERIFIED**
 
 ## What failed or should not be repeated?
 
-Record attempt, why it failed, evidence and safer replacement.
+Record the experiment outcome separately from Evidence Confidence:
 
-Allowed labels: **FAILED / REJECTED**, **UNKNOWN / NOT VERIFIED**.
+- outcome: `accepted` / `rejected`;
+- why;
+- evidence;
+- safer replacement.
+
+Do not use `FAILED` as an evidence label; `FAIL` belongs to Test Status.
 
 ## New AE know-how
 
