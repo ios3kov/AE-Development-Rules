@@ -4,6 +4,10 @@
 
 Нумерация § сохранена глобально для стабильных ссылок из manifest/templates.
 
+## AI Smart Entry prerequisite
+
+При AI-assisted работе сначала применяется [AI_ENTRYPOINT.md](../AI_ENTRYPOINT.md). ИИ самостоятельно классифицирует запрос и выбирает применимые internal rules; пользователь не обязан знать или выбирать Risk Profile / Delivery Gate / Stage 0.
+
 ## Stage 0 prerequisite
 
 Перед Product Spec, Technical Design или Production Plan нового продукта / крупной новой функции MUST быть завершён применимый [Stage 0 — Product Discovery и Product Vision](../PRODUCT_DISCOVERY.md).
