@@ -17,6 +17,21 @@
 
 ---
 
+## AI Smart Entry
+
+При работе с ИИ пользователь описывает цель обычным языком. [AI_ENTRYPOINT.md](AI_ENTRYPOINT.md) определяет, как ИИ должен сам:
+
+- понять тип задачи;
+- использовать уже известный контекст;
+- определить необходимость Product Discovery;
+- выбрать внутренние Risk Profile / Delivery Gate;
+- выбрать только применимые rule modules;
+- задать пользователю только material questions человеческим языком.
+
+Пользователь не обязан управлять инженерной классификацией стандарта.
+
+---
+
 ## Stage 0 — Product Discovery
 
 До выбора технической архитектуры для нового продукта, крупной функции или существенного product-direction change применяется [PRODUCT_DISCOVERY.md](PRODUCT_DISCOVERY.md).
@@ -95,6 +110,7 @@ Critical не означает Release. Низкорисковый patch мож�
 
 `DEVELOPMENT_RULES.md` — индекс стандарта. Нормативный текст разделён по модулям; один Rule Group имеет один canonical location.
 
+- [AI Smart Entry](AI_ENTRYPOINT.md) — пользовательский вход в стандарт для AI-assisted работы.
 - [Product Discovery](PRODUCT_DISCOVERY.md) — Stage 0 / §0.
 - [Process Core](core/PROCESS.md) — §§1–13, §27.
 - [Engineering Core](core/ENGINEERING.md) — §§14–21, §§24–25, §§31–39, §41.

@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.1.0 — 2026-10-01
+
+Backward-compatible usability update: добавлен **AI Smart Entry** — пользователь больше не должен знать или выбирать внутренние инженерные режимы стандарта.
+
+- Добавлен [AI_ENTRYPOINT.md](AI_ENTRYPOINT.md) как основной вход для AI-assisted работы.
+- Пользователь может формулировать задачу обычным языком; ИИ сам определяет Stage 0, Risk Profile, Delivery Gate и применимые Rule Groups.
+- Запрещено перекладывать на пользователя выбор внутренних терминов, если намерение можно определить из контекста.
+- Перед вопросами ИИ должен использовать уже известный conversation/repository/product context и не спрашивать повторно известное.
+- Добавлена внутренняя маршрутизация типовых запросов: новый продукт, крупная функция, bug/regression, небольшое улучшение, validation, release и research.
+- Уточнения задаются только когда ответ materially меняет product/scope/UX/architecture/compatibility/security/distribution/acceptance criteria.
+- Рекомендуется задавать 1–3 связанных человеческих вопроса за один заход вместо большой технической анкеты.
+- Добавлены human-language examples вместо вопросов вроде «какой Delivery Gate выбрать?».
+- После маршрутизации ИИ должен читать только минимальный применимый набор canonical rules, а не весь repository.
+- WORKFLOW, Product Discovery, Process Core, DEVELOPMENT_RULES и starter-kit обновлены так, чтобы внутренние режимы оставались внутренней инженерной классификацией.
+- Self-test блокирует release стандарта, если Smart Entry contract исчезнет или потеряет ключевые правила.
+
 ## 3.0.0 — 2026-10-01
 
 Breaking process release: для нового продукта, крупной новой функции или существенного изменения product direction введён обязательный **Stage 0 — Product Discovery и Product Vision** до Product Spec / Technical Design / Production Plan.

@@ -30,6 +30,7 @@ function walk(dir) {
 
 const required = [
   "README.md",
+  "AI_ENTRYPOINT.md",
   "DEVELOPMENT_RULES.md",
   "WORKFLOW.md",
   "PRODUCT_DISCOVERY.md",
@@ -107,6 +108,23 @@ for (let id = 1; id <= 41; id++) {
   if (owners.length > 1) fail("duplicate canonical section §" + id + ": " + owners.join(", "));
 }
 
+
+// AI Smart Entry added in v3.1 must remain the user-facing routing contract.
+const aiEntryPath = path.join(repoRoot, "AI_ENTRYPOINT.md");
+if (fs.existsSync(aiEntryPath)) {
+  const aiEntry = fs.readFileSync(aiEntryPath, "utf8");
+  for (const requiredText of [
+    "# AI Smart Entry",
+    "Пользователь не обязан знать внутренние термины стандарта",
+    "## 3. Внутренняя маршрутизация задачи",
+    "## 4. Когда нужно задавать вопросы",
+    "## 5. Как задавать вопросы пользователю",
+    "## 8. Загружать только применимые правила",
+    "Пользователь не должен управлять инженерным процессом вместо ИИ"
+  ]) {
+    if (!aiEntry.includes(requiredText)) fail("AI_ENTRYPOINT.md missing Smart Entry contract: " + requiredText);
+  }
+}
 
 // Stage 0 product discovery added in v3 must remain discoverable.
 const discoveryPath = path.join(repoRoot, "PRODUCT_DISCOVERY.md");
