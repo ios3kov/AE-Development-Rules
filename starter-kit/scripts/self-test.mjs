@@ -115,13 +115,13 @@ if (fs.existsSync(generator)) {
 const sourcesPath = path.join(repoRoot, "SOURCES.md");
 if (fs.existsSync(sourcesPath)) {
   const body = fs.readFileSync(sourcesPath, "utf8");
-  const chunks = body.split(/\r?\n(?=### SRC-)/).filter((chunk) => chunk.startsWith("### SRC-"));
-  if (chunks.length === 0) fail("SOURCES.md contains no registered sources");
-  for (const chunk of chunks) {
-    const head = chunk.match(/^### (SRC-[A-Z0-9-]+)/);
-    if (!head) continue;
-    const id = head[1];
-    const text = chunk;
+  const heads = [...body.matchAll(/^### (SRC-[A-Z0-9-]+)/gm)];
+  if (heads.length === 0) fail("SOURCES.md contains no registered sources");
+  for (let i = 0; i < heads.length; i++) {
+    const id = heads[i][1];
+    const start = heads[i].index;
+    const end = i + 1 < heads.length ? heads[i + 1].index : body.length;
+    const text = body.slice(start, end);
     const dateMatch = text.match(/^- Last verified: (\d{4}-\d{2}-\d{2})$/m);
     const intervalMatch = text.match(/^- Refresh interval days: (\d+)$/m);
     const urlMatch = text.match(/^- URL: https:\/\//m);
