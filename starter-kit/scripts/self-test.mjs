@@ -115,11 +115,13 @@ if (fs.existsSync(generator)) {
 const sourcesPath = path.join(repoRoot, "SOURCES.md");
 if (fs.existsSync(sourcesPath)) {
   const body = fs.readFileSync(sourcesPath, "utf8");
-  const blocks = [...body.matchAll(/^### (SRC-[A-Z0-9-]+)\n([\s\S]*?)(?=^### |\s*$)/gm)];
-  if (blocks.length === 0) fail("SOURCES.md contains no registered sources");
-  for (const block of blocks) {
-    const id = block[1];
-    const text = block[2];
+  const chunks = body.split(/\r?\n(?=### SRC-)/).filter((chunk) => chunk.startsWith("### SRC-"));
+  if (chunks.length === 0) fail("SOURCES.md contains no registered sources");
+  for (const chunk of chunks) {
+    const head = chunk.match(/^### (SRC-[A-Z0-9-]+)/);
+    if (!head) continue;
+    const id = head[1];
+    const text = chunk;
     const dateMatch = text.match(/^- Last verified: (\d{4}-\d{2}-\d{2})$/m);
     const intervalMatch = text.match(/^- Refresh interval days: (\d+)$/m);
     const urlMatch = text.match(/^- URL: https:\/\//m);
@@ -215,7 +217,7 @@ for (const file of activeDocs) {
 }
 
 // GitHub Actions dependencies must be immutable.
-for (const file of files.filter((p) => p.includes(path.join(".github", "workflows")) && /\.ya?ml$/i.test(p))) {
+for (const file of files.filter((p) => /\.ya?ml$/i.test(p))) {
   const body = fs.readFileSync(file, "utf8");
   for (const match of body.matchAll(/uses:\s*([^@\s]+)@([^\s#]+)/g)) {
     const action = match[1];
