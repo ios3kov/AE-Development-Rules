@@ -50,6 +50,7 @@ const required = [
   "starter-kit/scripts/generate-applicability.mjs",
   "starter-kit/tests/behavioral-smoke.mjs",
   "starter-kit/templates/VALIDATION_CHECKLIST.md",
+  "starter-kit/templates/DEBUGGING_RECORD.md",
   "starter-kit/templates/RELEASE_CHECKLIST.md",
   "starter-kit/templates/UXP_ENGINEERING.md"
 ];
@@ -102,6 +103,21 @@ for (let id = 1; id <= 41; id++) {
   const owners = sectionOwners.get(id) || [];
   if (owners.length === 0) fail("missing canonical section §" + id);
   if (owners.length > 1) fail("duplicate canonical section §" + id + ": " + owners.join(", "));
+}
+
+
+// Workflow/debugging guidance added in v2.1 must remain discoverable.
+const workflowPath = path.join(repoRoot, "WORKFLOW.md");
+const engineeringPath = path.join(repoRoot, "core", "ENGINEERING.md");
+if (fs.existsSync(workflowPath)) {
+  const workflow = fs.readFileSync(workflowPath, "utf8");
+  for (const heading of ["## 9. Controlled initiative", "## 10. Представление ручных изменений"]) {
+    if (!workflow.includes(heading)) fail("WORKFLOW.md missing required guidance: " + heading);
+  }
+}
+if (fs.existsSync(engineeringPath)) {
+  const engineering = fs.readFileSync(engineeringPath, "utf8");
+  if (!engineering.includes("### Debugging Protocol")) fail("core/ENGINEERING.md missing Debugging Protocol");
 }
 
 // Applicability manifest must generate the exact checked-in table and point to real sections.
