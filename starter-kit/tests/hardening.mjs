@@ -36,6 +36,7 @@ test('A06 JSX directives, include cycles and missing/invalid includes',()=>{
  fs.writeFileSync(inc,'var = ;');assert.notEqual(node('check-extendscript.mjs',[source]).status,0);
  fs.writeFileSync(inc,'#include "main.jsx"');assert.notEqual(node('check-extendscript.mjs',[source]).status,0);
  fs.unlinkSync(inc);assert.notEqual(node('check-extendscript.mjs',[source]).status,0);
+ fs.writeFileSync(inc,'var value=1;');fs.writeFileSync(source,'#include "'+inc.split(path.sep).join('/')+'"\n');const absolute=node('check-extendscript.mjs',[source]);assert.equal(absolute.status,2);assert.match(absolute.stderr,/literal relative path/);
 });
 test('A10 API scan rejects invalid scope and records complete candidate inventory',()=>{
  const src=path.join(tmp,'source');fs.mkdirSync(src);

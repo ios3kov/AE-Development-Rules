@@ -51,3 +51,5 @@ Windows behavior is not inferred from the local macOS run. Exact final commit an
 Adjacent A03 coverage: dependency collectors now use UUID report names and exclusive writes. A fixed-clock regression runs them twice and verifies both historical reports and unchanged first bytes.
 
 The dependency regression also reproduced an existing zsh `path` variable collision that replaced PATH during hashing. The loop now uses manifest_file, and find/sort failures propagate outside process substitution.
+
+Verified CI baseline: [run 36917756681](https://github.com/ios3kov/AE-Development-Rules/actions/runs/36917756681) passed Linux/macOS/Windows for 11b9bdc8aacd7fa1d0aca12ba657cd3246c0d2cc, including fixed-clock dependency-history tests. Subsequent JSX subset refinement explicitly rejects absolute includes; its final result is available in current PR checks.

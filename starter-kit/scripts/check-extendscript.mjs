@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { basename, dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve, isAbsolute } from "node:path";
 
 const input = process.argv[2];
 if (!input) {
@@ -29,7 +29,7 @@ async function preprocess(file, depth = 0) {
         const [, name, raw] = directive;
         if (name === "include") {
           const m = raw.match(/^["']([^"']+)["']\s*;?$/);
-          if (!m) throw new Error("include requires a literal relative path");
+          if (!m || isAbsolute(m[1])) throw new Error("include requires a literal relative path");
           out.push(await preprocess(resolve(dirname(file), m[1]), depth + 1));
         } else if (["target", "targetengine", "script", "strict"].includes(name)) {
           if (!raw) throw new Error("empty directive");
