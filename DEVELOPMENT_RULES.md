@@ -2163,6 +2163,8 @@ Test case должен проверять наблюдаемое требова�
 - [Owned fail-closed AE test workspace](starter-kit/scripts/create-owned-test-workspace.sh)
 - [Windows binary / dependency / Authenticode audit](starter-kit/scripts/windows-binary-audit.ps1)
 - [Windows release signature/hash verification](starter-kit/scripts/windows-release-verify.ps1)
+- [Dependency evidence on macOS/Linux](starter-kit/scripts/collect-dependency-evidence.sh)
+- [Dependency evidence on Windows](starter-kit/scripts/collect-dependency-evidence.ps1)
 
 ### Прямые ссылки на templates
 
@@ -2200,7 +2202,7 @@ Test case должен проверять наблюдаемое требова�
 
 ## 34. Версия стандарта и фиксация baseline
 
-Сам стандарт `AE-Development-Rules` должен иметь явную версию.
+Сам стандарт `AE-Development-Rules` должен иметь явную версию. Текущая версия хранится в [VERSION](VERSION), история — в [CHANGELOG.md](CHANGELOG.md).
 
 Для значимого milestone / release AE-проекта фиксировать:
 
