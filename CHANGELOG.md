@@ -1,5 +1,30 @@
 # Changelog
 
+## 3.0.0 — 2026-10-01
+
+Breaking process release: для нового продукта, крупной новой функции или существенного изменения product direction введён обязательный **Stage 0 — Product Discovery и Product Vision** до Product Spec / Technical Design / Production Plan.
+
+- Добавлен [PRODUCT_DISCOVERY.md](PRODUCT_DISCOVERY.md) как нормативный §0.
+- Введён профессиональный discovery flow: known context → focused interview → Product Vision → Product Scope → Core User Flows → Success Criteria.
+- Требования разделяются на **Confirmed Requirement / Derived Requirement / Assumption / Open Question / Idea / Non-goal**.
+- Assumption больше нельзя незаметно превращать в requirement.
+- Введены explicit Core / Important / Later / Out of scope и обязательные non-goals.
+- Определены Stage 0 exit criteria: пользователь, проблема, desired outcome, core flow, scope, constraints, critical assumptions и testable Success Criteria.
+- Для существующего продукта Stage 0 не повторяется для каждого bugfix/refactor, если уже существует актуальный product contract и работа его не меняет.
+- Добавлен reusable [PRODUCT_DISCOVERY_TEMPLATE.md](starter-kit/templates/PRODUCT_DISCOVERY_TEMPLATE.md) с итеративным interview, requirement ledger, Product Vision, flows и exit check.
+- Stage 0 подключён к Process Core, WORKFLOW, DEVELOPMENT_RULES index, README, starter-kit и STANDARD_ADOPTION baseline.
+- Добавлен Rule Group `PRODUCT-DISCOVERY` в `rules-manifest.yaml`.
+- Self-test теперь блокирует release стандарта, если Stage 0 contract/template исчезли или потеряли ключевые разделы.
+
+### Migration from 2.x
+
+Проект, переходящий на 3.0, должен определить:
+
+1. существует ли подтверждённый Product Vision / requirements contract;
+2. если нет и проект/крупная функция ещё проектируются — пройти Stage 0;
+3. сохранить ссылку на Product Discovery / Product Vision в project baseline;
+4. не требовать повторного discovery для локальных изменений, которые не меняют product contract.
+
 ## 2.1.0 — 2026-10-01
 
 Backward-compatible workflow/debugging update.
