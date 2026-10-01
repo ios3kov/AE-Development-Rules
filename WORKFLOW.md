@@ -45,7 +45,7 @@
 
 Статус процесса не заменяет инженерные статусы.
 
-Для результатов проверок использовать только **Test Status** из DEVELOPMENT_RULES.md §10.
+Для результатов проверок использовать только **Test Status** из [core/PROCESS.md](core/PROCESS.md) §10.
 Для совместимости — **Compatibility Status**.
 Для силы инженерного вывода — **Evidence Confidence**.
 
