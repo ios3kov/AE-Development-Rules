@@ -1,0 +1,31 @@
+name: Cross-platform Preflight
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  macos-preflight:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run macOS preflight
+        run: |
+          chmod +x starter-kit/scripts/preflight.sh
+          starter-kit/scripts/preflight.sh
+
+  windows-preflight:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Windows preflight
+        shell: pwsh
+        run: starter-kit/scripts/preflight.ps1
+
+  note:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Static CI preflight does not replace runtime After Effects tests."
+          echo "Record AE runtime compatibility separately per platform."
