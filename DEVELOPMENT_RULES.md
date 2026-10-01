@@ -673,7 +673,7 @@ Dirty build допустим для внутренних эксперимент�
 
 ## 9. Regression Check — два уровня
 
-### Level 1 — после каждого commit, затрагивающего поведение или artifact
+### Level 1 — на каждом integration checkpoint / merge-ready commit, затрагивающем поведение или artifact
 
 Выполнять применимые быстрые проверки:
 
@@ -1228,7 +1228,7 @@ Logging должен быть thread-safe, ограниченным по объ�
 - сравнение с baseline;
 - проверка релевантных ресурсов.
 
-### Level 2 — перед milestone / release
+### Level 2 — для Critical Risk Profile, milestone и Release Candidate
 
 Проводить profiling реального сценария внутри After Effects в объёме, определённом рисками и требованиями.
 
@@ -1319,6 +1319,33 @@ Evidence старой версии можно использовать как и
 ---
 
 ## 21. Совместимость и применимость технологий
+
+### Technology Lifecycle Status
+
+Compatibility и maturity — разные вещи. Технология может работать в конкретной конфигурации, но оставаться beta/deprecated как platform choice.
+
+Использовать отдельный **Technology Lifecycle Status**:
+
+- **PREVIEW** — prerelease/experimental/not-yet-public-beta capability; production baseline требует явного project decision и documented fallback/exit plan.
+- **BETA** — публичная beta; допустима для controlled production только с явным acceptance риска, pin целевой host version и расширенными runtime tests.
+- **GA** — general availability / обычный поддерживаемый production path.
+- **DEPRECATED** — технология ещё может работать и поддерживаться в переходный период, но vendor объявил её замену/вывод; новые долгоживущие архитектуры требуют documented justification и migration plan.
+- **RETIRED** — vendor support/runtime distribution завершены; новый production baseline запрещён, кроме явно изолированного legacy maintenance scope.
+
+На baseline 2026-10-01 согласно Adobe extensibility roadmap:
+
+- After Effects UXP ещё не public beta; Adobe объявила public beta к ноябрю 2026. До фактического выхода public beta считать AE UXP **PREVIEW** для production-решений.
+- CEP находится в объявленном переходе к retirement и считается **DEPRECATED** для новой долгоживущей архитектуры; Adobe планирует завершить CEP transition к концу 2029.
+- ExtendScript этим CEP→UXP transition не затрагивается.
+
+Эти статусы time-sensitive и не должны жить как вечный hardcode: authoritative source и дата проверки находятся в [SOURCES.md](SOURCES.md). Перед новым technology decision проверять актуальное состояние источника.
+
+Для PREVIEW/BETA/DEPRECATED технологии MUST:
+
+- зафиксировать причину выбора;
+- определить целевой host/version scope;
+- иметь fallback, migration или exit plan, если технология недоступна/меняется;
+- не обещать пользователю GA-level stability без соответствующего vendor/runtime Evidence.
 
 Вести матрицу реально проверенной совместимости.
 
@@ -2265,6 +2292,8 @@ Test case должен проверять наблюдаемое требова�
 - [Windows preflight](starter-kit/scripts/preflight.ps1)
 - [Artifact identity + SHA-256](starter-kit/scripts/record-artifact.sh)
 - [Starter-kit self-test / consistency audit](starter-kit/scripts/self-test.mjs)
+- [Applicability map generator/check](starter-kit/scripts/generate-applicability.mjs)
+- [Starter-kit behavioural smoke tests](starter-kit/tests/behavioral-smoke.mjs)
 - [ExtendScript sanity-check](starter-kit/scripts/check-extendscript.mjs)
 - [Adobe API inventory для compatibility audit](starter-kit/scripts/scan-adobe-api.sh)
 - [macOS binary audit](starter-kit/scripts/macos-binary-audit.sh)
@@ -2317,6 +2346,21 @@ Test case должен проверять наблюдаемое требова�
 
 ## 34. Версия стандарта и фиксация baseline
 
+### Freshness внешних источников
+
+Time-sensitive требования стандарта MUST ссылаться на канонический источник из [SOURCES.md](SOURCES.md).
+
+Для каждого такого источника фиксируются:
+
+- URL;
+- что именно он подтверждает;
+- дата последней проверки;
+- максимальный refresh interval.
+
+Перед release самого стандарта stale source MUST быть перепроверен. Self-test стандарта должен блокировать release, если источник вышел за свой refresh interval.
+
+Не переносить факт из старой версии Adobe/GitHub документации в текущий стандарт без повторной проверки, если он влияет на technology choice, compatibility, security или distribution.
+
 Сам стандарт `AE-Development-Rules` должен иметь явную версию. Текущая версия хранится в [VERSION](VERSION), история — в [CHANGELOG.md](CHANGELOG.md).
 
 Для значимого milestone / release AE-проекта фиксировать:
@@ -2339,9 +2383,11 @@ Test case должен проверять наблюдаемое требова�
 
 Изменения самого стандарта версионировать по принципу:
 
-- **major** — несовместимое изменение обязательного процесса или смысла release gate;
-- **minor** — новое существенное требование, проверка или reusable capability без отмены существующего контракта;
-- **patch** — уточнение, исправление формулировки, template/script fix без изменения обязательного смысла.
+- **major** — изменение MUST/MUST NOT, gate/status semantics или process contract, из-за которого ранее соответствующий проект может стать несоответствующим без изменения своего процесса;
+- **minor** — новая backward-compatible capability, новый профиль для нового типа технологии, новый SHOULD/MAY или automation, не делающие ранее соответствующий проект несоответствующим;
+- **patch** — уточнение, исправление формулировки/template/script/source metadata без изменения обязательного смысла.
+
+Если есть сомнение между major и minor, выполнить compatibility analysis самого стандарта: «может ли существующий compliant project остаться compliant без изменений?». Если нет — major.
 
 Версия стандарта не заменяет commit SHA: для воспроизводимости milestone хранить оба.
 
@@ -2517,7 +2563,9 @@ UXP считать отдельной runtime / security / lifecycle модел�
 
 Перед выбором UXP для After Effects обязательно подтвердить текущую поддержку целевой версии AE и требуемых host APIs по официальной документации Adobe. Для каждого используемого host member учитывать его `Min Version`, если Adobe её публикует.
 
-На момент актуализации v1.2.0 документация After Effects UXP у Adobe продолжает расширяться; конкретные возможности нужно подтверждать для целевой версии host, а не переносить из Photoshop / Premiere / общей UXP документации автоматически. After Effects API Reference публикует `Min Version` для host members — эти значения входят в compatibility contract.
+На baseline 2026-10-01 Adobe объявляет public beta UXP plugins для After Effects к ноябрю 2026. Пока public beta фактически не доступна, UXP для AE рассматривается как **Technology Lifecycle: PREVIEW**. После выхода beta статус обновляется только после повторной проверки [SOURCES.md](SOURCES.md), а не по календарю автоматически.
+
+Конкретные возможности нужно подтверждать для целевой версии host, не переносить из Photoshop / Premiere / общей UXP документации автоматически. After Effects API Reference публикует `Min Version` для host members — эти значения входят в compatibility contract.
 
 Официальные starting points:
 
