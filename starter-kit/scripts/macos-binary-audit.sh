@@ -59,4 +59,13 @@ BIN="$(resolve_binary "$TARGET")"
   codesign --verify --deep --strict --verbose=2 "$TARGET" 2>&1 || true
 } > "$OUT"
 
+{
+  echo
+  echo "## Collection status"
+  echo "collection_status=COMPLETE"
+  echo "audit_verdict=NOT_ASSIGNED"
+} >> "$OUT"
+
 echo "Evidence: $OUT"
+echo "Evidence collection: COMPLETE"
+echo "NOTE: exit code 0 means evidence collection completed; individual probe failures remain evidence and do not mean Compatibility: PASS/VERIFIED."

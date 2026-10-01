@@ -252,12 +252,13 @@ for (const file of scriptFiles) {
   }
 }
 
-// Active docs must use current terminology.
-const activeDocs = files.filter((p) =>
-  p.endsWith(".md") &&
-  !p.endsWith(path.join("CHANGELOG.md")) &&
-  !p.endsWith(path.join("SOURCES.md"))
-);
+// Active docs, scripts and manifests must use current terminology.
+// self-test itself is excluded because it intentionally contains the forbidden vocabulary below.
+const terminologyFiles = files.filter((p) => {
+  if (p === __filename) return false;
+  if (p.endsWith(path.join("CHANGELOG.md")) || p.endsWith(path.join("SOURCES.md"))) return false;
+  return /\.(md|mjs|sh|ps1|ya?ml)$/i.test(p);
+});
 const legacyTerms = [
   "API-COMPATIBLE",
   "RISK / UNKNOWN",
@@ -268,10 +269,41 @@ const legacyTerms = [
   "Release / Critical",
   "Release-Critical"
 ];
-for (const file of activeDocs) {
+for (const file of terminologyFiles) {
   const body = fs.readFileSync(file, "utf8");
   for (const term of legacyTerms) {
     if (body.includes(term)) fail(rel(file) + " contains legacy terminology: " + term);
+  }
+}
+
+// Binary audit helpers are evidence collectors; successful execution must not masquerade as compatibility PASS.
+for (const relativePath of [
+  "starter-kit/scripts/macos-binary-audit.sh",
+  "starter-kit/scripts/windows-binary-audit.ps1"
+]) {
+  const auditPath = path.join(repoRoot, relativePath);
+  if (!fs.existsSync(auditPath)) continue;
+  const body = fs.readFileSync(auditPath, "utf8");
+  if (!body.includes("audit_verdict=NOT_ASSIGNED")) {
+    fail(relativePath + " must declare audit_verdict=NOT_ASSIGNED");
+  }
+  if (!body.includes("exit code 0 means evidence collection completed")) {
+    fail(relativePath + " must explain evidence-collection exit semantics");
+  }
+}
+
+// CI should avoid redundant branch matrices while preserving full PR/main coverage.
+const ciWorkflowPath = path.join(repoRoot, ".github", "workflows", "starter-kit-self-test.yml");
+if (fs.existsSync(ciWorkflowPath)) {
+  const workflow = fs.readFileSync(ciWorkflowPath, "utf8");
+  for (const requiredText of [
+    "branches: [main]",
+    "pull_request:",
+    "workflow_dispatch:",
+    "concurrency:",
+    "cancel-in-progress: true"
+  ]) {
+    if (!workflow.includes(requiredText)) fail("starter-kit self-test workflow missing CI optimization: " + requiredText);
   }
 }
 

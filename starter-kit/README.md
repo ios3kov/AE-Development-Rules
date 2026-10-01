@@ -41,9 +41,9 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 - `scripts/record-artifact.sh` — commit, dirty state, environment и SHA-256 artifact.
 - `scripts/check-extendscript.mjs` — быстрый parser sanity-check JSX/ExtendScript.
 - `scripts/scan-adobe-api.sh` — inventory PF/AEGP/SmartFX identifiers для compatibility audit.
-- `scripts/macos-binary-audit.sh` — Mach-O architectures, deployment target, linked libraries, symbols и signing.
+- `scripts/macos-binary-audit.sh` — evidence collector для Mach-O architectures, deployment target, linked libraries, symbols и signing; exit 0 не означает compatibility PASS.
 - `scripts/macos-bundle-verify.sh` — codesign, stapling, Gatekeeper и quarantine evidence.
-- `scripts/windows-binary-audit.ps1` — PE/dependency/AuthentiCode evidence для Windows.
+- `scripts/windows-binary-audit.ps1` — evidence collector для PE/dependencies/AuthentiCode; report содержит collection status, а exit 0 не означает compatibility PASS.
 - `scripts/windows-release-verify.ps1` — SHA-256/AuthentiCode/Zone.Identifier release evidence.
 - `scripts/create-owned-test-workspace.sh` — создаёт уникальный fail-closed workspace для AE runtime tests.
 - `scripts/verify-native-effect-bundle-macos.sh` — проверяет структуру native effect bundle, AE exports, PiPL/resources, dependencies и подпись.
