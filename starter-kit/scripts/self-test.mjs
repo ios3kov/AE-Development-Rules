@@ -292,6 +292,21 @@ for (const relativePath of [
   }
 }
 
+// CI should avoid redundant branch matrices while preserving full PR/main coverage.
+const workflowPath = path.join(repoRoot, ".github", "workflows", "starter-kit-self-test.yml");
+if (fs.existsSync(workflowPath)) {
+  const workflow = fs.readFileSync(workflowPath, "utf8");
+  for (const requiredText of [
+    "branches: [main]",
+    "pull_request:",
+    "workflow_dispatch:",
+    "concurrency:",
+    "cancel-in-progress: true"
+  ]) {
+    if (!workflow.includes(requiredText)) fail("starter-kit self-test workflow missing CI optimization: " + requiredText);
+  }
+}
+
 // GitHub Actions dependencies must be immutable.
 for (const file of files.filter((p) => /\.ya?ml$/i.test(p))) {
   const body = fs.readFileSync(file, "utf8");
