@@ -49,7 +49,7 @@ for (const p of required) {
 const versionPath = path.join(repoRoot, "VERSION");
 if (fs.existsSync(versionPath)) {
   const version = fs.readFileSync(versionPath, "utf8").trim();
-  if (!/^\\d+\\.\\d+\\.\\d+$/.test(version)) fail("VERSION is not semver: " + version);
+  if (!/^\d+\.\d+\.\d+$/.test(version)) fail("VERSION is not semver: " + version);
   const readme = fs.readFileSync(path.join(repoRoot, "README.md"), "utf8");
   if (!readme.includes("v" + version)) fail("README baseline does not match VERSION " + version);
 }
@@ -58,7 +58,7 @@ const files = walk(repoRoot);
 
 for (const file of files.filter((p) => p.endsWith(".md"))) {
   const body = fs.readFileSync(file, "utf8");
-  const linkRe = /!?\\[[^\\]]*\\]\\(([^)]+)\\)/g;
+  const linkRe = /!?\[[^\]]*\]\(([^)]+)\)/g;
   let match;
   while ((match = linkRe.exec(body))) {
     let target = match[1].trim().replace(/^<|>$/g, "");
@@ -105,12 +105,12 @@ if (ps) {
 
 const scriptFiles = files.filter((p) => p.startsWith(path.join(repoRoot, "starter-kit", "scripts")));
 const destructive = [
-  { re: /\\brm\\s+-[^\\n]*rf[^\\n]*\\s+\\/(?:\\s|$)/i, name: "rm -rf /" },
-  { re: /\\bgit\\s+reset\\s+--hard\\b/i, name: "git reset --hard" },
-  { re: /\\bgit\\s+clean\\s+-[^\\n]*f/i, name: "git clean -f" },
-  { re: /\\bmkfs(?:\\.|\\s)/i, name: "mkfs" },
-  { re: /\\bdiskutil\\s+erase/i, name: "diskutil erase" },
-  { re: /\\bformat(?:\\.com)?\\s+[a-z]:/i, name: "format drive" }
+  { re: /\brm\s+-[^\n]*rf[^\n]*\s+\/(?:\s|$)/i, name: "rm -rf /" },
+  { re: /\bgit\s+reset\s+--hard\b/i, name: "git reset --hard" },
+  { re: /\bgit\s+clean\s+-[^\n]*f/i, name: "git clean -f" },
+  { re: /\bmkfs(?:\.|\s)/i, name: "mkfs" },
+  { re: /\bdiskutil\s+erase/i, name: "diskutil erase" },
+  { re: /\bformat(?:\.com)?\s+[a-z]:/i, name: "format drive" }
 ];
 for (const file of scriptFiles) {
   const body = fs.readFileSync(file, "utf8");
