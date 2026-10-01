@@ -23,6 +23,9 @@ delivery_gates:
     description: final Release Candidate; full Release Gate applies
 
 rule_groups:
+  - id: PRODUCT-DISCOVERY
+    section: "0"
+    source: PRODUCT_DISCOVERY.md
   - id: CORE-SCOPE
     section: "1"
     source: core/PROCESS.md
