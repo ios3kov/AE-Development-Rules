@@ -23,6 +23,8 @@
 
 Перед началом значимого этапа кратко указать:
 
+- текущий **Risk Profile**: Light / Standard / Critical;
+- текущий **Delivery Gate**: Development / Validation / Release;
 - текущий этап: `Этап X из Y`, если полный цикл уже определён;
 - что уже завершено;
 - что делается сейчас;
@@ -98,9 +100,9 @@
 
 ## 7. Release
 
-Когда работа переходит от validation к финальному release, явно сообщить это как смену режима.
+Когда работа переходит от validation к финальному release, явно сообщить смену **Delivery Gate: Validation → Release**. Risk Profile при этом не меняется автоматически.
 
-Далее применяется полный **Release Gate** из DEVELOPMENT_RULES.md §26 и только те platform-specific gates, которые применимы к фактическому distributable.
+Далее применяется полный **Release Gate** из profiles/RELEASE.md §26 и только те platform-specific gates, которые применимы к фактическому distributable.
 
 ## 8. Stop criteria
 
