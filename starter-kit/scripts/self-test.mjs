@@ -31,6 +31,7 @@ function walk(dir) {
 const required = [
   "README.md",
   "AI_ENTRYPOINT.md",
+  "REFERENCE_AUDIT.md",
   "DEVELOPMENT_RULES.md",
   "WORKFLOW.md",
   "PRODUCT_DISCOVERY.md",
@@ -51,6 +52,7 @@ const required = [
   "starter-kit/README.md",
   "starter-kit/scripts/generate-applicability.mjs",
   "starter-kit/tests/behavioral-smoke.mjs",
+  "starter-kit/templates/REFERENCE_SPECIFICATION_TEMPLATE.md",
   "starter-kit/templates/PRODUCT_DISCOVERY_TEMPLATE.md",
   "starter-kit/templates/VALIDATION_CHECKLIST.md",
   "starter-kit/templates/DEBUGGING_RECORD.md",
@@ -117,6 +119,7 @@ if (fs.existsSync(aiEntryPath)) {
     "# AI Smart Entry",
     "Пользователь не обязан знать внутренние термины стандарта",
     "## 3. Внутренняя маршрутизация задачи",
+    "### Конкретный внешний референс — conditional overlay",
     "## 4. Когда нужно задавать вопросы",
     "## 5. Как задавать вопросы пользователю",
     "## 8. Загружать только применимые правила",
@@ -124,6 +127,62 @@ if (fs.existsSync(aiEntryPath)) {
   ]) {
     if (!aiEntry.includes(requiredText)) fail("AI_ENTRYPOINT.md missing Smart Entry contract: " + requiredText);
   }
+}
+
+// Reference-driven contract added in v4 must remain conditional, evidence-based and parity-testable.
+const referenceAuditPath = path.join(repoRoot, "REFERENCE_AUDIT.md");
+const referenceTemplatePath = path.join(repoRoot, "starter-kit", "templates", "REFERENCE_SPECIFICATION_TEMPLATE.md");
+if (fs.existsSync(referenceAuditPath)) {
+  const referenceAudit = fs.readFileSync(referenceAuditPath, "utf8");
+  for (const requiredText of [
+    "## R0.1. Когда Reference Audit включается",
+    "Reference Audit **не включается автоматически**",
+    "## R0.5. Reference Claim Status",
+    "## R0.6. Обязательная декомпозиция whole-product reference",
+    "## R0.8. Coverage Map",
+    "## R0.11. Exit criteria",
+    "## R0.13. Parity Testing после реализации",
+    "PROVEN",
+    "OBSERVED",
+    "INFERRED",
+    "UNKNOWN"
+  ]) {
+    if (!referenceAudit.includes(requiredText)) fail("REFERENCE_AUDIT.md missing reference-driven contract: " + requiredText);
+  }
+}
+if (fs.existsSync(referenceTemplatePath)) {
+  const template = fs.readFileSync(referenceTemplatePath, "utf8");
+  for (const requiredText of [
+    "## 4. UI / control inventory",
+    "## 7. Preset inventory",
+    "## 15. Reference Coverage Map",
+    "## 18. Parity acceptance tests",
+    "## 20. Exit check"
+  ]) {
+    if (!template.includes(requiredText)) fail("REFERENCE_SPECIFICATION_TEMPLATE.md missing required section: " + requiredText);
+  }
+}
+
+const manifestContractPath = path.join(repoRoot, "rules-manifest.yaml");
+if (fs.existsSync(manifestContractPath)) {
+  const manifestContract = fs.readFileSync(manifestContractPath, "utf8");
+  for (const requiredText of [
+    "schema_version: 2",
+    "id: REFERENCE-AUDIT",
+    "section: \"R0\"",
+    "source: REFERENCE_AUDIT.md",
+    "applicability: conditional",
+    "trigger: explicit_external_reference"
+  ]) {
+    if (!manifestContract.includes(requiredText)) fail("rules-manifest.yaml missing Reference Audit contract: " + requiredText);
+  }
+}
+
+const adoptionTemplatePath = path.join(repoRoot, "starter-kit", "templates", "STANDARD_ADOPTION.md");
+if (fs.existsSync(adoptionTemplatePath)) {
+  const adoption = fs.readFileSync(adoptionTemplatePath, "utf8");
+  if (!adoption.includes("Reference Audit status:")) fail("STANDARD_ADOPTION.md missing Reference Audit status");
+  if (!adoption.includes("Reference Specification / reference baseline:")) fail("STANDARD_ADOPTION.md missing reference baseline");
 }
 
 // Stage 0 product discovery added in v3 must remain discoverable.

@@ -6,7 +6,7 @@
 
 ## Версия стандарта
 
-**Текущий стабильный baseline: v3.1.1**
+**Текущий стабильный baseline: v4.0.0**
 
 - [VERSION](VERSION)
 - [CHANGELOG.md](CHANGELOG.md)
@@ -24,6 +24,7 @@
 ## Главные документы
 
 - [AI_ENTRYPOINT.md](AI_ENTRYPOINT.md) — умный вход: переводит обычный пользовательский запрос на язык стандарта.
+- [REFERENCE_AUDIT.md](REFERENCE_AUDIT.md) — обязательная декомпозиция конкретного внешнего референса, когда пользователь выбрал его как основу/аналог.
 - [PRODUCT_DISCOVERY.md](PRODUCT_DISCOVERY.md) — обязательный Stage 0 для нового продукта / крупной новой функции: interview → Product Vision → Scope → User Flows → Success Criteria.
 - [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) — нормативный индекс, ключевые определения и сгенерированная applicability map.
 - [core/PROCESS.md](core/PROCESS.md) — общий процесс, testing, Git, identity, regression и Evidence.
@@ -36,7 +37,7 @@
 
 ## Как использовать в AE-проектах
 
-Для нового продукта / крупной новой функции ИИ сам определяет необходимость Stage 0 через Smart Entry и, если требуется, проводит Product Discovery до технического планирования.
+Если пользователь явно выбрал конкретный внешний продукт/artifact как референс, Smart Entry включает Reference Audit до Technical Design соответствующего scope. Для нового продукта / крупной новой функции ИИ отдельно определяет необходимость Stage 0 и, если требуется, проводит Product Discovery до технического планирования.
 
 Каждый AE-проект должен:
 

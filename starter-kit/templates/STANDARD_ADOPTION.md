@@ -5,6 +5,8 @@
 - Standard commit: `<commit-sha>`
 - Adopted on: `<date>`
 - Project milestone / release:
+- Reference Audit status: `COMPLETE | PARTIAL | BLOCKED | N/A`
+- Reference Specification / reference baseline:
 - Stage 0 status: `COMPLETE | EXISTING PRODUCT CONTRACT | N/A`
 - Product Discovery / Product Vision reference:
 - Product Vision / requirements baseline date:

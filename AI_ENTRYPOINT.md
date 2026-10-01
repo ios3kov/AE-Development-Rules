@@ -37,6 +37,23 @@
 
 ИИ сам выбирает один основной путь и подключает дополнительные правила по риску.
 
+### Конкретный внешний референс — conditional overlay
+
+До выбора основного пути проверить, сделал ли пользователь **конкретный внешний продукт/artifact** основой, аналогом или parity target.
+
+Триггеры:
+
+- пользователь прислал файл и назвал его референсом;
+- дал ссылку на конкретный продукт и просит взять его за основу;
+- назвал конкретный продукт/продукты: «как X», «аналог X», «повтори X»;
+- обозначил конкретный UI/behavior/preset/render reference.
+
+Тогда MUST применяться [Reference Audit](REFERENCE_AUDIT.md) в заявленном scope **до Technical Design соответствующей области**.
+
+Просто «хочу glow/line generator» или случайное упоминание продукта Reference Audit не включает.
+
+Если непонятно, является ли названный продукт именно референсом, задать один короткий вопрос человеческим языком.
+
 ### Новый продукт
 
 Если Product Vision ещё не определён:
@@ -134,6 +151,7 @@
 
 После понимания запроса ИИ самостоятельно определяет:
 
+- triggered ли Reference Audit и какой у него scope;
 - нужен ли Stage 0;
 - тип artifact / компонентов;
 - Risk Profile;
@@ -151,6 +169,7 @@
 
 Примеры:
 
+- concrete reference → Smart Entry + Reference Audit + применимые product/engineering rules;
 - новый продукт → Smart Entry + Product Discovery;
 - bug в JSX → Process Core + Debugging + JSX/Tools;
 - validation build → текущие engineering rules + Validation Gate;
@@ -196,6 +215,8 @@
 - не менять product direction молча.
 
 ## 12. Короткие примеры
+
+**Референс:** «Вот plugin X, сделай аналог» → включить Reference Audit, построить Reference Specification и parity tests до Technical Design.
 
 **Новый продукт:** «Хочу новый AE-плагин» → использовать известный context, при необходимости провести короткий Stage 0, затем перейти к spec/design/plan.
 

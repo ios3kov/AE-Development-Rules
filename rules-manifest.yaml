@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 
 risk_profiles:
   - id: light
@@ -23,6 +23,11 @@ delivery_gates:
     description: final Release Candidate; full Release Gate applies
 
 rule_groups:
+  - id: REFERENCE-AUDIT
+    section: "R0"
+    source: REFERENCE_AUDIT.md
+    applicability: conditional
+    trigger: explicit_external_reference
   - id: PRODUCT-DISCOVERY
     section: "0"
     source: PRODUCT_DISCOVERY.md
