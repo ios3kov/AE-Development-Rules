@@ -17,6 +17,18 @@
 
 ---
 
+## Stage 0 — Product Discovery
+
+До выбора технической архитектуры для нового продукта, крупной функции или существенного product-direction change применяется [PRODUCT_DISCOVERY.md](PRODUCT_DISCOVERY.md).
+
+Stage 0 отвечает на вопрос **«что именно должен дать продукт пользователю?»** до вопроса **«как это реализовать?»**.
+
+Основная цепочка:
+
+**Product Discovery → Product Vision → Product Scope → Product Spec → Technical Design → Production Plan → Development → Validation → Release**
+
+Reusable interview/vision template: [starter-kit/templates/PRODUCT_DISCOVERY_TEMPLATE.md](starter-kit/templates/PRODUCT_DISCOVERY_TEMPLATE.md).
+
 ## Нормативные ключевые слова
 
 Чтобы обязательность правил трактовалась одинаково:
@@ -83,6 +95,7 @@ Critical не означает Release. Низкорисковый patch мож�
 
 `DEVELOPMENT_RULES.md` — индекс стандарта. Нормативный текст разделён по модулям; один Rule Group имеет один canonical location.
 
+- [Product Discovery](PRODUCT_DISCOVERY.md) — Stage 0 / §0.
 - [Process Core](core/PROCESS.md) — §§1–13, §27.
 - [Engineering Core](core/ENGINEERING.md) — §§14–21, §§24–25, §§31–39, §41.
 - [Tools / Panels Runtime](profiles/TOOLS.md) — §22.
