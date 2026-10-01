@@ -41,8 +41,35 @@ function strip(value) {
 }
 
 function render(manifest) {
-  const groupMap = new Map(manifest.rule_groups.map((g) => [g.id, g.section]));
-  const expand = (value) => value.replace(/\b([A-Z][A-Z-]+)\b/g, (id) => groupMap.has(id) ? id + " (§" + groupMap.get(id) + ")" : id);
+  const ids = new Set();
+  for (const group of manifest.rule_groups) {
+    if (!group.id || !group.section || !group.source) throw new Error("rule group requires id, section and source");
+    if (ids.has(group.id)) throw new Error("duplicate rule group id: " + group.id);
+    ids.add(group.id);
+    const sourcePath = path.join(root, group.source);
+    if (!fs.existsSync(sourcePath)) throw new Error("missing canonical rule source: " + group.source);
+    const source = fs.readFileSync(sourcePath, "utf8");
+    const first = String(group.section).split("-")[0];
+    if (!new RegExp("^## " + first.replace(/[.*+?^$()|[\\]\\]/g, "\\  const groupMap = new Map(manifest.rule_groups.map((g) => [g.id, g.section]));
+  const expand = (value) => value.replace(/\b([A-Z][A-Z-]+)\b/g, (id) => groupMap.has(id) ? id + " (§" + groupMap.get(id) + ")" : id);") + "\\.", "m").test(source)) {
+      throw new Error("section §" + group.section + " not found in " + group.source);
+    }
+  }
+
+  const groupMap = new Map(manifest.rule_groups.map((g) => [g.id, g]));
+  const expand = (value) => value.replace(/\b([A-Z][A-Z-]+)\b/g, (id) => {
+    const group = groupMap.get(id);
+    if (!group) return id;
+    return id + " ([§" + group.section + "](" + group.source + "))";
+  });
+
+  for (const profile of manifest.artifact_profiles) {
+    for (const key of ["light", "standard", "critical", "validation", "release"]) {
+      for (const match of String(profile[key] || "").matchAll(/\b([A-Z][A-Z-]+)\b/g)) {
+        if (!groupMap.has(match[1])) throw new Error("unknown rule group " + match[1] + " in profile " + profile.id);
+      }
+    }
+  }
 
   const riskRows = manifest.artifact_profiles.map((p) =>
     "| " + p.label + " | " + expand(p.light) + " | " + expand(p.standard) + " | " + expand(p.critical) + " |"
