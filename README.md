@@ -15,9 +15,14 @@
 
 ## Главные документы
 
-- [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) — инженерные требования, проверки, compatibility, Evidence и release gates.
-- [WORKFLOW.md](WORKFLOW.md) — рабочий ритм, статусы этапов и правила коротких отчётов.
-- Быстрая карта «тип проекта × Light / Standard / Release» находится в начале DEVELOPMENT_RULES.md.
+- [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) — нормативный индекс, ключевые определения и сгенерированная applicability map.
+- [core/PROCESS.md](core/PROCESS.md) — общий процесс, testing, Git, identity, regression и Evidence.
+- [core/ENGINEERING.md](core/ENGINEERING.md) — safety, performance, compatibility/maturity, docs, dependencies и engineering controls.
+- [profiles/](profiles/) — Native / JSX / CEP / UXP / Helper / Release профили.
+- [WORKFLOW.md](WORKFLOW.md) — рабочий ритм и статус-коммуникация.
+- [rules-manifest.yaml](rules-manifest.yaml) — machine-readable applicability source of truth.
+- [SOURCES.md](SOURCES.md) — freshness registry внешних time-sensitive источников.
+- [LICENSE](LICENSE) — MIT license.
 
 ## Как использовать в AE-проектах
 
@@ -33,7 +38,7 @@
 
 ## Принцип
 
-Написанный код — не проверенный продукт. Пользовательская validation не заменяет внутренний QA; Validation Build и Release Candidate проходят разные gates.
+Написанный код — не проверенный продукт. **Risk Profile** (Light / Standard / Critical) и **Delivery Gate** (Development / Validation / Release) выбираются независимо. Пользовательская validation не заменяет внутренний QA.
 
 
 ## Starter kit
