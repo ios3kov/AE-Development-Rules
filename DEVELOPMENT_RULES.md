@@ -17,12 +17,34 @@
 
 ---
 
+## Быстрая карта применимости
+
+Сначала определить **тип продукта** и **режим процесса**. Таблица ниже — навигатор, а не замена детальным требованиям.
+
+| Тип проекта | Light | Standard | Release / Critical |
+|---|---|---|---|
+| Native plugin / effect | §1, §7–10, релевантные §14–19 и §23 | Light + baseline, реальные AE tests, Regression Level 1, compatibility/performance по риску | Standard + Regression Level 2, §20, §23, §26 и platform distribution gate только если применим |
+| JSX / ScriptUI | §1; для micro-helper допускается минимальный профиль | §7–10, §22, реальный AE smoke/integration test | Standard + §26; OS code signing не требуется для source-only artifact без executable installer/helper |
+| CEP | §1, релевантные §22 | Standard checks + bridge/lifecycle/package/runtime tests | §26 + distribution/package requirements; OS signing только для executable code/installer/helper |
+| UXP | §1 + §40 в применимом scope | §21, §22, §40 + host/Min Version/runtime tests | Standard + §26 + актуальные Adobe distribution requirements; OS signing только если artifact содержит executable code/installer/helper |
+| Helper / companion app | §1, §7–10, §14–19 по риску | Standard + IPC/files/network/runtime tests по scope | §26 + §28/§30 только для соответствующего публичного executable distributable |
+
+Правило выбора простое:
+
+1. Выбрать строку по фактическому типу artifact.
+2. Выбрать Light / Standard / Release-Critical по риску и цели текущего этапа.
+3. Добавить требования для реально затронутых рисков.
+4. Не выполнять platform/signing gate только потому, что проект запускается на этой ОС: gate должен быть применим именно к типу передаваемого artifact.
+
+Для смешанного продукта использовать объединение требований его компонентов. Например, CEP/UXP panel с native helper требует отдельно проверить panel runtime и executable helper.
+
+Организационный порядок работы и формат коротких статусов вынесены в [WORKFLOW.md](WORKFLOW.md).
+
+---
+
 ## 1. Применение правил и обязательность проверок
 
-Перед началом каждого значимого этапа разработки 
-а) сообщить текущий статус разработки и на каком этапе разработке сейчас, например Этап Х из Y (где ч- количество законченных этапов, Y - общее количество этапов полного цикла производства)
-б) сверяться с этим документом и выбирать применимые требования.
-в) сообщить краткий план следующего этапа/шага разработки
+Перед началом каждого значимого этапа сверяться с этим документом, выбирать применимые требования и фиксировать scope проверки. Правила рабочего ритма, статусов этапов и общения находятся в [WORKFLOW.md](WORKFLOW.md).
 
 Значимый этап:
 
@@ -95,7 +117,7 @@
 Использовать для:
 
 - milestone / release;
-- передачи artifact пользователю;
+- финальной передачи Release Candidate / публичного release;
 - крупных архитектурных изменений;
 - performance-critical изменений;
 - изменений render path, MFR / SmartFX, threading, memory ownership;
@@ -120,7 +142,26 @@
 
 Если во время работы обнаружен более высокий риск, режим процесса должен быть повышен.
 
-§26–28 относятся к финальной передаче / release и другим явно указанным там сценариям; они не должны механически применяться к каждой микроправке, если эта правка ещё не является кандидатом на передачу или release.
+### Validation Build и Release Candidate — разные вещи
+
+**Validation Build** — идентифицированный тестовый artifact, передаваемый пользователю для ограниченной проверки UX, поведения или уникального окружения. Он не становится публичным release только из-за факта передачи пользователю.
+
+Для Validation Build по умолчанию требуются:
+
+- понятный scope пользовательской проверки;
+- известный commit / Build ID или иная однозначная идентичность artifact;
+- релевантные быстрые внутренние проверки;
+- отсутствие известных критических проблем безопасности, потери данных и обязательных FAIL для проверяемого сценария;
+- явная маркировка, что artifact тестовый и не предназначен для публичного распространения;
+- честное перечисление того, что ещё не прошло Release Gate.
+
+Для Validation Build **не требуется автоматически** полный публичный Release Gate, notarization, Authenticode, финальный installer, полный Regression Level 2, полная compatibility matrix или публичный distribution-channel test, если именно эти свойства не являются предметом текущей проверки.
+
+**Release Candidate** — неизменяемый кандидат на финальную передачу / публикацию. Для него выполняется полный применимый Release Gate из §26 и platform-specific gates только там, где они действительно применимы к artifact.
+
+Если цель пользовательского теста — проверить именно финальную установку, подпись, quarantine/SmartScreen, updater или публичный package, соответствующий release/distribution gate становится частью этого теста.
+
+§26 различает Validation Gate и Release Gate. §28 и §30 относятся только к соответствующим публичным platform distributables и не должны механически применяться к каждой внутренней сборке.
 
 ### Адаптация для малых команд и solo-разработки
 
@@ -599,9 +640,9 @@ Dirty build допустим для внутренних эксперимент�
 
 Если обязательная проверка упала, этап не считается подтверждённым. Нельзя переносить нерешённый FAIL в release gate как будто проверка пройдена.
 
-### Level 2 — перед milestone / release / ручным тестом пользователя
+### Level 2 — перед milestone / Release Candidate и для high-risk validation
 
-Выполнять полный обязательный набор регрессии для текущего milestone и заявленного scope:
+Выполнять полный обязательный набор регрессии для текущего milestone / Release Candidate и заявленного scope. Для обычного ограниченного Validation Build Level 2 не является автоматическим требованием: его необходимость определяется риском и тем, что именно должен подтвердить пользователь.
 
 - основной функционал;
 - затронутые существующие сценарии;
@@ -659,9 +700,11 @@ Dirty build допустим для внутренних эксперимент�
 
 Анализ кода сам по себе не является доказательством исправления runtime-проблемы.
 
-### Статусы
+### Единая таксономия статусов
 
-Каждая проверка получает один статус:
+Использовать три независимых namespace. Не смешивать их в одной колонке или формулировке.
+
+**Test Status** — результат конкретно выполненной проверки:
 
 - **PASS** — выполнена, критерии соблюдены.
 - **FAIL** — выполнена, критерии нарушены.
@@ -671,7 +714,24 @@ Dirty build допустим для внутренних эксперимент�
 
 `BLOCKED`, `NOT RUN` и `N/A` не являются PASS.
 
-При необходимости известную ожидаемую ошибку можно отмечать дополнительным признаком, но это не должно скрывать её фактический результат или делать обязательный gate успешным.
+**Compatibility Status** — уровень подтверждения конкретной конфигурации / версии:
+
+- **VERIFIED** — реально запущена и проверена в заявленном runtime scope.
+- **STATIC-COMPATIBLE** — статический audit не нашёл известных препятствий, но runtime test не выполнен.
+- **LIMITED** — поддерживается только в явно указанном ограниченном scope.
+- **UNSUPPORTED** — найдено конкретное несовместимое требование / API / binary / platform limitation.
+- **UNKNOWN** — данных недостаточно.
+
+**Evidence Confidence** — качество основания для инженерного утверждения или know-how:
+
+- **PROVEN** — подтверждено воспроизводимым test/runtime evidence.
+- **USER-REPORTED** — наблюдение подтверждено пользователем в его среде, но не воспроизведено независимо.
+- **OBSERVED** — исследовательское наблюдение / диагностика с ограниченным scope.
+- **UNVERIFIED** — предположение или вопрос без достаточного подтверждения.
+
+Если контекст может быть неоднозначным, писать namespace явно: `Test: PASS`, `Compatibility: VERIFIED`, `Evidence: PROVEN`.
+
+При необходимости известную ожидаемую ошибку можно отмечать дополнительным признаком, но это не должно скрывать её фактический Test Status или делать обязательный gate успешным.
 
 ### Test record
 
@@ -705,9 +765,10 @@ Dirty build допустим для внутренних эксперимент�
 Различать:
 
 - **реализация завершена** — изменения кода выполнены;
-- **проверка завершена** — обязательные тесты выполнены и результаты зафиксированы;
-- **готово к передаче** — пройден финальный gate;
-- **выпущено** — artifact опубликован или передан установленным способом.
+- **готово к validation** — Validation Gate пройден для явно ограниченного пользовательского теста;
+- **проверка завершена** — обязательные проверки заявленного scope выполнены и результаты зафиксированы;
+- **готово к release** — полный применимый Release Gate пройден для Release Candidate;
+- **выпущено** — проверенный Release Candidate опубликован или передан установленным способом.
 
 Задача не считается полностью завершённой только потому, что код написан.
 
@@ -726,11 +787,17 @@ Dirty build допустим для внутренних эксперимент�
 - Evidence сохранено;
 - для performance-critical изменений есть реальные замеры.
 
-Для milestone / release / передачи пользователю дополнительно:
+Для ограниченного Validation Build дополнительно:
+
+- пройден Validation Gate из §26;
+- зафиксирован scope пользовательской проверки;
+- проверен именно передаваемый тестовый artifact.
+
+Для milestone / Release Candidate дополнительно:
 
 - пройден Regression Level 2;
-- пройден финальный checklist;
-- проверен именно передаваемый artifact.
+- пройден полный применимый Release Gate;
+- проверен именно финальный кандидат.
 
 ### Когда проверка недоступна
 
@@ -761,14 +828,16 @@ Dirty build допустим для внутренних эксперимент�
 - последний проверенный milestone;
 - последний release.
 
-Нельзя писать «готово к передаче», если:
+Нельзя писать «готово к validation» или «готово к release» без указания соответствующего scope и gate.
 
-- production-изменения не находятся в Git;
+Нельзя объявлять artifact готовым к заявленной передаче, если:
+
+- относящиеся к передаче изменения не зафиксированы и artifact нельзя однозначно воспроизвести;
 - тестировался другой artifact;
-- Build ID неизвестен;
+- Build ID / artifact identity неизвестны;
 - Evidence относится к другой версии;
-- обязательные проверки не пройдены;
-- документация описывает другое поведение.
+- обязательные для заявленного Validation Gate или Release Gate проверки не пройдены;
+- документация / инструкция описывает другое поведение.
 
 Test reports и release records предпочтительно хранить отдельно от генерируемых исходников, чтобы запись результата проверки не требовала изменения уже проверенного production artifact.
 
@@ -1232,14 +1301,9 @@ Evidence старой версии можно использовать как и
 - результат;
 - известные ограничения.
 
-Использовать понятные статусы:
+Использовать только **Compatibility Status** из §10: VERIFIED / STATIC-COMPATIBLE / LIMITED / UNSUPPORTED / UNKNOWN.
 
-- supported / verified;
-- limited support;
-- untested;
-- unsupported.
-
-Не считать всю платформу проверенной по одному запуску одного smoke test. Указывать фактический scope.
+Не считать всю платформу VERIFIED по одному запуску одного smoke test. Указывать фактический scope.
 
 ### Статический compatibility audit по API
 
@@ -1258,16 +1322,17 @@ Evidence старой версии можно использовать как и
 - отдельно учитывать MFR, SmartFX, render lifecycle, Custom UI и другие host-механизмы, поведение которых могло меняться между версиями;
 - задокументировать найденные blockers, риски и допущения.
 
-Результат статического compatibility audit должен использовать отдельные статусы:
+Результат статического compatibility audit записывать через **Compatibility Status** из §10:
 
 - **VERIFIED** — версия реально запущена и проверена в After Effects в заявленном scope;
-- **API-COMPATIBLE** — статический аудит не выявил известных API / binary / platform препятствий, но runtime-проверка этой версии не выполнена;
-- **RISK / UNKNOWN** — есть version-specific поведение, неполные данные или иная неопределённость;
+- **STATIC-COMPATIBLE** — статический аудит не выявил известных API / binary / platform препятствий, но runtime-проверка этой версии не выполнена;
+- **LIMITED** — подтверждён только ограниченный scope;
+- **UNKNOWN** — есть version-specific поведение, неполные данные или иная неопределённость;
 - **UNSUPPORTED** — найдено конкретное несовместимое API, binary, platform или host requirement.
 
-`API-COMPATIBLE` не является эквивалентом `VERIFIED`.
+`STATIC-COMPATIBLE` не является эквивалентом `VERIFIED`.
 
-Статический аудит может использоваться для определения **минимальной вероятно совместимой версии After Effects**, но без реального runtime-теста такую версию нельзя называть официально проверенной или подтверждённо поддерживаемой.
+Статический аудит может использоваться для определения **минимальной вероятно совместимой версии After Effects**, но без реального runtime-теста такую версию нельзя называть VERIFIED.
 
 Если в пользовательской документации версия обозначается как официально поддерживаемая, для неё должен существовать реальный runtime Evidence в соответствии с матрицей совместимости.
 ### Unicode, локализация и региональные настройки
@@ -1290,35 +1355,11 @@ Evidence старой версии можно использовать как и
 
 Поддержка Unicode paths и пользовательских имён должна проверяться даже для продукта только с английским UI, если такие данные входят в заявленный scope.
 
-### UXP и host support
+### UXP host support
 
-Перед выбором UXP подтвердить:
+Для UXP в этом разделе фиксируется только Compatibility Status целевой версии AE. Полный runtime / sandbox / permissions / lifecycle / packaging contract находится в §40 и намеренно не дублируется здесь.
 
-- поддержку целевой версией After Effects;
-- доступность необходимых host API;
-- доступность нужных manifest capabilities;
-- ограничения runtime.
-
-Общая документация UXP не является доказательством поддержки конкретным host-приложением.
-
-### UXP Sandbox / Permissions
-
-При использовании UXP отдельно проверять:
-
-- filesystem sandbox;
-- `localFileSystem`;
-- manifest permissions;
-- user-granted file / folder access;
-- сохранение и восстановление tokens;
-- restart;
-- отказ пользователя;
-- отозванные и недействительные permissions;
-- stale entries;
-- доступ вне разрешённой области.
-
-Не предполагать произвольный доступ к файловой системе.
-
-Отказ в доступе должен обрабатываться как штатная ситуация.
+Общая документация UXP или проверка в другом Adobe host не являются Evidence поддержки конкретной версии After Effects.
 
 ---
 
@@ -1641,13 +1682,14 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 - ограничения и противопоказания;
 - ссылку на commit, issue, PR, test fixture или диагностический материал.
 
-Нельзя превращать ретроспективу в список неподтверждённых предположений. Нужно различать:
+Нельзя превращать ретроспективу в список неподтверждённых предположений. Для уверенности вывода использовать **Evidence Confidence** из §10:
 
-- **PROVEN / VERIFIED** — подтверждено тестами или реальным host evidence;
-- **USER-REPORTED** — подтверждено пользователем в целевой среде;
-- **OBSERVED / RESEARCH** — наблюдение или исследовательский вывод;
-- **FAILED / REJECTED** — подход проверен и оказался непригодным;
-- **UNKNOWN / NOT VERIFIED** — вопрос остаётся открытым.
+- **PROVEN** — подтверждено воспроизводимыми tests или реальным host evidence;
+- **USER-REPORTED** — подтверждено пользователем в целевой среде, но не воспроизведено независимо;
+- **OBSERVED** — наблюдение или исследовательский вывод с ограниченным scope;
+- **UNVERIFIED** — вопрос остаётся открытым.
+
+Отдельно от Evidence Confidence фиксировать outcome эксперимента, например `accepted` / `rejected`. Не использовать `FAILED` как evidence label, чтобы не путать его с Test Status FAIL.
 
 Особенно ценны отрицательные результаты. Если подход потребовал много исследования и оказался тупиковым, это знание нужно сохранить вместе с причиной, чтобы его не повторяли в следующем проекте.
 
@@ -1706,20 +1748,41 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 
 ---
 
-## 26. Финальный gate перед передачей пользователю
+## 26. Validation Gate и Release Gate
 
-Перед ручным тестом пользователя выполнить все обязательные и разумные доступные автоматические проверки.
+Передача тестового artifact пользователю для ограниченной проверки и финальный release — разные события.
 
-Все обнаруженные проблемы должны быть:
+### Validation Gate
 
-- исследованы;
-- классифицированы;
-- исправлены и повторно проверены, если блокируют передачу;
-- либо явно зарегистрированы как допустимые известные ограничения вне обязательных критериев.
+Validation Build можно передать пользователю, когда:
 
-Нельзя передавать artifact с упавшей обязательной проверкой.
+- определён конкретный вопрос, который должен подтвердить пользователь;
+- artifact однозначно идентифицирован commit / Build ID / hash или эквивалентом;
+- выполнены релевантные автоматические и внутренние проверки, доступные разработчику;
+- основной проверяемый сценарий не имеет известного обязательного Test: FAIL;
+- нет известных критических рисков потери данных, безопасности или повреждения проекта;
+- пользователь получает краткую инструкцию проверки и известные ограничения;
+- artifact явно обозначен как validation / test build, если он ещё не прошёл Release Gate.
 
-### До фиксации финального кандидата
+Для обычного Validation Build не требуются автоматически:
+
+- полный Regression Level 2;
+- финальный public installer/package;
+- Developer ID notarization или Authenticode;
+- проверка реального публичного download channel;
+- полный compatibility sweep;
+- deep profiling;
+- release documentation в финальном виде.
+
+Эти проверки становятся обязательными, если входят в предмет validation или затронутый риск.
+
+Пользовательский результат фиксировать как Evidence. Если результат существует только в пользовательской среде, использовать `Evidence: USER-REPORTED`. Это не превращает непройденные внутренние проверки в Test: PASS.
+
+### Release Gate
+
+Перед финальной публикацией / передачей Release Candidate выполнить полный применимый цикл.
+
+#### До фиксации Release Candidate
 
 Выполнить необходимое:
 
@@ -1732,20 +1795,20 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 
 После этого зафиксировать изменения в Git.
 
-### Создание финального кандидата
+#### Создание Release Candidate
 
 - Проверить clean Git state.
 - Выполнить clean build / clean package.
-- Выполнить необходимые signing / post-processing steps.
+- Выполнить применимые signing / post-processing steps.
 - Зафиксировать Build ID.
 - Рассчитать финальный SHA-256.
 - Сохранить artifact и manifest.
 
-### Проверка кандидата
+#### Проверка Release Candidate
 
 - Подготовить безопасное контролируемое окружение.
 - Исключить конфликт старых активных версий.
-- Выполнить чистую установку.
+- Выполнить чистую установку, где она применима.
 - Подтвердить runtime Build ID.
 - Выполнить smoke / integration tests.
 - Пройти Regression Level 2.
@@ -1759,12 +1822,13 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 - Проверить upgrade / migration, где применимо.
 - Проверить согласованный scope совместимости.
 - Выполнить реальные проверки внутри After Effects.
+- Выполнить §28 / §30 только для тех публичных distributables, к которым соответствующий platform gate применим.
 
-### Решение о передаче
+#### Решение о release
 
 Убедиться, что:
 
-- все обязательные проверки имеют PASS;
+- все обязательные Test Status имеют PASS;
 - все N/A обоснованы;
 - нет обязательных BLOCKED / NOT RUN;
 - нет известных критических ошибок;
@@ -1774,76 +1838,47 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 - установленная и реально загруженная версия идентифицированы;
 - ограничения сформулированы честно.
 
-Во время финального gate artifact не изменять.
+Во время Release Gate artifact не изменять.
 
-Если потребовалась правка, создать нового кандидата и повторить необходимый цикл проверки.
+Если потребовалась правка, создать нового Release Candidate и повторить необходимый цикл проверки.
 
-Пользователю передаётся именно проверенный файл или пакет, а не заново собранный «такой же».
+Пользователю как финальный release передаётся именно проверенный файл или пакет, а не заново собранный «такой же».
 
 ---
 
-## 27. Общение с пользователем
+## 27. Workflow и общение
 
-Общаться:
+Рабочий ритм, статусы этапов, правила коротких отчётов после завершённых логичных блоков и требования к общению вынесены в [WORKFLOW.md](WORKFLOW.md).
 
-- коротко;
-- человеческим языком;
-- без воды;
-- без ненужного технического шума;
-- с ясным различием фактов и предположений.
-
-Технические подробности давать, когда они нужны для решения или понимания ограничения.
-
-В итоговом сообщении достаточно указать:
-
-- что изменено;
-- что проверено;
-- какая версия передаётся;
-- что осталось ограниченным или непроверенным;
-- требуется ли действие пользователя.
-
-Не говорить «готово», «исправлено», «работает» или «ускорено» без соответствующего Evidence.
-
-Если проверка недоступна, прямо назвать:
-
-- что не проверено;
-- почему;
-- как это влияет на готовность.
-
-Не изображать выполнение недоступных действий:
-
-- запуск After Effects;
-- тестирование GPU;
-- проверку другой ОС;
-- установку artifact;
-- подтверждение загруженной версии.
-
-Не перекладывать доступную разработчику диагностику на пользователя.
-
-Если проблема воспроизводится только в пользовательской среде, сначала исчерпать доступные способы воспроизведения и подготовить минимальный безопасный запрос данных или диагностический пакет.
-
-Участие пользователя допустимо для:
-
-- обязательного разрешения доступа;
-- проверки уникального окружения;
-- предоставления недоступных исходных данных;
-- оценки UX и соответствия реальной задаче.
-
-Это не должно превращаться в последовательность необоснованных промежуточных экспериментов.
+Этот раздел намеренно не дублирует WORKFLOW.md. Инженерные Test / Compatibility / Evidence статусы остаются нормативно определены в §10 этого документа.
 
 ---
 
 ## 28. Публичный macOS-дистрибутив без предупреждений Gatekeeper
 
-Для любого продукта, который должен публично распространяться на macOS, финальный этап разработки включает создание **нормального пользовательского дистрибутива, который устанавливается и запускается без предупреждений Gatekeeper и без ручных обходов защиты macOS**.
+Этот gate применяется не «ко всему, что работает на macOS», а к **публичному distributable, содержащему исполняемый native code, app/helper, installer или другой artifact, для которого macOS code signing / notarization реально являются частью штатной доставки**.
 
-Тестовый artifact с ad-hoc подписью может использоваться во время разработки, но **не считается финальным публичным macOS-релизом**.
+Примеры, где gate обычно применим:
+
+- native `.plugin` / executable bundle;
+- helper / companion app;
+- installer / package с исполняемым кодом;
+- hybrid UXP plugin с macOS `.uxpaddon` native binary;
+- другой executable component, который macOS проверяет как код.
+
+Сам по себе source-only `.jsx`, HTML/JS/CSS panel или pure UXP `.ccx` без native binary **не делает Developer ID/notarization обязательными**. Для CEP / UXP package использовать требования Adobe к соответствующему формату распространения отдельно от OS code signing.
+
+По текущей документации Adobe UXP pure `.ccx` package не требует package-level digital signature или timestamp. Для hybrid UXP Adobe отдельно требует signing/notarization macOS `.uxpaddon` binaries.
+
+Если gate применим, финальный этап включает создание нормального пользовательского дистрибутива без небезопасных обходов Gatekeeper.
+
+Тестовый artifact с ad-hoc подписью может использоваться во время разработки, но **не считается финальным публичным macOS-release для executable artifact в scope этого gate**.
 
 ### Обязательные требования
 
-Перед публичным macOS release:
+Перед публичным macOS release **для artifact в scope этого gate**:
 
-- подписать финальный bundle и весь исполняемый вложенный код действительным **Apple Developer ID** сертификатом;
+- подписать финальный bundle и применимый исполняемый вложенный код действительным **Apple Developer ID** сертификатом;
 - использовать корректную и минимально необходимую signing configuration / entitlements;
 - отправить финальный distributable в **Apple Notary Service** и получить статус `Accepted`;
 - выполнить stapling notarization ticket для форматов, где Apple это поддерживает;
@@ -1877,7 +1912,7 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 
 ### Финальный artifact
 
-Публично передаваемый файл должен быть именно тем artifact, который прошёл:
+Для artifact в scope этого gate публично передаваемый файл должен быть именно тем artifact, который прошёл:
 
 - Developer ID signing;
 - notarization;
@@ -1886,6 +1921,8 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 - реальную установку из quarantined download;
 - финальный smoke test.
 
+Для source-only / pure package artifact вне scope этого gate применяются его format-specific install/package checks, а не искусственное требование Apple code signing.
+
 После любого изменения байтов bundle / installer / archive необходимо заново:
 
 - зафиксировать artifact identity;
@@ -1893,9 +1930,9 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 - повторить необходимые signing / notarization проверки;
 - повторить затронутые smoke / integration проверки.
 
-Если Developer ID, notarization или реальная Gatekeeper-проверка недоступны, статус публичного macOS release — **BLOCKED**, а не PASS.
+Если artifact находится в scope этого gate, а обязательные Developer ID, notarization или реальная Gatekeeper-проверка недоступны, соответствующий Test Status — **BLOCKED**, а не PASS.
 
-**Разработка публичного macOS-продукта не считается полностью завершённой, пока пользователю нельзя отдать обычный подписанный и notarized дистрибутив без предупреждений Gatekeeper и без инструкций по обходу защиты macOS.**
+Executable macOS distributable в scope этого gate не считается release-ready, пока его нельзя штатно установить и запустить без инструкций по отключению или обходу системной защиты.
 
 
 ---
@@ -1943,7 +1980,7 @@ Sphinx, MkDocs, Wiki, сайт или другая система публика
 - **portable as-is** — код не зависит от платформы;
 - **platform adapter required** — нужен тонкий platform-specific слой;
 - **rewrite required** — механизм принципиально зависит от платформы;
-- **UNKNOWN / NOT VERIFIED** — данных недостаточно.
+- **undetermined** — данных недостаточно.
 
 ### Перенос native AE plugin
 
@@ -1981,15 +2018,19 @@ Platform-specific реализации одного и того же польз�
 
 ## 30. Публичный Windows-дистрибутив и release gate
 
-Для продукта, который публично распространяется на Windows, финальный release должен устанавливаться и запускаться стандартным пользовательским способом без необходимости отключать системные механизмы безопасности.
+Этот gate применяется к публичному Windows distributable, когда продукт содержит **PE/native executable code, helper/app, installer или иной компонент, для которого Authenticode / Windows security checks реально относятся к штатной доставке**.
+
+Source-only JSX, HTML/JS/CSS panel или pure UXP `.ccx` без native executable не требуют Authenticode только потому, что используются на Windows. CEP ZXP signing и UXP CCX packaging являются отдельными format-specific требованиями Adobe.
+
+Если gate применим, финальный release должен устанавливаться и запускаться стандартным пользовательским способом без необходимости отключать системные механизмы безопасности.
 
 ### Обязательные требования
 
-Перед публичным Windows release по применимости:
+Перед публичным Windows release для artifact в scope этого gate:
 
 - собрать production artifact для заявленной архитектуры;
 - проверить PE / binary architecture и runtime dependencies;
-- подписать исполняемый код и installer действительным code-signing certificate;
+- подписать применимый исполняемый код и installer действительным code-signing certificate;
 - использовать timestamping, чтобы подпись оставалась проверяемой после истечения сертификата;
 - проверить Authenticode signature стандартными Windows средствами, например SignTool / PowerShell;
 - проверить installer / package integrity;
@@ -2024,17 +2065,19 @@ SmartScreen reputation и предупреждения, зависящие от 
 
 ### Финальный Windows artifact
 
-Пользователю передаётся именно тот package / installer / archive, который прошёл:
+Для artifact в scope этого gate пользователю передаётся именно тот package / installer / archive, который прошёл:
 
 - identity / hash фиксацию;
-- signing;
+- применимое signing;
 - signature verification;
 - dependency / architecture audit;
 - чистую установку;
 - runtime загрузку в целевом After Effects;
 - финальный smoke test.
 
-Если обязательная подпись, целевая Windows-среда или реальная runtime-проверка недоступны, соответствующий публичный Windows release gate имеет статус **BLOCKED**, а не PASS.
+Для source-only / pure package artifact вне scope этого gate использовать format-specific package/install verification без искусственного Authenticode requirement.
+
+Если artifact находится в scope этого gate, а обязательная подпись, целевая Windows-среда или реальная runtime-проверка недоступны, соответствующий Test Status — **BLOCKED**, а не PASS.
 
 
 ---
@@ -2169,6 +2212,7 @@ Test case должен проверять наблюдаемое требова�
 - [macOS/local preflight](starter-kit/scripts/preflight.sh)
 - [Windows preflight](starter-kit/scripts/preflight.ps1)
 - [Artifact identity + SHA-256](starter-kit/scripts/record-artifact.sh)
+- [Starter-kit self-test / consistency audit](starter-kit/scripts/self-test.mjs)
 - [ExtendScript sanity-check](starter-kit/scripts/check-extendscript.mjs)
 - [Adobe API inventory для compatibility audit](starter-kit/scripts/scan-adobe-api.sh)
 - [macOS binary audit](starter-kit/scripts/macos-binary-audit.sh)
@@ -2188,6 +2232,7 @@ Test case должен проверять наблюдаемое требова�
 - [Static API Compatibility Audit](starter-kit/templates/API_COMPATIBILITY_AUDIT.md)
 - [Build Identity contract](starter-kit/templates/BUILD_IDENTITY.md)
 - [AE Runtime Test Safety](starter-kit/templates/AE_RUNTIME_TEST_SAFETY.md)
+- [Validation Build Checklist](starter-kit/templates/VALIDATION_CHECKLIST.md)
 - [Release Checklist](starter-kit/templates/RELEASE_CHECKLIST.md)
 - [Cross-platform Porting Audit](starter-kit/templates/CROSS_PLATFORM_PORTING.md)
 - [Security Checklist](starter-kit/templates/SECURITY_CHECKLIST.md)
@@ -2208,6 +2253,7 @@ Test case должен проверять наблюдаемое требова�
 
 ### CI examples
 
+- [GitHub Actions: starter-kit self-test](.github/workflows/starter-kit-self-test.yml)
 - [GitHub Actions: AE preflight](starter-kit/examples/github-actions/ae-preflight.yml)
 - [GitHub Actions: cross-platform macOS + Windows preflight](starter-kit/examples/github-actions/cross-platform-preflight.yml)
 
@@ -2419,7 +2465,7 @@ UXP считать отдельной runtime / security / lifecycle модел�
 
 Перед выбором UXP для After Effects обязательно подтвердить текущую поддержку целевой версии AE и требуемых host APIs по официальной документации Adobe. Для каждого используемого host member учитывать его `Min Version`, если Adobe её публикует.
 
-На момент baseline v1.1.0 документация After Effects UXP у Adobe всё ещё развивается; поэтому конкретные возможности должны подтверждаться для целевой версии host, а не переноситься из Photoshop / Premiere / общей UXP документации автоматически.
+На момент актуализации v1.2.0 документация After Effects UXP у Adobe продолжает расширяться; конкретные возможности нужно подтверждать для целевой версии host, а не переносить из Photoshop / Premiere / общей UXP документации автоматически. After Effects API Reference публикует `Min Version` для host members — эти значения входят в compatibility contract.
 
 Официальные starting points:
 
@@ -2427,6 +2473,8 @@ UXP считать отдельной runtime / security / lifecycle модел�
 - [After Effects UXP API Reference](https://developer.adobe.com/after-effects/uxp/after-effects-api/)
 - [UXP Hub](https://developer.adobe.com/uxp/)
 - [UXP Manifest](https://developer.adobe.com/uxp/guides/explanation/concepts/manifest/)
+- [UXP Entrypoints / lifecycle](https://developer.adobe.com/uxp/guides/explanation/concepts/entrypoints/)
+- [UXP package / distribution](https://developer.adobe.com/uxp/guides/how-to/distribution/package/)
 
 ### Runtime assumptions
 
@@ -2443,6 +2491,10 @@ Node.js tooling допустим на build/test этапе, но runtime plugin
 ### Async / await и состояние
 
 Асинхронная операция должна иметь определённый lifecycle и ownership.
+
+Текущая UXP документация отдельно ограничивает async lifecycle entrypoints: Promise support явно указан для plugin `destroy()` и panel `create()/show()/hide()/destroy()`. Не предполагать, что любой lifecycle callback можно безопасно превратить в долгую async-операцию.
+
+В актуальном UXP Entrypoints guide lifecycle methods имеют ограниченный timeout (сейчас документировано 300 ms). Поэтому lifecycle callback должен выполнять только короткую обязательную работу; длительные операции запускать через отдельный управляемый operation flow, а не удерживать lifecycle transition.
 
 По применимости:
 
@@ -2509,11 +2561,29 @@ Tokens / saved references должны проверяться на stale / revok
 
 Для plugin/panel entrypoints проверять фактическое поведение `create / show / hide / destroy` в целевой версии AE.
 
-Не полагаться на cleanup callback для критического восстановления данных или безопасности без runtime Evidence, что callback действительно вызывается в нужных сценариях.
+UXP platform documentation прямо предупреждает, что `hide()` и `destroy()` работают ненадёжно не во всех host-приложениях. Поэтому:
 
-Lifecycle handler не должен выполнять ненужно долгую работу.
+- не делать essential cleanup, сохранность данных или security invariant зависимыми только от `hide()` / `destroy()`;
+- подтверждать фактическое поведение именно в целевой версии After Effects;
+- при нескольких panels проверять, какой panel реально вызвал lifecycle event: общая UXP документация отмечает ограничения multi-panel lifecycle;
+- учитывать, что command entrypoints выполняются как команды и не имеют persistent panel lifecycle.
 
 Listener / timer / subscription должны иметь явный owner и защиту от duplicate registration после reload / reopen.
+
+Lifecycle handler должен быть коротким и укладываться в platform timeout. Долгий network / file / host workflow не выполнять как обязательную часть teardown callback.
+
+### Packaging / distribution
+
+Различать pure UXP и hybrid UXP:
+
+- pure UXP package распространяется как `.ccx`; по текущей Adobe UXP документации `.ccx` не требует package-level digital signature или timestamp;
+- package создавать поддерживаемым Adobe tooling, а не считать ручной ZIP эквивалентом production package;
+- plugin ID должен соответствовать выбранному distribution channel;
+- hybrid plugin с native `.uxpaddon` требует отдельной проверки platform/architecture layout и native binaries;
+- для macOS hybrid `.uxpaddon` выполнять Adobe-required Developer ID signing/notarization native binary;
+- installation test выполнять через реальный поддерживаемый `.ccx` flow / Creative Cloud Desktop для заявленного distribution channel.
+
+Не переносить CEP ZXP signing rules на UXP CCX и наоборот.
 
 ### UXP-specific test cases
 
@@ -2625,21 +2695,21 @@ Host-specific correctness — buffer ownership, suites, MFR, SmartFX, color mana
 
 # Главное правило
 
-**Пользователь — последний этап приёмки в своей реальной среде, а не замена внутреннему QA и диагностике.**
+**Пользователь — последний источник validation в своей реальной среде, а не замена внутреннему QA и диагностике.**
 
-Перед передачей разработчик обязан подтвердить, что:
+Перед любой передачей разработчик обязан подтвердить, что:
 
-1. Реализовано требуемое поведение.
+1. Цель передачи определена: Validation Build или Release Candidate.
 2. Передаётся текущий идентифицированный artifact.
-3. Проверен именно этот artifact.
-4. Пройдены все обязательные проверки.
+3. Проверен именно этот artifact в обязательном для текущего gate scope.
+4. Для Validation Build пройден Validation Gate; для release — полный применимый Release Gate.
 5. Evidence соответствует заявленным выводам.
 6. Известные ограничения сообщены честно.
 7. Автоматизация не повредила пользовательские данные и окружение.
 
-До ручного теста должны быть исчерпаны все разумные доступные технические способы проверки.
+До пользовательской validation должны быть исчерпаны разумные доступные технические способы проверки **её заявленного scope**. Это не означает автоматическое выполнение release-only ceremony до каждого пользовательского теста.
 
-Цель процесса — не обещать невозможное отсутствие любых ошибок, а не передавать пользователю проблемы, которые должны были быть обнаружены предусмотренными инженерными проверками.
+Цель процесса — не обещать невозможное отсутствие любых ошибок, а не передавать пользователю проблемы, которые должны были быть обнаружены предусмотренными для текущего gate инженерными проверками.
 
 **Написанный код — не то же самое, что проверенный продукт.  
 Успешная сборка — не то же самое, что корректная работа.  

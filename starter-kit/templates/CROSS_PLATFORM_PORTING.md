@@ -31,12 +31,12 @@
 | GPU | <Metal/etc.> | <target> | <status> | <notes> |
 | Installer/update | <mechanism> | <target> | <status> | <notes> |
 
-Allowed status:
+Porting outcome:
 
 - **portable as-is**
 - **platform adapter required**
 - **rewrite required**
-- **UNKNOWN / NOT VERIFIED**
+- **undetermined**
 
 ## Shared acceptance contract
 

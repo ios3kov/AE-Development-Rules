@@ -6,16 +6,18 @@
 
 ## Версия стандарта
 
-**Текущий стабильный baseline: v1.1.0**
+**Текущий стабильный baseline: v1.2.0**
 
 - [VERSION](VERSION)
 - [CHANGELOG.md](CHANGELOG.md)
 
 Для release проекта фиксируйте и версию стандарта, и конкретный commit SHA.
 
-## Главный документ
+## Главные документы
 
-- [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) — обязательный процесс разработки, проверки, документирования и выпуска.
+- [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) — инженерные требования, проверки, compatibility, Evidence и release gates.
+- [WORKFLOW.md](WORKFLOW.md) — рабочий ритм, статусы этапов и правила коротких отчётов.
+- Быстрая карта «тип проекта × Light / Standard / Release» находится в начале DEVELOPMENT_RULES.md.
 
 ## Как использовать в AE-проектах
 
@@ -31,7 +33,7 @@
 
 ## Принцип
 
-Написанный код — не проверенный продукт. Пользователь — последний этап приёмки, а не замена внутреннему QA.
+Написанный код — не проверенный продукт. Пользовательская validation не заменяет внутренний QA; Validation Build и Release Candidate проходят разные gates.
 
 
 ## Starter kit

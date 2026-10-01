@@ -46,6 +46,6 @@ Check lifecycle/callback ordering, MFR, SmartFX, Custom UI, AEGP, render queue/a
 
 | AE version | Status | Reason |
 | --- | --- | --- |
-| <version> | **VERIFIED / API-COMPATIBLE / RISK / UNKNOWN / UNSUPPORTED** | <evidence> |
+| <version> | **VERIFIED / STATIC-COMPATIBLE / LIMITED / UNKNOWN / UNSUPPORTED** | <evidence> |
 
-Static audit may estimate a minimum probably compatible version; only runtime AE evidence can establish VERIFIED.
+Static audit may estimate a minimum probably compatible version; only runtime AE evidence can establish Compatibility: VERIFIED. A static-only result is Compatibility: STATIC-COMPATIBLE.

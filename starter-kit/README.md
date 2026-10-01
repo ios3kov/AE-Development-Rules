@@ -4,8 +4,21 @@
 
 Основа — реально использованные паттерны наших AE-проектов: Build Identity, Git state, SHA-256, ExtendScript sanity-check, runtime diagnostics, test records и compatibility evidence. Проектно-специфичная логика удалена.
 
+## Self-test
+
+Перед использованием или release самого стандарта:
+
+```sh
+node starter-kit/scripts/self-test.mjs --dry-run
+```
+
+Self-test read-only: проверяет local Markdown links, обязательные paths/templates, shell/Node/PowerShell syntax где tooling доступен, executable bits на POSIX, опасные destructive patterns и legacy status terminology.
+
+CI запускает тот же self-test на Linux, macOS и Windows через `.github/workflows/starter-kit-self-test.yml`.
+
 ## Scripts
 
+- `scripts/self-test.mjs` — self-consistency / safety audit starter-kit и документации.
 - `scripts/collect-dependency-evidence.sh` — hashes dependency manifests/lockfiles и фиксирует доступные audit/SBOM tools на macOS/Linux.
 - `scripts/collect-dependency-evidence.ps1` — Windows PowerShell эквивалент.
 
@@ -34,6 +47,7 @@
 - `templates/TEST_RECORD.md`
 - `templates/COMPATIBILITY_MATRIX.md`
 - `templates/API_COMPATIBILITY_AUDIT.md`
+- `templates/VALIDATION_CHECKLIST.md`
 - `templates/RELEASE_CHECKLIST.md`
 - `templates/RETROSPECTIVE.md`
 - `templates/USER_GUIDE.md`
@@ -55,7 +69,8 @@
 2. Подключить релевантные scripts к build/test pipeline или CI.
 3. Light: запускать только проверки затронутого scope.
 4. Standard: добавить runtime AE evidence.
-5. Release / Critical: пройти полный применимый gate из `DEVELOPMENT_RULES.md`.
+5. Validation Build: использовать `VALIDATION_CHECKLIST.md`, не подменяя его Release Gate.
+6. Release / Critical: пройти полный применимый gate из `DEVELOPMENT_RULES.md`.
 
 ## Ограничение
 
