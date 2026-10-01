@@ -57,6 +57,7 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 - `templates/CRASH_DIAGNOSTICS.md`
 - `templates/ACCESSIBILITY_CHECKLIST.md`
 
+- `templates/DEBUGGING_RECORD.md`
 - `templates/TEST_RECORD.md`
 - `templates/COMPATIBILITY_MATRIX.md`
 - `templates/API_COMPATIBILITY_AUDIT.md`
