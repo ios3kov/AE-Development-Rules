@@ -5,6 +5,9 @@
 - Standard commit: `<commit-sha>`
 - Adopted on: `<date>`
 - Project milestone / release:
+- Stage 0 status: `COMPLETE | EXISTING PRODUCT CONTRACT | N/A`
+- Product Discovery / Product Vision reference:
+- Product Vision / requirements baseline date:
 - Current Risk Profile: `Light | Standard | Critical`
 - Current Delivery Gate: `Development | Validation | Release`
 - Rules manifest schema/version:
