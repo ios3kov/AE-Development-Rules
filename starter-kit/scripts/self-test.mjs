@@ -31,6 +31,8 @@ function walk(dir) {
 const required = [
   "README.md",
   "AI_ENTRYPOINT.md",
+  "docs/AI_BEHAVIOR_SCENARIOS.md",
+  "docs/AI_PROTOCOL_UPDATE.md",
   "REFERENCE_AUDIT.md",
   "DEVELOPMENT_RULES.md",
   "WORKFLOW.md",
@@ -62,6 +64,7 @@ const required = [
   "CONTRIBUTING.md",
   "starter-kit/templates/REFERENCE_SPECIFICATION_TEMPLATE.md",
   "starter-kit/templates/PRODUCT_DISCOVERY_TEMPLATE.md",
+  "starter-kit/templates/AI_TASK_STATE.md",
   "starter-kit/templates/VALIDATION_CHECKLIST.md",
   "starter-kit/templates/DEBUGGING_RECORD.md",
   "starter-kit/templates/RELEASE_CHECKLIST.md",
@@ -126,9 +129,13 @@ if (fs.existsSync(aiEntryPath)) {
   for (const requiredText of [
     "# AI Smart Entry",
     "Пользователь не обязан знать внутренние термины стандарта",
+    "### 2.1. Приоритет решений и доверие к источникам",
+    "### 2.2. Восстановление и сохранение состояния задачи",
+    "### 2.3. Контракт должен покрывать текущий scope",
     "## 3. Внутренняя маршрутизация задачи",
     "### Конкретный внешний референс — conditional overlay",
     "## 4. Когда нужно задавать вопросы",
+    "### 4.1. Продолжение работы и границы разрешений",
     "## 5. Как задавать вопросы пользователю",
     "## 8. Загружать только применимые правила",
     "Пользователь не должен управлять инженерным процессом вместо ИИ"

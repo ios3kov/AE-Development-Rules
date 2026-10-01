@@ -42,13 +42,20 @@ export function route(manifest, context) {
   const allowed = ['audit','documentation','research','bugfix','improvement','new-product','major-feature'];
   if (!allowed.includes(context.task) || !['light','standard','critical'].includes(context.risk) || !['development','validation','release'].includes(context.delivery)) throw new Error('invalid routing context');
   if (!Array.isArray(context.components) || !context.components.length || new Set(context.components).size !== context.components.length) throw new Error('components required');
-  if (!['none','feature','ui','behavior','whole-product'].includes(context.reference) || typeof context.product_contract !== 'boolean') throw new Error('invalid reference/product context');
+  if (!['none','feature','ui','behavior','whole-product'].includes(context.reference)) throw new Error('invalid reference context');
+  for (const key of ['product_contract','contract_covers_scope','changes_product_contract']) {
+    if (typeof context[key] !== 'boolean') throw new Error('invalid product context: ' + key);
+  }
+  if (!context.product_contract && context.contract_covers_scope) throw new Error('a missing product contract cannot cover the current scope');
   const selected = context.components.map(id => {
     const p = manifest.artifact_profiles.find(p => p.id === id);
     if (!p) throw new Error('unknown component');
     return [...(context.task === "documentation" ? ["CORE-SCOPE","GIT","DOCS","EVIDENCE"] : rulesFor(p, context.risk)), ...(context.delivery === 'development' ? [] : p[context.delivery].rules)];
   });
-  const discovery = ['new-product','major-feature'].includes(context.task) && !context.product_contract;
+  const implementation = !['audit','documentation','research'].includes(context.task);
+  const currentContract = context.product_contract && context.contract_covers_scope;
+  const productChange = ['new-product','major-feature'].includes(context.task) || context.changes_product_contract;
+  const discovery = implementation && productChange && !currentContract;
   const reference = context.reference !== 'none' && !['audit','documentation','research'].includes(context.task);
-  return { risk:context.risk, delivery:context.delivery, product_discovery:discovery, reference_audit:reference, implementation_task:!['audit','documentation','research'].includes(context.task), rules:[...new Set([...selected.flat(),...(discovery ? ['PRODUCT-DISCOVERY'] : []),...(reference ? ['REFERENCE-AUDIT'] : [])])] };
+  return { risk:context.risk, delivery:context.delivery, product_discovery:discovery, reference_audit:reference, implementation_task:implementation, rules:[...new Set([...selected.flat(),...(discovery ? ['PRODUCT-DISCOVERY'] : []),...(reference ? ['REFERENCE-AUDIT'] : [])])] };
 }

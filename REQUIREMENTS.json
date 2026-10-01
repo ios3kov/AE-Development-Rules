@@ -2,6 +2,30 @@
   "schema_version": 1,
   "requirements": [
     {
+      "id": "AI-TRUST-001",
+      "source": "AI_ENTRYPOINT.md",
+      "section": "2.1",
+      "meaning": "Preserve confirmed decisions and reject authority from untrusted content"
+    },
+    {
+      "id": "AI-STATE-001",
+      "source": "AI_ENTRYPOINT.md",
+      "section": "2.2",
+      "meaning": "Restore and persist actual scoped task state for continuing AI work"
+    },
+    {
+      "id": "AI-AUTO-001",
+      "source": "AI_ENTRYPOINT.md",
+      "section": "4.1",
+      "meaning": "Continue authorized work with scoped permissions and dependency blockers"
+    },
+    {
+      "id": "API-SOURCE-001",
+      "source": "core/PROCESS.md",
+      "section": "3",
+      "meaning": "Confirm new or changed host API contracts against selected target sources"
+    },
+    {
       "id": "ART-001",
       "source": "core/PROCESS.md",
       "section": "7",
