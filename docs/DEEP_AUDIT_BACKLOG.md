@@ -1,0 +1,32 @@
+# Deep audit findings for version 5.0.0
+
+Baseline: `8d88b19afea726b7c79988c5f6958f65d13995ba`, published 5.0.0, audited 2026-10-02. This ledger records open findings and optional proposals; it does not amend canonical requirements, authorize release, or claim an actual AI configuration passed evaluation. Earlier F01–F12 remediation remains historical and is not reopened by adjacent findings.
+
+## Confirmed findings
+
+| ID | Priority | State | Problem and boundary | Correction and acceptance |
+| --- | --- | --- | --- | --- |
+| D01 | P2 | OPEN | Reading-map coverage: Light JSX bugfix and standalone helper do not select TOOL-RUNTIME; Critical CEP/UXP do not select general CODE-SAFETY. Fifteen canonical sections have no mapping. Canonical risk requirements still apply; no model violation was observed. | Reconcile component minima and feature-dependent selection. Exercise JSX Undo, IPC helper, security-sensitive panel and updater requests while preserving proportional documentation/micro-helper scope. |
+| D02 | P3 | OPEN | AI fixture inspector hashes contents only: forbidden POSIX chmod is invisible to file_scope PASS. agent_behavior remains NOT ASSESSED. | Bind relevant types/modes to snapshots or explicitly narrow the result label. Detect forbidden mode changes and standard-snapshot changes; define platform semantics and old-record migration. |
+| D03 | P3 | OPEN | Direct project-record library accepts sparse/inherited component arrays because schema iteration skips holes. JSON CLI rejects null; release_readiness remains NOT_ASSESSED. | Require dense own array items or constrain the library contract to validated JSON values. Dense known components pass; sparse/mixed/inherited arrays reject. |
+| D04 | P3 | OPEN | macOS bundle wrapper accepts whitespace-only AE_STAPLING_NA_REASON. Reproduced with safe command stubs, not real Gatekeeper/notarization. | Reject empty/spaces/tabs/newlines. Meaningful explanations remain subject to actual project N/A policy; required stapling failure still blocks. |
+| D05 | P2 | OPEN | Removing DEBUGGING, API-SOURCES or PRODUCT-DISCOVERY definitions is accepted; routing emits undefined IDs. Removing all three still passes full local self-test. Published definitions are present. | Validate every task overlay and resulting selected ID, including its canonical source/section contract. Missing/incorrect definitions reject; current valid routes remain usable. |
+| D06 | P3 | OPEN | loadManifest and map generator accept a canonical source symlink outside the checkout. A tracked link can keep Git clean while external rule content changes. Published sources are ordinary files; AI fixture preparation already rejects this case. | Canonicalize source boundaries or reject linked canonical sources/ancestors. External targets reject; normal sources pass. Keep the existing fixture-preparation guard. |
+| D07 | P3 | OPEN | Artifact manifest masks modes with 0777; a directory change 0770 → 01770 still verifies as identical. POSIX/macOS probe only; no elevated executable or runtime privilege test. | Define supported metadata scope. Bind significant special bits on supported platforms or reject/narrow unsupported inputs; document old-record compatibility. |
+
+## Optional improvements
+
+| ID | State | Proposal and acceptance boundary |
+| --- | --- | --- |
+| I01 | PROPOSED | Explain unknown IPC mutation outcome: response loss/timeout does not prove rollback. Reconcile or deduplicate before retry. Any new mandatory semantics require compatibility analysis under Engineering §34. |
+| I02 | PROPOSED | Versioned errata: affected baseline, impact, temporary control and corrected version; preserve frozen adoption and historical Evidence. This ledger supplies tracking, but does not yet supply corrected versions or complete errata policy. |
+| I03 | PROPOSED | AE-specific AI evaluation fixtures and held-out variants: Undo partial failure, lost IPC response, render cancellation ownership, parameter/state contract, stale loaded plugin. Controlled preparation is not actual model or AE validation. |
+| I04 | PROPOSED | Short source-checked decision examples for JSX mutation, IPC operation and native render boundary, with exact versions and explicit Evidence limits. Unexecuted examples must not imply production correctness. |
+
+## Verification and next work
+
+The original audit retained isolated probes, a 116-file hashed inventory, local self-test output and exact baseline CI/release identity outside the standard checkout. Local self-test passed available Node/POSIX/macOS checks; two Windows-only checks were skipped locally. Exact-baseline public CI passed all three operating systems. Actual AI behavior and AE product runtime were NOT RUN.
+
+The [repeat audit](DEEP_AUDIT_5_0_0_REPEAT.md) re-established D01–D04 and added D05–D07. Its [redacted probe evidence](evidence/deep-v5-repeat-probes.json) records actual observations, controls and limitations. There are seven open findings and four optional proposals; these counts are not an exhaustive-error guarantee or a quality score. No new optional requirements were added.
+
+Priority: D01/D05 reading-map coverage and integrity, then focused corrections D02–D04 and D06–D07, then optional improvements selected for the product. Findings remain OPEN until correction and matching regression evidence are recorded. The published tag is immutable. A further audit must distinguish new findings from these entries and preserve their reproduction limits.
