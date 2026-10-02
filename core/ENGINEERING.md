@@ -880,8 +880,8 @@ Test case должен проверять наблюдаемое требова�
 - [macOS artifact integrity verification](../starter-kit/scripts/macos-bundle-verify.sh)
 - [Native AE effect bundle verification on macOS](../starter-kit/scripts/verify-native-effect-bundle-macos.sh)
 - [Owned fail-closed AE test workspace](../starter-kit/scripts/create-owned-test-workspace.sh)
-- [Windows binary / dependency / Authenticode audit](../starter-kit/scripts/windows-binary-audit.ps1)
-- [Windows release signature/hash verification](../starter-kit/scripts/windows-release-verify.ps1)
+- [Windows binary / dependency audit](../starter-kit/scripts/windows-binary-audit.ps1)
+- [Windows artifact integrity verification](../starter-kit/scripts/windows-release-verify.ps1)
 - [Dependency evidence on macOS/Linux](../starter-kit/scripts/collect-dependency-evidence.sh)
 - [Dependency evidence on Windows](../starter-kit/scripts/collect-dependency-evidence.ps1)
 

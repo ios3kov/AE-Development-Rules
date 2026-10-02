@@ -138,12 +138,19 @@ test('A01 empty resource cannot pass structural bundle check',{skip:process.plat
  assert.equal(valid.status,0,valid.stdout+valid.stderr);assert.match(valid.stdout,/bundle structural checks only/);assert.match(valid.stdout,/pipl_semantics=NOT_RUN/);assert.ok(!fs.existsSync(trace),'no certificate probe needed for structural PASS');
 });
 const ps=['pwsh','powershell'].find(cmd=>run(cmd,['-NoLogo','-NoProfile','-Command','$PSVersionTable.PSVersion.ToString()']).status===0);
-test('A13 Windows timestamp and failing dumpbin contracts',{skip:!ps||process.platform!=='win32'},()=>{
- const target=path.join(tmp,'fake.exe');fs.writeFileSync(target,'fixture');const harness=path.join(tmp,'windows-fixture.ps1');
+test('A13 unsigned Windows integrity and failing dumpbin contracts',{skip:!ps||process.platform!=='win32'},()=>{
+ const target=path.join(tmp,'fake.exe');fs.writeFileSync(target,'unsigned fixture');const harness=path.join(tmp,'windows-fixture.ps1');
  const dumpbin=path.join(tmp,'dumpbin.cmd');fs.writeFileSync(dumpbin,'@echo off\r\necho fixture probe failure\r\nexit /b 7\r\n');
- fs.writeFileSync(harness,`param([string]$Script,[string]$Target,[string]$Output,[string]$Kind,[string]$Dumpbin)\nfunction Get-AuthenticodeSignature { [pscustomobject]@{ Status='Valid'; StatusMessage='fixture'; SignerCertificate=$null; TimeStamperCertificate=$null } }\nif ($Kind -eq 'timestamp') { & $Script -Target $Target -Output $Output }\nelse { function Get-Command { [CmdletBinding()]param([string]$Name); if ($Name -eq 'dumpbin.exe') { [pscustomobject]@{ Source=$Dumpbin } } else { Microsoft.PowerShell.Core\\Get-Command $Name } }; & $Script -Target $Target -Output $Output }\nif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\n`);
- const timestampOutput=path.join(tmp,'timestamp.txt');
- const timestamp=run(ps,['-NoProfile','-File',harness,path.join(scripts,'windows-release-verify.ps1'),target,timestampOutput,'timestamp',dumpbin]);assert.notEqual(timestamp.status,0);assert.match(fs.readFileSync(timestampOutput,'utf8'),/timestamp=BLOCKED/);
+ fs.writeFileSync(harness,`param([string]$Script,[string]$Target,[string]$Output,[string]$Kind,[string]$Dumpbin)\nfunction Get-AuthenticodeSignature { throw 'signature probes are outside this collector contract' }\nif ($Kind -eq 'integrity') { & $Script -Target $Target -EvidenceDirectory $Output }\nelse { function Get-Command { [CmdletBinding()]param([string]$Name); if ($Name -eq 'dumpbin.exe') { [pscustomobject]@{ Source=$Dumpbin } } else { Microsoft.PowerShell.Core\\Get-Command $Name } }; & $Script -Target $Target -Output $Output }\nif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\n`);
+ const script=path.join(scripts,'windows-release-verify.ps1'),output=path.join(tmp,'windows-integrity');
+ const invoke=out=>run(ps,['-NoProfile','-File',harness,script,target,out,'integrity',dumpbin],{cwd:repo});
+ const checked=invoke(output);assert.equal(checked.status,0,checked.stdout+checked.stderr);assert.match(checked.stdout,/recorded artifact integrity only/);assert.match(checked.stdout,/host_load=NOT_RUN/);
+ const record=path.join(output,'artifact-record.json'),bytes=fs.readFileSync(record);assert.equal(node('verify-artifact.mjs',[target,record]).status,0);
+ assert.notEqual(invoke(output).status,0);assert.deepEqual(fs.readFileSync(record),bytes);
+ fs.appendFileSync(target,'changed');assert.equal(node('verify-artifact.mjs',[target,record]).status,1);
+ const directory=path.join(tmp,'windows-payload');fs.mkdirSync(directory);fs.writeFileSync(path.join(directory,'payload'),'unsigned');
+ const overlap=run(ps,['-NoProfile','-File',script,'-Target',directory,'-EvidenceDirectory',path.join(directory,'evidence')],{cwd:repo});assert.notEqual(overlap.status,0);assert.ok(!fs.existsSync(path.join(directory,'evidence')));
+ const legacy=path.join(tmp,'legacy-windows-evidence');assert.notEqual(run(ps,['-NoProfile','-File',script,'-Target',target,'-Output',legacy,'-LocalCheck'],{cwd:repo}).status,0);assert.ok(!fs.existsSync(legacy));
  const binaryOutput=path.join(tmp,'dumpbin.txt');
  const binary=run(ps,['-NoProfile','-File',harness,path.join(scripts,'windows-binary-audit.ps1'),target,binaryOutput,'binary',dumpbin]);const report=fs.readFileSync(binaryOutput,'utf8');assert.notEqual(binary.status,0,binary.stdout+binary.stderr+report);assert.match(report,/headers_exit=7/);assert.match(report,/collection_status=PARTIAL/);
 });

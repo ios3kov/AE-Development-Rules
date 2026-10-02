@@ -40,7 +40,6 @@ The following are **not automatically required** unless they are part of the val
 
 - Regression Level 2
 - final public installer/package
-- Authenticode
 - public download-channel test
 - full compatibility sweep
 - deep profiling

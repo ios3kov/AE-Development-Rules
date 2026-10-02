@@ -100,8 +100,12 @@ try {
     expect(reports.length > 0, "collect-dependency-evidence.ps1 should write a report");
 
     for (const script of ["windows-binary-audit.ps1", "windows-release-verify.ps1"]) {
-      r = run(pwsh, ["-NoLogo", "-NoProfile", "-File", path.join(scripts, script), "-Target", path.join(tmp, "missing.exe")], { cwd: repo });
+      const missingOutput = path.join(tmp, script + "-missing-evidence");
+      const args = ["-NoLogo", "-NoProfile", "-File", path.join(scripts, script), "-Target", path.join(tmp, "missing.exe"),
+        script === "windows-release-verify.ps1" ? "-EvidenceDirectory" : "-Output", missingOutput];
+      r = run(pwsh, args, { cwd: repo });
       expect(r.status !== 0, script + " should fail closed for missing target");
+      expect(!fs.existsSync(missingOutput), script + " should not create evidence for missing target");
     }
   }
 } finally {

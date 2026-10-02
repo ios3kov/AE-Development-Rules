@@ -59,7 +59,7 @@
       "id": "WIN-001",
       "source": "profiles/RELEASE.md",
       "section": "30",
-      "meaning": "Verify signature and timestamp for public executables"
+      "meaning": "Verify exact Windows artifact integrity, documented installation and actual host loading without certificate/signing-service prerequisites"
     },
     {
       "id": "COMPAT-001",

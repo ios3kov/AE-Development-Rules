@@ -46,13 +46,6 @@
 - Last verified: 2026-10-01
 - Refresh interval days: 180
 
-### SRC-MICROSOFT-TIMESTAMP
-- URL: https://learn.microsoft.com/en-us/windows/win32/seccrypto/time-stamping-authenticode-signatures
-- Scope: Authenticode timestamp and certificate expiry.
-- Claim: Timestamping preserves signature verifiability after signing-certificate expiry; signature validity alone does not replace a required timestamp check.
-- Last verified: 2026-10-01
-- Refresh interval days: 90
-
 ### SRC-ADOBE-CEP-DISTRIBUTION
 - URL: https://github.com/Adobe-CEP/Getting-Started-guides/blob/master/Package%20Distribute%20Install/readme.md
 - Scope: CEP ZXP packaging, signing and distribution channels.
