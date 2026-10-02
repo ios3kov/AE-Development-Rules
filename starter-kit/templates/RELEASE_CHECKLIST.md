@@ -19,6 +19,7 @@ This checklist is for a **Release Candidate**, not a normal Validation Build. Fo
 - [ ] Restart/repeat PASS
 - [ ] Relevant edge/error cases checked
 - [ ] Compatibility matrix updated
+- [ ] Each officially supported AE version has scoped actual runtime evidence (local or remote); exact artifact/loaded identity and AE build recorded, no inferred intermediate-version PASS
 
 ## Native/render where applicable
 

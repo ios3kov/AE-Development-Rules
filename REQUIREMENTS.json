@@ -71,7 +71,7 @@
       "id": "COMPAT-001",
       "source": "core/ENGINEERING.md",
       "section": "21",
-      "meaning": "Runtime evidence establishes verified compatibility"
+      "meaning": "Use scoped source/API and exact artifact audits without all local hosts; only matching actual target runtime evidence establishes verified compatibility"
     },
     {
       "id": "RENDER-001",

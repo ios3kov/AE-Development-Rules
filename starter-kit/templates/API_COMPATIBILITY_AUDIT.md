@@ -5,7 +5,9 @@
 - Product/component:
 - Git commit:
 - Build ID:
-- SDK used to build:
+- SDK used to build (exact version/header revision):
+- Final artifact SHA-256 / manifest:
+- Audit scope / source inventory digest / omitted components:
 - Target AE versions / scripting or panel runtime:
 - Target platform:
 
@@ -27,9 +29,11 @@ Run:
 ./starter-kit/scripts/scan-adobe-api.sh <source-dir>
 ```
 
-| API / suite / revision | Used where | Minimum documented AE/SDK | Risk / notes | Source |
+| API / suite / revision / runtime capability | Used where / branch | Required or optional / fallback | Minimum documented AE build / SDK separately | Source revision/date / unresolved question |
 | --- | --- | --- | --- | --- |
-| <name> | <file/function> | <version> | <notes> | <Adobe doc/header> |
+| <actual identifier> | <call site, wrapper or dynamic route> | <requirement and fallback> | <AE minimum; SDK revision; unknown if unconfirmed> | <checked header/doc, date, uncertainty> |
+
+The scanner collects lexical native identifiers only. COMPLETE is collection scope, not a compatibility verdict. Record review of wrappers, indirect calls, generated/build dependencies and conditional paths separately. Audit JSX/CEP/UXP APIs and runtimes separately. Missing material availability/coverage remains UNKNOWN; do not infer minimum host version from the SDK label alone.
 
 ## Plugin metadata
 
@@ -49,14 +53,32 @@ Run:
 - external symbols:
 - runtime dependencies:
 
+## Baseline SDK build probe and fallback checks
+
+- Minimum target AE / selected baseline SDK and why it is applicable:
+- Toolchain / exact headers / build options / command / result / Evidence:
+- Relationship of probe build to final distributed artifact; differences/limits:
+- Missing API/suite/capability cases simulated / expected fallback or safe refusal:
+- Actual adapter test observations / Test Status / Evidence:
+- Unavailable checks / reason / next action:
+
+Compilation is not runtime acceptance. Adapter/mock PASS covers decision logic only; do not alter installed AE or claim its old ABI/MFR/UI behavior was tested.
+
 ## Version-specific host behavior
 
 Check lifecycle/callback ordering, MFR, SmartFX, Custom UI, AEGP, render queue/aerender, project-file ABI and known Adobe changes.
 
+## Runtime selection and remote execution
+
+- Exact minimum/current target AE versions/builds and additional API/behavior boundaries:
+- Reason for each selected or omitted configuration:
+- Link to [remote packet](REMOTE_COMPATIBILITY_CHECK.md) / actual run record:
+- Actual runtime Evidence per officially supported version; no interpolation between endpoints:
+
 ## Result
 
-| AE version | Status | Reason |
-| --- | --- | --- |
-| <version> | **VERIFIED / STATIC-COMPATIBLE / LIMITED / UNKNOWN / UNSUPPORTED** | <evidence> |
+| AE full version/build + OS/architecture | Candidate identity | Compatibility Status | Scope / Evidence / limitation |
+| --- | --- | --- | --- |
+| <actual configuration> | <commit, Build ID, SHA-256/manifest> | **VERIFIED / STATIC-COMPATIBLE / LIMITED / UNKNOWN / UNSUPPORTED** | <observations, omissions, reason> |
 
-Static audit may estimate a minimum probably compatible version; only runtime AE evidence can establish Compatibility: VERIFIED. A static-only result is Compatibility: STATIC-COMPATIBLE.
+Static audit may estimate a minimum probably compatible version; only runtime AE evidence can establish Compatibility: VERIFIED. A sufficiently complete static-only result with no known blocker is Compatibility: STATIC-COMPATIBLE; material unknowns remain UNKNOWN. A specific confirmed blocker is UNSUPPORTED for that configuration.
