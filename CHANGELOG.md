@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.1.0 — 2026-10-02
+
+- Adds REL-DOC-001: applicable user instructions must be ready before publication; the final release reply and subsequent “what next?” explicitly direct the user to the version-matching guide and identify concrete additional documentation gaps. Smart Entry, Workflow and the release checklist share this contract. No published 6.0.0 artifact/tag is changed.
+
 ## 6.0.0 — 2026-10-02
 
 Changes the macOS/Windows distribution policy at the user's request: certificate/signing-service access is no longer a release prerequisite. MAC-001/WIN-001 now require artifact identity, documented installation and actual host loading. This is a major release: mandatory gate meaning and a public checker interface change; adopted 5.x records/tools retain their original semantics. [Migration and verification](docs/releases/6.0.0.md).

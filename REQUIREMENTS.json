@@ -50,6 +50,12 @@
       "meaning": "Required failures or unavailable checks block release"
     },
     {
+      "id": "REL-DOC-001",
+      "source": "profiles/RELEASE.md",
+      "section": "26",
+      "meaning": "Complete applicable user instructions before publication and explicitly hand off the version-matching guide after release"
+    },
+    {
       "id": "MAC-001",
       "source": "profiles/RELEASE.md",
       "section": "28",
