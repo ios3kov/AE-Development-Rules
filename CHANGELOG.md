@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## 6.2.0 — 2026-10-02
 
-- Expands Engineering §21 into a protocol for compatibility without installing all AE versions locally: source/API coverage and documented minimum host versions, exact artifact analysis, scoped SDK/fallback probes, risk-based runtime selection and remote packet/run evidence. Endpoint tests, lexical inventory and mock/compile PASS do not establish untested host compatibility. Existing Compatibility Status and per-supported-version runtime requirements remain intact. Templates and COMPAT-001 are reconciled; no actual AE/model runs or new release are claimed.
+- Expands Engineering §21 into a protocol for compatibility without installing all AE versions locally: source/API coverage and documented minimum host versions, exact artifact analysis, scoped SDK/fallback probes, risk-based runtime selection and remote packet/run evidence. Endpoint tests, lexical inventory and mock/compile PASS do not establish untested host compatibility. Existing Compatibility Status and per-supported-version runtime requirements remain intact. Templates and COMPAT-001 are reconciled; no actual AE/model runs are claimed by this rules release.
+
+- Includes the already merged reusable AE render-validation know-how, with historical project observations kept separate from compatibility evidence for a new candidate.
 
 ## 6.1.0 — 2026-10-02
 
