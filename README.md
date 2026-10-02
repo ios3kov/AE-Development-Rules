@@ -45,6 +45,7 @@
 - [DEVELOPMENT_RULES.md](DEVELOPMENT_RULES.md) — нормативный индекс, ключевые определения и сгенерированная applicability map.
 - [core/PROCESS.md](core/PROCESS.md) — общий процесс, testing, Git, identity, regression и Evidence.
 - [core/ENGINEERING.md](core/ENGINEERING.md) — safety, performance, compatibility/maturity, docs, dependencies и engineering controls.
+- [AE engineering know-how](docs/AE_ENGINEERING_KNOWHOW.md) — reusable render-validation patterns with evidence and scope; no new mandatory policy.
 - [profiles/](profiles/) — Native / JSX / CEP / UXP / Helper / Release профили.
 - [WORKFLOW.md](WORKFLOW.md) — рабочий ритм и статус-коммуникация.
 - [rules-manifest.yaml](rules-manifest.yaml) — machine-readable applicability source of truth.
