@@ -2,7 +2,7 @@
 
 [cases.json](cases.json) supplies 21 synthetic starting states for the [20 behavior scenarios](../../../docs/AI_BEHAVIOR_SCENARIOS.md); AI-EVAL-12 has prerequisite-blocked and safe-user-question variants. Files, scope permissions, simulated tool responses, semantic rubrics and illustrative expected changes are versioned together. No actual model run or AE result is claimed.
 
-From the standard repository, choose an existing parent outside that repository:
+Preparation requires a Git checkout whose root is the standard itself, so the recorded SHA cannot silently belong to a parent repository. For release downloads, clone the selected tag before using preparation; source archives remain usable as rule/template/script material. Git must be available. From that checkout, choose an existing parent outside it:
 
 ```sh
 node starter-kit/scripts/prepare-ai-scenario.mjs AI-EVAL-02 /tmp/new-ai-eval-02
