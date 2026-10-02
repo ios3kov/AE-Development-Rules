@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 6.1.0 — 2026-10-02
 
 - Adds REL-DOC-001: applicable user instructions must be ready before publication; the final release reply and subsequent “what next?” explicitly direct the user to the version-matching guide and identify concrete additional documentation gaps. Smart Entry, Workflow and the release checklist share this contract. No published 6.0.0 artifact/tag is changed.
 
