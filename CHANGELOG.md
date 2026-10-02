@@ -1,8 +1,8 @@
 # Changelog
 
-## 5.0.0 — Unreleased
+## 5.0.0 — 2026-10-02
 
-Breaking AI/process candidate. Adds mandatory trust, resume-state and scoped-autonomy contracts for AI-assisted work, plus target-source verification when adding/changing host API use. Includes the unreleased 4.1.0 audit remediation below; no 4.1.0 release is implied. Published stable baseline remains 4.0.0 until an explicitly authorized release.
+Major AI/process release. Adds mandatory trust, resume-state and scoped-autonomy contracts for AI-assisted work, plus target-source verification when adding/changing host API use. Includes the unreleased 4.1.0 audit remediation below; no separate 4.1.0 release is implied. 5.0.0 is the first GitHub Release/tag for this repository; earlier version sections record the standard's development history. The previous 4.0.0 project baseline is retained until consciously migrated. See [release notes](docs/releases/5.0.0.md).
 
 - Smart Entry defines user-decision precedence, adopted-rule boundaries and untrusted reference/tool content. External instructions cannot grant scope or approval.
 - Continuing repository tasks restore actual Git/environment state, confirmed decisions, permission sources, Evidence and the next step; update the existing canonical checkpoint rather than duplicate documents.
@@ -50,7 +50,7 @@ Audit remediation A01–A13; enforcement of existing safety/Evidence requirement
 
 Copy scripts with their lib directory. Node 22+ is required. `rules-manifest.yaml` uses JSON notation (valid YAML 1.2); schema 3 replaces free-form rule lists with structured inheritance/rules. Existing artifact/binary evidence output directories/files cannot be reused. Dependency reports may share a history directory, with fresh UUID names and exclusive files. Binary collectors return 2 for incomplete collection. Configure macOS local/public and required/na stapling policy explicitly; a documented N/A requires AE_STAPLING_NA_REASON. Windows timestamp is required by default; LocalCheck intentionally excludes that public-release gate. Never upgrade a baseline in a frozen release cycle automatically.
 
-The JSX checker now includes pinned js-tokens 10.0.0 under scripts/lib/vendor, with its MIT license and provenance. Copy that complete directory when upgrading. Dirty Validation records now return BLOCKED/nonzero, enforcing the existing internal-only dirty-build rule. PKG signature Evidence is named pkgutil rather than codesign. That follow-up introduced no mandatory process requirement or record schema version changes; its unreleased 4.1.0 work is retained in the 5.0.0 candidate.
+The JSX checker now includes pinned js-tokens 10.0.0 under scripts/lib/vendor, with its MIT license and provenance. Copy that complete directory when upgrading. Dirty Validation records now return BLOCKED/nonzero, enforcing the existing internal-only dirty-build rule. PKG signature Evidence is named pkgutil rather than codesign. That follow-up introduced no mandatory process requirement or record schema version changes; its unreleased 4.1.0 work is retained in 5.0.0.
 
 ## 4.0.0 — 2026-10-01
 
