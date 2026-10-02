@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.2.0 — 2026-10-02
+
+- Expands Engineering §21 into a protocol for compatibility without installing all AE versions locally: source/API coverage and documented minimum host versions, exact artifact analysis, scoped SDK/fallback probes, risk-based runtime selection and remote packet/run evidence. Endpoint tests, lexical inventory and mock/compile PASS do not establish untested host compatibility. Existing Compatibility Status and per-supported-version runtime requirements remain intact. Templates and COMPAT-001 are reconciled; no actual AE/model runs are claimed by this rules release.
+
+- Includes the already merged reusable AE render-validation know-how, with historical project observations kept separate from compatibility evidence for a new candidate.
+
 ## 6.1.0 — 2026-10-02
 
 - Adds REL-DOC-001: applicable user instructions must be ready before publication; the final release reply and subsequent “what next?” explicitly direct the user to the version-matching guide and identify concrete additional documentation gaps. Smart Entry, Workflow and the release checklist share this contract. No published 6.0.0 artifact/tag is changed.
