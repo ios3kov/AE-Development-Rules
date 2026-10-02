@@ -1,4 +1,6 @@
-# Исправление глубокого аудита: рабочая версия 5.1.0
+# Исправление глубокого аудита: 5.1.0
+
+## Исторический этап локального исправления
 
 Исходный published baseline: 5.0.0 / `8d88b19afea726b7c79988c5f6958f65d13995ba`. Начальная revision этой работы: `f3214a1f8447af54b156fe31d350b0753a4c112f`, clean. Отдельная ветка: `fix/deep-audit-5.1.0`. Разрешены изменения, локальные проверки и commit. Merge, push и публикация в этот этап не входят.
 
@@ -45,3 +47,9 @@ Precommit static code scan: exit 0, no findings in scanned scope, 121 текст
 ## Review и ограничения
 
 Проверены actual diff и migration: не меняются Product Spec flags/route output keys, Risk/Delivery semantics, adopted-baseline/permission boundaries, pre-handoff phases и Evidence status taxonomy. Source files остаются canonical; schemas manifest 3/project-record 1 сохраняются, metadata v2 migration явная. Нет нового universal MUST/gate. Static scanner не устанавливает release readiness. PowerShell/Windows, remote candidate CI, actual model и AE runtime — NOT RUN. SOURCES.md и original vendor verification dates не изменены. Current main и published tag сохраняются; merge/push/release не выполнены.
+
+## Переход к выпуску — 2026-10-02
+
+После завершения локального этапа пользователь явно разрешил выпуск: «делай релиз». Для этого этапа разрешены push, PR/merge, tag и GitHub Release. Прежний main `8d88b19afea726b7c79988c5f6958f65d13995ba` сохранён отдельной remote/local backup-веткой и локальным Git bundle; published v5.0.0 не изменяется.
+
+Текущие README/VERSION/CHANGELOG и migration notes подготовлены к 5.1.0. Публикация требует exact-head PR CI и exact-commit main CI на Linux/macOS/Windows, затем annotated tag, сверку архивов с Git tree и повторное скачивание uploaded assets. Итоговые SHA, runs, checksums и disposition записываются в `release-evidence.json` у [GitHub Release v5.1.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v5.1.0). Исторические результаты выше относятся к своему этапу и не заменяют эти проверки. Actual model/AE остаются NOT RUN.

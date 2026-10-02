@@ -165,9 +165,9 @@ Bugfix adds DEBUGGING; implementation/research adds API-SOURCES. Light profiles 
 
 CI требует POSIX runtime на Linux/macOS и PowerShell на Windows. В отчёте явно указаны RUN/NOT RUN и platform skips; платформенная проверка не считается выполненной на другом runner. Примеры CI передают базовый commit PR в preflight; локально тот же scope задаётся через `AE_PREFLIGHT_BASE_REF`.
 
-### Deep-audit migration (5.1 candidate)
+### Deep-audit migration (5.1.0)
 
-См. [полную миграцию](../docs/releases/5.1.0.md) и [errata 5.0.0](../docs/ERRATA.md). Это рабочая версия, ещё не опубликованный release. D01–D10 проверяются отдельной `tests/deep-audit.mjs`; self-test запускает её вместе с прежними suites.
+См. [полную миграцию](../docs/releases/5.1.0.md) и [errata 5.0.0](../docs/ERRATA.md). Точный исходник и release Evidence доступны в [v5.1.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v5.1.0). D01–D10 проверяются отдельной `tests/deep-audit.mjs`; self-test запускает её вместе с прежними suites.
 
 Optional `context.features` добавляет применимые reading overlays, например `['ipc']`, `['ui']`, `['updater']` или `['testing']`. Полный список генерируется в DEVELOPMENT_RULES.md. Поле можно опустить для прежнего caller shape; список должен быть dense/unique/known. Наличие feature не разрешает mutation/publication и не делает audit implementation-задачей. Все §§1–41 представлены в карте; JSX/helper получают runtime минимум, Critical CEP/UXP — code safety. Требования внутри разделов остаются соразмерными scope.
 

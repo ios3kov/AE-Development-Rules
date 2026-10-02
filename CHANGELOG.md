@@ -1,8 +1,8 @@
 # Changelog
 
-## 5.1.0 — Unreleased (2026-10-02)
+## 5.1.0 — 2026-10-02
 
-Minor candidate; not a published tag/release. Repairs D01–D10 and implements optional I01–I04 from the five-pass 5.0.0 deep audit. No new universal MUST/gate contract is introduced. Existing project baselines remain frozen until explicit adoption. [Remediation](docs/DEEP_AUDIT_REMEDIATION_5_1.md), [errata](docs/ERRATA.md), [migration](docs/releases/5.1.0.md).
+Minor release. Repairs D01–D10 and implements optional I01–I04 from the five-pass 5.0.0 deep audit. No new universal MUST/gate contract is introduced. Existing project baselines remain frozen until explicit adoption. [Remediation](docs/DEEP_AUDIT_REMEDIATION_5_1.md), [errata](docs/ERRATA.md), [migration](docs/releases/5.1.0.md).
 
 - Reading map now covers all canonical §§1–41: component/runtime and Critical code-safety minima, scoped state/completion/automation guidance and optional typed feature overlays. Undefined selected IDs, deleted/misbound task overlays and linked canonical sources/ancestors reject.
 - Fixture snapshot v2 records types, modes and empty directories; artifact/manifest v2 includes POSIX special mode bits. Windows mode scope remains Node-emulated. Legacy records are preserved with their original tools; new verifiers reject them rather than silently asserting stronger Evidence.
