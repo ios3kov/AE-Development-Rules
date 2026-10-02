@@ -1,0 +1,530 @@
+{
+  "schema_version": 1,
+  "kind": "audit_observations_not_release_certification",
+  "assembled_utc": "2026-10-02T10:40:46.462945+00:00",
+  "baseline_commit": "8d88b19afea726b7c79988c5f6958f65d13995ba",
+  "audit_start_commit": "2f8f06790bfe2c912831391d4135693e40efb57c",
+  "version_probes": {
+    "schema_version": 1,
+    "utc": "2026-10-02T10:37:24.095Z",
+    "baseline_commit": "8d88b19afea726b7c79988c5f6958f65d13995ba",
+    "audit_start_commit": "2f8f06790bfe2c912831391d4135693e40efb57c",
+    "node": "v24.13.1",
+    "platform": "darwin",
+    "probe_harness_sha256": "5db8dec7192cbc37c7a6d6198561d7f9074f73171e499d83c474afd32aa149de",
+    "observations": [
+      {
+        "id": "version-metadata-integrity",
+        "case": "unchanged-control",
+        "version": "5.0.0",
+        "readme_baseline": "v5.0.0",
+        "readme_release_link": "v5.0.0",
+        "readme_contains_version_substring": true,
+        "exit": 0,
+        "summary": [
+          "coverage: Node=RUN; POSIX=RUN; PowerShell=NOT RUN",
+          "coverage: hardening POSIX=RUN; macOS native=RUN; Windows contracts=NOT RUN",
+          "starter-kit self-test: PASS (121 files checked, dry-run)"
+        ],
+        "stderr": "WARN: PowerShell parser unavailable; .ps1 syntax check skipped\n",
+        "log_sha256": "2c629615b4ea1a0d9c2f3d6ffd86e488eadd068eb8dc69cd5c0a14fa5e857851",
+        "changed_paths": [],
+        "scope": "Synthetic owned clone; no actual release, publication, tag or model/AE run"
+      },
+      {
+        "id": "version-metadata-integrity",
+        "case": "readme-prerelease-mismatch",
+        "version": "5.0.0",
+        "readme_baseline": "v5.0.0-rc.1",
+        "readme_release_link": "v5.0.0-rc.1",
+        "readme_contains_version_substring": true,
+        "exit": 0,
+        "summary": [
+          "coverage: Node=RUN; POSIX=RUN; PowerShell=NOT RUN",
+          "coverage: hardening POSIX=RUN; macOS native=RUN; Windows contracts=NOT RUN",
+          "starter-kit self-test: PASS (121 files checked, dry-run)"
+        ],
+        "stderr": "WARN: PowerShell parser unavailable; .ps1 syntax check skipped\n",
+        "log_sha256": "f6cc84c2bfbc134c5dd9a3f83b31dfa28544cf167ab91c3646d3dc7d400b116b",
+        "changed_paths": [
+          "README.md"
+        ],
+        "scope": "Synthetic owned clone; no actual release, publication, tag or model/AE run"
+      },
+      {
+        "id": "version-metadata-integrity",
+        "case": "readme-wrong-baseline-with-current-link",
+        "version": "5.0.0",
+        "readme_baseline": "v5.0.1",
+        "readme_release_link": "v5.0.0",
+        "readme_contains_version_substring": true,
+        "exit": 0,
+        "summary": [
+          "coverage: Node=RUN; POSIX=RUN; PowerShell=NOT RUN",
+          "coverage: hardening POSIX=RUN; macOS native=RUN; Windows contracts=NOT RUN",
+          "starter-kit self-test: PASS (121 files checked, dry-run)"
+        ],
+        "stderr": "WARN: PowerShell parser unavailable; .ps1 syntax check skipped\n",
+        "log_sha256": "97b3b349afe3975b98ba539e99372528afe125b815b22dfba792500a24ca5e1e",
+        "changed_paths": [
+          "README.md"
+        ],
+        "scope": "Synthetic owned clone; no actual release, publication, tag or model/AE run"
+      },
+      {
+        "id": "version-metadata-integrity",
+        "case": "invalid-version-leading-zero",
+        "version": "05.0.0",
+        "readme_baseline": "v05.0.0",
+        "readme_release_link": "v05.0.0",
+        "readme_contains_version_substring": true,
+        "exit": 0,
+        "summary": [
+          "coverage: Node=RUN; POSIX=RUN; PowerShell=NOT RUN",
+          "coverage: hardening POSIX=RUN; macOS native=RUN; Windows contracts=NOT RUN",
+          "starter-kit self-test: PASS (121 files checked, dry-run)"
+        ],
+        "stderr": "WARN: PowerShell parser unavailable; .ps1 syntax check skipped\n",
+        "log_sha256": "49358ba7fdf0091a5639c4534c76d4de67de9f9e1cc26b475e2ba1fd513ef3db",
+        "changed_paths": [
+          "README.md",
+          "VERSION"
+        ],
+        "scope": "Synthetic owned clone; no actual release, publication, tag or model/AE run"
+      },
+      {
+        "id": "version-metadata-integrity",
+        "case": "unrelated-readme-version-control",
+        "version": "5.0.0",
+        "readme_baseline": "v6.0.0",
+        "readme_release_link": "v6.0.0",
+        "readme_contains_version_substring": false,
+        "exit": 1,
+        "summary": [
+          "coverage: Node=RUN; POSIX=RUN; PowerShell=NOT RUN",
+          "coverage: hardening POSIX=RUN; macOS native=RUN; Windows contracts=NOT RUN"
+        ],
+        "stderr": "WARN: PowerShell parser unavailable; .ps1 syntax check skipped\nFAIL: README baseline does not match VERSION 5.0.0\nstarter-kit self-test: 1 failure(s)\n",
+        "log_sha256": "4ad6dc91178fc69192f3d045ac75c6a349922ee24f802a04786f71e734954688",
+        "changed_paths": [
+          "README.md"
+        ],
+        "scope": "Synthetic owned clone; no actual release, publication, tag or model/AE run"
+      },
+      {
+        "id": "version-metadata-integrity",
+        "case": "missing-patch-version-control",
+        "version": "5.0",
+        "readme_baseline": "v5.0",
+        "readme_release_link": "v5.0",
+        "readme_contains_version_substring": true,
+        "exit": 1,
+        "summary": [
+          "coverage: Node=RUN; POSIX=RUN; PowerShell=NOT RUN",
+          "coverage: hardening POSIX=RUN; macOS native=RUN; Windows contracts=NOT RUN"
+        ],
+        "stderr": "WARN: PowerShell parser unavailable; .ps1 syntax check skipped\nFAIL: VERSION is not semver: 5.0\nstarter-kit self-test: 1 failure(s)\n",
+        "log_sha256": "9d56f00da3f9483e86131c42d2f794b2d2cbd190550e174573dc2084f7778688",
+        "changed_paths": [
+          "README.md",
+          "VERSION"
+        ],
+        "scope": "Synthetic owned clone; no actual release, publication, tag or model/AE run"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "root",
+        "key": "unexpected",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $: unknown key unexpected\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "root",
+        "key": "constructor",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $: unknown key constructor\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "root",
+        "key": "toString",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $: unknown key toString\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "root",
+        "key": "__proto__",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $: unknown key __proto__\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "candidate",
+        "key": "unexpected",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $.candidate: unknown key unexpected\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "candidate",
+        "key": "constructor",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $.candidate: unknown key constructor\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "candidate",
+        "key": "toString",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $.candidate: unknown key toString\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "candidate",
+        "key": "__proto__",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $.candidate: unknown key __proto__\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "check",
+        "key": "unexpected",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $.checks[0]: unknown key unexpected\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "check",
+        "key": "constructor",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $.checks[0]: unknown key constructor\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "check",
+        "key": "toString",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $.checks[0]: unknown key toString\n"
+      },
+      {
+        "id": "unknown-prototype-named-fields-control",
+        "location": "check",
+        "key": "__proto__",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $.checks[0]: unknown key __proto__\n"
+      }
+    ]
+  },
+  "schema_probes": {
+    "schema_version": 1,
+    "utc": "2026-10-02T10:38:45.160Z",
+    "node": "v24.13.1",
+    "platform": "darwin",
+    "observations": [
+      {
+        "id": "duplicate-evidence-item-order",
+        "case": "single-control",
+        "evidence": [
+          {
+            "path": "duplicate-evidence.txt",
+            "sha256": "5eee0c524ce3d768836b7538fe00d810743f71f30d105000ec62781c46fd4416"
+          }
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"recorded_policy\": \"PASS\",\n  \"release_readiness\": \"NOT_ASSESSED\",\n  \"checks\": 1,\n  \"deferred_checks\": 0\n}\n",
+        "stderr": "",
+        "input_sha256": "6e930c07fa7734b9d7f5c4ffb3e465dd96d040053677a3080a37931fe5d67a5b"
+      },
+      {
+        "id": "duplicate-evidence-item-order",
+        "case": "same-order-duplicate",
+        "evidence": [
+          {
+            "path": "duplicate-evidence.txt",
+            "sha256": "5eee0c524ce3d768836b7538fe00d810743f71f30d105000ec62781c46fd4416"
+          },
+          {
+            "path": "duplicate-evidence.txt",
+            "sha256": "5eee0c524ce3d768836b7538fe00d810743f71f30d105000ec62781c46fd4416"
+          }
+        ],
+        "exit": 2,
+        "stdout": "",
+        "stderr": "INCOMPLETE: $.checks[0].evidence: duplicate item\n",
+        "input_sha256": "92f69842cec05794cd522b33ccd2a6bf5b612272b93897e6ffeb47b94658ee5d"
+      },
+      {
+        "id": "duplicate-evidence-item-order",
+        "case": "reordered-duplicate",
+        "evidence": [
+          {
+            "path": "duplicate-evidence.txt",
+            "sha256": "5eee0c524ce3d768836b7538fe00d810743f71f30d105000ec62781c46fd4416"
+          },
+          {
+            "sha256": "5eee0c524ce3d768836b7538fe00d810743f71f30d105000ec62781c46fd4416",
+            "path": "duplicate-evidence.txt"
+          }
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"recorded_policy\": \"PASS\",\n  \"release_readiness\": \"NOT_ASSESSED\",\n  \"checks\": 1,\n  \"deferred_checks\": 0\n}\n",
+        "stderr": "",
+        "input_sha256": "e5980d9809bacde4402ba3ecbf2a4224aa8206fb8ad3013ec596a9cc9e0d400d"
+      }
+    ],
+    "scope": "Synthetic owned JSON CLI records; evidence content hash verified, no actual AI/AE test result or release certification"
+  },
+  "schema_input_records": [
+    {
+      "case": "single-control",
+      "record": {
+        "schema_version": 1,
+        "standard": {
+          "version": "4.1.0",
+          "commit": "58d14aa12375757f4e52396d951f1557ae4f453c"
+        },
+        "project": "native adoption example (illustrative; not executed)",
+        "components": [
+          "native"
+        ],
+        "risk": "standard",
+        "delivery": "development",
+        "candidate": {
+          "commit": "0000000000000000000000000000000000000000",
+          "build_id": "illustrative-native-not-built",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "source_state": "CLEAN"
+        },
+        "checks": [
+          {
+            "id": "cpu-gpu-parity",
+            "requirement": "RENDER-001",
+            "required": true,
+            "revision": "0000000000000000000000000000000000000000",
+            "artifact_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "status": "PASS",
+            "reason": "Synthetic schema observation without actual AE execution",
+            "evidence": [
+              {
+                "path": "duplicate-evidence.txt",
+                "sha256": "5eee0c524ce3d768836b7538fe00d810743f71f30d105000ec62781c46fd4416"
+              }
+            ]
+          }
+        ]
+      },
+      "input_sha256": "6e930c07fa7734b9d7f5c4ffb3e465dd96d040053677a3080a37931fe5d67a5b"
+    },
+    {
+      "case": "same-order-duplicate",
+      "record": {
+        "schema_version": 1,
+        "standard": {
+          "version": "4.1.0",
+          "commit": "58d14aa12375757f4e52396d951f1557ae4f453c"
+        },
+        "project": "native adoption example (illustrative; not executed)",
+        "components": [
+          "native"
+        ],
+        "risk": "standard",
+        "delivery": "development",
+        "candidate": {
+          "commit": "0000000000000000000000000000000000000000",
+          "build_id": "illustrative-native-not-built",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "source_state": "CLEAN"
+        },
+        "checks": [
+          {
+            "id": "cpu-gpu-parity",
+            "requirement": "RENDER-001",
+            "required": true,
+            "revision": "0000000000000000000000000000000000000000",
+            "artifact_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "status": "PASS",
+            "reason": "Synthetic schema observation without actual AE execution",
+            "evidence": [
+              {
+                "path": "duplicate-evidence.txt",
+                "sha256": "5eee0c524ce3d768836b7538fe00d810743f71f30d105000ec62781c46fd4416"
+              },
+              {
+                "path": "duplicate-evidence.txt",
+                "sha256": "5eee0c524ce3d768836b7538fe00d810743f71f30d105000ec62781c46fd4416"
+              }
+            ]
+          }
+        ]
+      },
+      "input_sha256": "92f69842cec05794cd522b33ccd2a6bf5b612272b93897e6ffeb47b94658ee5d"
+    },
+    {
+      "case": "reordered-duplicate",
+      "record": {
+        "schema_version": 1,
+        "standard": {
+          "version": "4.1.0",
+          "commit": "58d14aa12375757f4e52396d951f1557ae4f453c"
+        },
+        "project": "native adoption example (illustrative; not executed)",
+        "components": [
+          "native"
+        ],
+        "risk": "standard",
+        "delivery": "development",
+        "candidate": {
+          "commit": "0000000000000000000000000000000000000000",
+          "build_id": "illustrative-native-not-built",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "source_state": "CLEAN"
+        },
+        "checks": [
+          {
+            "id": "cpu-gpu-parity",
+            "requirement": "RENDER-001",
+            "required": true,
+            "revision": "0000000000000000000000000000000000000000",
+            "artifact_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "status": "PASS",
+            "reason": "Synthetic schema observation without actual AE execution",
+            "evidence": [
+              {
+                "path": "duplicate-evidence.txt",
+                "sha256": "5eee0c524ce3d768836b7538fe00d810743f71f30d105000ec62781c46fd4416"
+              },
+              {
+                "sha256": "5eee0c524ce3d768836b7538fe00d810743f71f30d105000ec62781c46fd4416",
+                "path": "duplicate-evidence.txt"
+              }
+            ]
+          }
+        ]
+      },
+      "input_sha256": "e5980d9809bacde4402ba3ecbf2a4224aa8206fb8ad3013ec596a9cc9e0d400d"
+    }
+  ],
+  "owned_evidence_content": "Controlled duplicate-Evidence observation\n",
+  "inventory": {
+    "schema_version": 1,
+    "commit": "2f8f06790bfe2c912831391d4135693e40efb57c",
+    "git_status": "",
+    "tracked_files": 121,
+    "bytes": 762324,
+    "changed_published_files": [
+      "README.md"
+    ],
+    "added_audit_files": [
+      "docs/DEEP_AUDIT_5_0_0_REPEAT.md",
+      "docs/DEEP_AUDIT_5_0_0_THIRD.md",
+      "docs/DEEP_AUDIT_BACKLOG.md",
+      "docs/evidence/deep-v5-repeat-probes.json",
+      "docs/evidence/deep-v5-third-probes.json"
+    ],
+    "removed_files": [],
+    "nonregular_files": []
+  },
+  "static_scan": {
+    "schema_version": 1,
+    "tool_version": "2.0.0",
+    "time_utc": "2026-10-02T10:34:13.124910+00:00",
+    "source_identity": {
+      "commit": "2f8f06790bfe2c912831391d4135693e40efb57c",
+      "dirty": false
+    },
+    "profile": "code",
+    "release_readiness": "not_assessed",
+    "inventory": {
+      "scope_digest": "b0ddcf1f4d627a0482e344ec4eb4db7ea8523e3b961a1ea0f5925de1df1e6d41",
+      "files": 111,
+      "bytes": 735928,
+      "excluded_directories": 2,
+      "unsupported_files": 7,
+      "omissions": []
+    },
+    "checks": [
+      {
+        "id": "inventory",
+        "status": "completed",
+        "reason": "Bounded text scope inventoried."
+      },
+      {
+        "id": "core.static",
+        "status": "completed"
+      },
+      {
+        "id": "git.index",
+        "status": "completed"
+      },
+      {
+        "id": "vibe.check_config",
+        "status": "completed"
+      },
+      {
+        "id": "vibe.check_platform_flags",
+        "status": "completed"
+      },
+      {
+        "id": "vibe.check_rate_limit_and_ai",
+        "status": "completed"
+      },
+      {
+        "id": "vibe.check_authz",
+        "status": "completed"
+      },
+      {
+        "id": "vibe.check_platform_configs",
+        "status": "completed"
+      },
+      {
+        "id": "supply_chain.github_actions",
+        "status": "completed",
+        "files_scanned": 1
+      }
+    ],
+    "findings": [],
+    "not_assessed": [
+      "Git history",
+      "runtime headers/cookies",
+      "browser flows and accessibility",
+      "authorization and E2EE",
+      "performance under load",
+      "backup restore and rollback",
+      "legal applicability",
+      "dependency vulnerabilities"
+    ],
+    "scope_note": "Generated/dependency directories and unsupported file types excluded. No finding is a safety guarantee.",
+    "exit_code": 0,
+    "verdict": "no_findings_in_scanned_scope"
+  },
+  "new_findings": [
+    "D09",
+    "D10"
+  ],
+  "prior_findings": "D01-D08 remain OPEN; earlier dated reproductions preserved, not rerun here",
+  "optional_proposals": "I01-I04 remain PROPOSED",
+  "limits": [
+    "Local synthetic clones; no changes to the published VERSION, README baseline or tag",
+    "Ordinary JSON CLI reproduction for D10, not just direct-JS non-JSON arrays",
+    "Provided Evidence hashes are verified; actual test semantics and approvals not authenticated",
+    "Self-test PASS on corrupted version copies is evidence of a check defect",
+    "Actual model behavior NOT RUN",
+    "AE runtime NOT RUN",
+    "Local Windows/PowerShell runtime NOT RUN",
+    "No new CI, push, merge or publication"
+  ]
+}
