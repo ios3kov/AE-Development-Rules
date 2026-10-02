@@ -40,30 +40,35 @@ This checklist is for a **Release Candidate**, not a normal Validation Build. Fo
 - [ ] Artifact type identified before applying signing gates
 - [ ] Format-specific Adobe packaging requirements checked
 
-## Public macOS executable release where applicable
+## macOS distribution where applicable
 
-- [ ] Gate applicability documented
-- [ ] Developer ID
-- [ ] Notarization Accepted
-- [ ] Stapling validated where applicable
-- [ ] PKG container signature: pkgutil --check-signature PASS, where applicable
-- [ ] App/DMG/code signature: applicable codesign verification PASS
-- [ ] Executable payload/nested-code signatures checked separately from container
-- [ ] Gatekeeper PASS
-- [ ] Real quarantined download
-- [ ] Standard install
-- [ ] Host launch/load smoke PASS
-- [ ] No security bypass required
+- [ ] Agreed artifact format, target architecture and installation path recorded
+- [ ] Final bytes/hash/manifest verified
+- [ ] Package structure, resources and dependencies checked by scope
+- [ ] Actual download through the selected channel observed
+- [ ] System prompts/quarantine state and required user actions recorded honestly
+- [ ] Installation succeeds using the documented steps in an owned test environment
+- [ ] Runtime Build ID and host launch/load smoke PASS
+- [ ] Update/uninstall and user-data preservation checked where applicable
+- [ ] Known install limitations documented; no unsupported warning-free claim
+- [ ] No unapproved changes to user/system security settings
 
-## Public Windows executable release where applicable
+Apple account/certificate/service access is not a prerequisite. Integrity-tool PASS does not establish install or host-load PASS.
 
-- [ ] Gate applicability documented
-- [ ] Authenticode/code signing where required
-- [ ] Timestamp/signature verification
-- [ ] Architecture/dependency audit
-- [ ] Standard install
-- [ ] Host launch/load smoke PASS
-- [ ] No Defender/SmartScreen/UAC bypass required
+## Windows distribution where applicable
+
+- [ ] Agreed artifact format, target architecture and installation path recorded
+- [ ] Final bytes/hash/manifest verified
+- [ ] PE architecture/dependencies checked where applicable
+- [ ] Actual download through the selected channel observed
+- [ ] System prompts/Zone.Identifier and required user actions recorded honestly
+- [ ] Installation succeeds using documented steps in an owned test environment
+- [ ] Runtime Build ID and host launch/load smoke PASS
+- [ ] Update/uninstall and user-data preservation checked where applicable
+- [ ] Known install limitations documented; no unsupported warning-free claim
+- [ ] No unapproved changes to user/system security settings
+
+Certificate/signing-service access is not a prerequisite. Integrity-tool PASS does not establish install or host-load PASS.
 
 ## Final decision
 

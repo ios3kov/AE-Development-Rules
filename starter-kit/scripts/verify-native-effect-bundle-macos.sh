@@ -40,10 +40,6 @@ done < <(find "$BUNDLE/Contents/Resources" -maxdepth 1 -type f -name '*.rsrc')
 echo "[dynamic dependencies]"
 otool -L "$BIN"
 
-echo "[signature]"
-codesign --verify --deep --strict --verbose=2 "$BUNDLE"
-codesign -dv --verbose=2 "$BUNDLE" 2>&1 | grep -E 'Identifier=|TeamIdentifier=|Signature=' || true
-
 echo "[hashes]"
 shasum -a 256 "$BIN" "$PLIST"
 find "$BUNDLE/Contents/Resources" -maxdepth 1 -type f -name '*.rsrc' -exec shasum -a 256 {} \;

@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.0.0 — 2026-10-02
+
+Changes the macOS/Windows distribution policy at the user's request: certificate/signing-service access is no longer a release prerequisite. MAC-001/WIN-001 now require artifact identity, documented installation and actual host loading. This is a major release: mandatory gate meaning and a public checker interface change; adopted 5.x records/tools retain their original semantics. [Migration and verification](docs/releases/6.0.0.md).
+
+- Removes macOS/Windows certificate/remote-service gates from canonical rules, UXP/porting guidance and validation/release templates. Unsigned or locally ad-hoc-signed artifacts can qualify after actual install/runtime checks. No claim of warning-free installation or universal external-channel acceptance.
+- Replaces macos-bundle-verify.sh with artifact record/verification using a fresh evidence directory. Legacy policy arguments fail with migration guidance; integrity PASS is separate from install/host-load status.
+- Native structural and Mach-O/PE collectors no longer require signature probes. Required structural/architecture/dependency collection failures still fail. Windows release wrapper also records/verifies artifact integrity; its legacy Output/LocalCheck interface rejects with migration guidance.
+- Preserves historical release/audit records; they describe their original baselines, not current macOS/Windows policy. The obsolete Apple and Microsoft timestamp source entries are removed; the UXP packaging source was actually rechecked on 2026-10-02.
+
 ## 5.1.0 — 2026-10-02
 
 Minor release. Repairs D01–D10 and implements optional I01–I04 from the five-pass 5.0.0 deep audit. No new universal MUST/gate contract is introduced. Existing project baselines remain frozen until explicit adoption. [Remediation](docs/DEEP_AUDIT_REMEDIATION_5_1.md), [errata](docs/ERRATA.md), [migration](docs/releases/5.1.0.md).

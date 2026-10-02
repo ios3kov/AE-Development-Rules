@@ -29,19 +29,6 @@ $hash = Get-FileHash -Algorithm SHA256 $resolved
 $lines.Add($hash.Hash)
 $lines.Add("")
 
-$lines.Add("## Authenticode")
-$sig = Get-AuthenticodeSignature $resolved
-$lines.Add("status=$($sig.Status)")
-$lines.Add("status_message=$($sig.StatusMessage)")
-if ($sig.SignerCertificate) {
-    $lines.Add("subject=$($sig.SignerCertificate.Subject)")
-    $lines.Add("thumbprint=$($sig.SignerCertificate.Thumbprint)")
-}
-if ($sig.TimeStamperCertificate) {
-    $lines.Add("timestamp_subject=$($sig.TimeStamperCertificate.Subject)")
-}
-$lines.Add("")
-
 $dumpbin = Get-Command dumpbin.exe -ErrorAction SilentlyContinue
 if ($dumpbin) {
     $lines.Add("## PE headers")

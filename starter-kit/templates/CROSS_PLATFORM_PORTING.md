@@ -27,7 +27,7 @@
 | Filesystem | <assumption> | <target behavior> | <status> | <notes> |
 | IPC/process | <mechanism> | <target mechanism> | <status> | <notes> |
 | Dynamic libs | <framework/dylib> | <DLL/import lib> | <status> | <notes> |
-| Signing | <Apple Developer ID> | <Authenticode> | <status> | <notes> |
+| Signing / integrity | <unsigned or local ad-hoc; final hash> | <unsigned; final hash> | <actual status> | <runtime/install limits> |
 | GPU | <Metal/etc.> | <target> | <status> | <notes> |
 | Installer/update | <mechanism> | <target> | <status> | <notes> |
 

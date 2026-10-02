@@ -97,43 +97,33 @@ test('A08 invalid Mach-O never collects COMPLETE',{skip:process.platform!=='darw
  const plain=path.join(tmp,'plain.txt');fs.writeFileSync(plain,'not binary');assert.notEqual(run('zsh',[path.join(scripts,'macos-binary-audit.sh'),plain,path.join(tmp,'plain-audit')]).status,0);
 });
 test('A08 valid Mach-O with a failed required probe reports PARTIAL',{skip:process.platform!=='darwin'},()=>{
- const bin=path.join(tmp,'binary-stubs');fs.mkdirSync(bin);const code=path.join(bin,'codesign');fs.writeFileSync(code,'#!/bin/sh\nexit 7\n');fs.chmodSync(code,0o755);
+ const bin=path.join(tmp,'binary-stubs');fs.mkdirSync(bin);const code=path.join(bin,'lipo');fs.writeFileSync(code,'#!/bin/sh\nexit 7\n');fs.chmodSync(code,0o755);
  const output=path.join(tmp,'partial-macho.txt');const r=run('zsh',[path.join(scripts,'macos-binary-audit.sh'),process.execPath,output],{env:{...process.env,PATH:bin+path.delimiter+process.env.PATH}});
  assert.equal(r.status,2,r.stderr);const report=fs.readFileSync(output,'utf8');assert.match(report,/probe_exit=7/);assert.match(report,/collection_status=PARTIAL/);assert.ok(!report.includes('collection_status=COMPLETE'));
 });
-test('A12 required stapling failure blocks; explicit N/A needs a reason',{skip:!posix},()=>{
- const bin=path.join(tmp,'stubs');fs.mkdirSync(bin);
- for(const [name,body] of Object.entries({codesign:'exit 0',spctl:'exit 0',xattr:'exit 0',xcrun:'exit 65'})){const p=path.join(bin,name);fs.writeFileSync(p,'#!/bin/sh\n'+body+'\n');fs.chmodSync(p,0o755);}
- const app=path.join(tmp,'fixture.app');fs.mkdirSync(app);const env={...process.env,PATH:bin+path.delimiter+process.env.PATH};
- const script=path.join(scripts,'macos-bundle-verify.sh');
- assert.notEqual(run('zsh',[script,app,path.join(tmp,'staple-fail'),'public','required'],{env}).status,0);
- assert.notEqual(run('zsh',[script,app,path.join(tmp,'staple-na'),'local','na'],{env}).status,0);
- assert.equal(run('zsh',[script,app,path.join(tmp,'staple-na-reason'),'local','na'],{env:{...env,AE_STAPLING_NA_REASON:'project format excludes stapling'}}).status,0);
+test('A12 integrity wrapper rejects output reuse, overlapping evidence and legacy policy arguments',{skip:!posix},()=>{
+ const script=path.join(scripts,'macos-bundle-verify.sh'),app=path.join(tmp,'identity.app');fs.mkdirSync(app);fs.writeFileSync(path.join(app,'payload'),'unsigned fixture');
+ const out=path.join(tmp,'identity-evidence');
+ assert.equal(run('zsh',[script,app,out],{cwd:repo}).status,0);
+ const record=fs.readFileSync(path.join(out,'artifact-record.json'));
+ assert.equal(run('zsh',[script,app,out],{cwd:repo}).status,2);assert.deepEqual(fs.readFileSync(path.join(out,'artifact-record.json')),record);
+ assert.equal(run('zsh',[script,app,path.join(app,'evidence')],{cwd:repo}).status,2);assert.ok(!fs.existsSync(path.join(app,'evidence')));
+ assert.equal(run('zsh',[script,app,path.join(tmp,'legacy-evidence'),'public','required'],{cwd:repo}).status,2);assert.ok(!fs.existsSync(path.join(tmp,'legacy-evidence')));
 });
-test('R02 macOS app/pkg/dmg verification selects format-specific commands',{skip:!posix},()=>{
+test('R02 unsigned app/plugin/pkg/dmg integrity checks need no platform-service commands',{skip:!posix},()=>{
  const bin=path.join(tmp,'format-stubs');fs.mkdirSync(bin);const trace=path.join(tmp,'format-trace');
- const bodies={
-  codesign:'case "$*" in *.pkg*) exit 7;; esac\nexit 0',
-  pkgutil:'[ "$1" = "--check-signature" ] || exit 8\n[ "${AE_FIXTURE_BAD_PKG:-0}" = "0" ] || exit 9\nexit 0',
-  spctl:'case "$*" in *.dmg*) case "$*" in *"--context context:primary-signature"*) exit 0;; *) exit 10;; esac;; esac\nexit 0',
-  xattr:'exit 0',xcrun:'exit 0'
- };
- for(const [name,body] of Object.entries(bodies)){
-  const file=path.join(bin,name);fs.writeFileSync(file,'#!/bin/sh\nprintf "%s\\n" "$0 $*" >> "$AE_TEST_TRACE"\n'+body+'\n');fs.chmodSync(file,0o755);
+ for(const name of ['codesign','pkgutil','spctl','xcrun']){
+  const file=path.join(bin,name);fs.writeFileSync(file,'#!/bin/sh\nprintf "%s\\n" "$0 $*" >> "$AE_TEST_TRACE"\nexit 65\n');fs.chmodSync(file,0o755);
  }
- const env={...process.env,PATH:bin+path.delimiter+process.env.PATH,AE_TEST_TRACE:trace};
- const script=path.join(scripts,'macos-bundle-verify.sh');
- for(const extension of ['app','pkg','dmg']){
-  const target=path.join(tmp,'format.'+extension);fs.writeFileSync(target,'fixture');fs.writeFileSync(trace,'');
-  const result=run('zsh',[script,target,path.join(tmp,'format-'+extension+'.txt'),'public','required'],{env});
-  assert.equal(result.status,0,result.stdout+result.stderr);
-  const calls=fs.readFileSync(trace,'utf8');
-  if(extension==='pkg'){assert.match(calls,/pkgutil --check-signature/);assert.ok(!calls.includes('codesign '));assert.match(calls,/spctl --assess --type install/);}
-  else {assert.match(calls,/codesign --verify/);assert.ok(!calls.includes('pkgutil '));}
-  if(extension==='dmg')assert.match(calls,/--context context:primary-signature/);
+ const env={...process.env,PATH:bin+path.delimiter+process.env.PATH,AE_TEST_TRACE:trace},script=path.join(scripts,'macos-bundle-verify.sh');
+ for(const extension of ['app','plugin','pkg','dmg']){
+  const target=path.join(tmp,'format.'+extension);if(['app','plugin'].includes(extension)){fs.mkdirSync(target);fs.writeFileSync(path.join(target,'payload'),'unsigned fixture');}else fs.writeFileSync(target,'unsigned fixture');
+  const out=path.join(tmp,'format-'+extension),result=run('zsh',[script,target,out],{env,cwd:repo});
+  assert.equal(result.status,0,result.stdout+result.stderr);assert.match(result.stdout,/recorded artifact integrity only/);assert.match(result.stdout,/host_load=NOT_RUN/);
+  assert.ok(!fs.existsSync(trace),'no account/signature/service probes');
+  const record=path.join(out,'artifact-record.json');assert.equal(node('verify-artifact.mjs',[target,record]).status,0);
+  fs.appendFileSync(['app','plugin'].includes(extension)?path.join(target,'payload'):target,'changed');assert.equal(node('verify-artifact.mjs',[target,record]).status,1);
  }
- const failed=run('zsh',[script,path.join(tmp,'format.pkg'),path.join(tmp,'format-bad-pkg.txt'),'public','required'],{env:{...env,AE_FIXTURE_BAD_PKG:'1'}});
- assert.notEqual(failed.status,0);assert.match(failed.stdout,/pkgutil=FAIL/);
 });
 test('A01 empty resource cannot pass structural bundle check',{skip:process.platform!=='darwin'},()=>{
  const bundle=path.join(tmp,'Fake.plugin'),contents=path.join(bundle,'Contents');fs.mkdirSync(path.join(contents,'MacOS'),{recursive:true});fs.mkdirSync(path.join(contents,'Resources'));
@@ -141,14 +131,26 @@ test('A01 empty resource cannot pass structural bundle check',{skip:process.plat
  const c=path.join(tmp,'fake.c');fs.writeFileSync(c,'void EffectMain(void){}\nvoid PluginDataEntryFunction2(void){}\n');assert.equal(run('clang',['-dynamiclib',c,'-o',path.join(contents,'MacOS/Fake')]).status,0);
  fs.writeFileSync(path.join(contents,'Resources/Fake.rsrc'),'');
  const r=run('zsh',[path.join(scripts,'verify-native-effect-bundle-macos.sh'),bundle]);assert.notEqual(r.status,0);assert.match(r.stdout+r.stderr,/empty resource/);
+ fs.writeFileSync(path.join(contents,'Resources/Fake.rsrc'),'controlled nonempty structural fixture');
+ const bin=path.join(tmp,'native-service-stubs');fs.mkdirSync(bin);const trace=path.join(tmp,'native-service-trace');
+ fs.writeFileSync(path.join(bin,'codesign'),'#!/bin/sh\necho called > \"$AE_TEST_TRACE\"\nexit 65\n');fs.chmodSync(path.join(bin,'codesign'),0o755);
+ const valid=run('zsh',[path.join(scripts,'verify-native-effect-bundle-macos.sh'),bundle],{env:{...process.env,PATH:bin+path.delimiter+process.env.PATH,AE_TEST_TRACE:trace}});
+ assert.equal(valid.status,0,valid.stdout+valid.stderr);assert.match(valid.stdout,/bundle structural checks only/);assert.match(valid.stdout,/pipl_semantics=NOT_RUN/);assert.ok(!fs.existsSync(trace),'no certificate probe needed for structural PASS');
 });
 const ps=['pwsh','powershell'].find(cmd=>run(cmd,['-NoLogo','-NoProfile','-Command','$PSVersionTable.PSVersion.ToString()']).status===0);
-test('A13 Windows timestamp and failing dumpbin contracts',{skip:!ps||process.platform!=='win32'},()=>{
- const target=path.join(tmp,'fake.exe');fs.writeFileSync(target,'fixture');const harness=path.join(tmp,'windows-fixture.ps1');
+test('A13 unsigned Windows integrity and failing dumpbin contracts',{skip:!ps||process.platform!=='win32'},()=>{
+ const target=path.join(tmp,'fake.exe');fs.writeFileSync(target,'unsigned fixture');const harness=path.join(tmp,'windows-fixture.ps1');
  const dumpbin=path.join(tmp,'dumpbin.cmd');fs.writeFileSync(dumpbin,'@echo off\r\necho fixture probe failure\r\nexit /b 7\r\n');
- fs.writeFileSync(harness,`param([string]$Script,[string]$Target,[string]$Output,[string]$Kind,[string]$Dumpbin)\nfunction Get-AuthenticodeSignature { [pscustomobject]@{ Status='Valid'; StatusMessage='fixture'; SignerCertificate=$null; TimeStamperCertificate=$null } }\nif ($Kind -eq 'timestamp') { & $Script -Target $Target -Output $Output }\nelse { function Get-Command { [CmdletBinding()]param([string]$Name); if ($Name -eq 'dumpbin.exe') { [pscustomobject]@{ Source=$Dumpbin } } else { Microsoft.PowerShell.Core\\Get-Command $Name } }; & $Script -Target $Target -Output $Output }\nif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\n`);
- const timestampOutput=path.join(tmp,'timestamp.txt');
- const timestamp=run(ps,['-NoProfile','-File',harness,path.join(scripts,'windows-release-verify.ps1'),target,timestampOutput,'timestamp',dumpbin]);assert.notEqual(timestamp.status,0);assert.match(fs.readFileSync(timestampOutput,'utf8'),/timestamp=BLOCKED/);
+ fs.writeFileSync(harness,`param([string]$Script,[string]$Target,[string]$Output,[string]$Kind,[string]$Dumpbin)\nfunction Get-AuthenticodeSignature { throw 'signature probes are outside this collector contract' }\nif ($Kind -eq 'integrity') { & $Script -Target $Target -EvidenceDirectory $Output }\nelse { function Get-Command { [CmdletBinding()]param([string]$Name); if ($Name -eq 'dumpbin.exe') { [pscustomobject]@{ Source=$Dumpbin } } else { Microsoft.PowerShell.Core\\Get-Command $Name } }; & $Script -Target $Target -Output $Output }\nif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\n`);
+ const script=path.join(scripts,'windows-release-verify.ps1'),output=path.join(tmp,'windows-integrity');
+ const invoke=out=>run(ps,['-NoProfile','-File',harness,script,target,out,'integrity',dumpbin],{cwd:repo});
+ const checked=invoke(output);assert.equal(checked.status,0,checked.stdout+checked.stderr);assert.match(checked.stdout,/recorded artifact integrity only/);assert.match(checked.stdout,/host_load=NOT_RUN/);
+ const record=path.join(output,'artifact-record.json'),bytes=fs.readFileSync(record);assert.equal(node('verify-artifact.mjs',[target,record]).status,0);
+ assert.notEqual(invoke(output).status,0);assert.deepEqual(fs.readFileSync(record),bytes);
+ fs.appendFileSync(target,'changed');assert.equal(node('verify-artifact.mjs',[target,record]).status,1);
+ const directory=path.join(tmp,'windows-payload');fs.mkdirSync(directory);fs.writeFileSync(path.join(directory,'payload'),'unsigned');
+ const overlap=run(ps,['-NoProfile','-File',script,'-Target',directory,'-EvidenceDirectory',path.join(directory,'evidence')],{cwd:repo});assert.notEqual(overlap.status,0);assert.ok(!fs.existsSync(path.join(directory,'evidence')));
+ const legacy=path.join(tmp,'legacy-windows-evidence');assert.notEqual(run(ps,['-NoProfile','-File',script,'-Target',target,'-Output',legacy,'-LocalCheck'],{cwd:repo}).status,0);assert.ok(!fs.existsSync(legacy));
  const binaryOutput=path.join(tmp,'dumpbin.txt');
  const binary=run(ps,['-NoProfile','-File',harness,path.join(scripts,'windows-binary-audit.ps1'),target,binaryOutput,'binary',dumpbin]);const report=fs.readFileSync(binaryOutput,'utf8');assert.notEqual(binary.status,0,binary.stdout+binary.stderr+report);assert.match(report,/headers_exit=7/);assert.match(report,/collection_status=PARTIAL/);
 });

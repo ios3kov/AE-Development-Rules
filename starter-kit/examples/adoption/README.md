@@ -8,7 +8,7 @@ Target: AE 2025+, macOS arm64; exact host/OS versions are selected before testin
 
 Acceptance: same fixture and parameter state on CPU/GPU; approved numeric tolerance; no unintended alpha/extended-range clipping; cancellation leaves buffers/checkout ownership correct. Run pure algorithm tests, structural packaging checks and owned AE tests for bit depth, preview/queue and claimed MFR/SmartFX. Use [render fixtures](../render/README.md); record actual host/project identity and difference output. See [native record](native.json).
 
-No public notarization is required merely because this is an internal milestone. A release switches Delivery Gate and selects distribution checks separately.
+A release switches Delivery Gate and selects actual installation/host-load checks separately. Apple distribution-service access is not a prerequisite under the current macOS policy.
 
 ## JSX micro helper
 
