@@ -29,7 +29,7 @@ Validation Build можно передать пользователю, когд�
 
 - полный Regression Level 2;
 - финальный public installer/package;
-- Developer ID notarization или Authenticode;
+- Authenticode для применимого Windows artifact;
 - проверка реального публичного download channel;
 - полный compatibility sweep;
 - deep profiling;
@@ -107,88 +107,40 @@ Validation Build можно передать пользователю, когд�
 
 ---
 
-## 28. Публичный macOS-дистрибутив без предупреждений Gatekeeper
+## 28. macOS-дистрибутив: целостность, установка и загрузка
 <!-- REQ: MAC-001 -->
 
-Этот gate применяется не «ко всему, что работает на macOS», а к **публичному distributable, содержащему исполняемый native code, app/helper, installer или другой artifact, для которого macOS code signing / notarization реально являются частью штатной доставки**.
+Этот gate применяется к распространяемому macOS artifact: native `.plugin`, app/helper, installer/package и применимым panel/UXP компонентам. Приёмка зависит от формата и заявленного способа установки.
 
-Примеры, где gate обычно применим:
+### Политика проекта
 
-- native `.plugin` / executable bundle;
-- helper / companion app;
-- installer / package с исполняемым кодом;
-- hybrid UXP plugin с macOS `.uxpaddon` native binary;
-- другой executable component, который macOS проверяет как код.
+Для разработки и выпуска не требуются платный Apple developer account, сертификат Apple для распространения, отправка artifact во внешнюю службу проверки или прикрепление её ticket. Отсутствие этих ресурсов само по себе не создаёт Test: BLOCKED и не запрещает Release.
 
-Сам по себе source-only `.jsx`, HTML/JS/CSS panel или pure UXP `.ccx` без native binary **не делает Developer ID/notarization обязательными**. Для CEP / UXP package использовать требования Adobe к соответствующему формату распространения отдельно от OS code signing.
+Допускается artifact без подписи либо с локальной ad-hoc подписью, если он проходит применимые install/runtime checks. Если локальная подпись нужна выбранному runtime, её создавать до фиксации финального hash; наличие подписи не доказывает совместимость с After Effects.
 
-По текущей документации Adobe UXP pure `.ccx` package не требует package-level digital signature или timestamp. Для hybrid UXP Adobe отдельно требует signing/notarization macOS `.uxpaddon` binaries.
+Не запускать операции с Apple account/credentials и не запрашивать их как prerequisite. Внешние каналы могут иметь собственные условия приёма пакета: выбирать канал, соответствующий согласованному способу доставки, и подтверждать его фактическую работоспособность. Локальный install не доказывает принятие пакета сторонним магазином.
 
-Если gate применим, финальный этап включает создание нормального пользовательского дистрибутива без небезопасных обходов Gatekeeper.
+### Обязательные проверки
 
-Тестовый artifact с ad-hoc подписью может использоваться во время разработки, но **не считается финальным публичным macOS-release для executable artifact в scope этого gate**.
+Для заявленного способа распространения:
 
-### Обязательные требования
+1. Зафиксировать точный commit, Build ID, целевые macOS/архитектуры и финальный hash/manifest.
+2. Проверить структуру package/bundle, native architectures, resources и dependencies по scope.
+3. Получить тот же пакет через выбранный канал доставки и записать фактические условия установки, включая системные предупреждения и quarantine metadata, если они появились.
+4. В безопасном owned test environment выполнить установку по подготовленной пользовательской инструкции.
+5. Запустить целевой host, подтвердить реально загруженный Build ID и выполнить smoke/integration checks.
+6. Проверить update/uninstall, когда они входят в продукт; сохранять пользовательские данные.
+7. Зафиксировать ограничения и минимальные действия пользователя в руководстве для этого artifact.
 
-Перед публичным macOS release **для artifact в scope этого gate**:
+Не обещать установку без предупреждений или поддержку непроверенного канала. Системное предупреждение не равнозначно runtime failure; невозможность установить или загрузить пакет по заявленному пути остаётся FAIL/BLOCKED по фактической причине. Недоступная обязательная runtime-проверка остаётся BLOCKED/NOT RUN.
 
-- подписать финальный bundle и применимый исполняемый вложенный код действительным **Apple Developer ID** сертификатом;
-- использовать корректную и минимально необходимую signing configuration / entitlements;
-- отправить финальный distributable в **Apple Notary Service** и получить статус `Accepted`;
-- выполнить stapling notarization ticket для форматов, где Apple это поддерживает;
-- проверить подпись PKG-контейнера через `pkgutil --check-signature`, а подписи app/DMG/исполняемого кода — применимым `codesign --verify --strict` с подходящими параметрами; `codesign` не является проверкой PKG-контейнера;
-- отдельно проверить применимые подписи исполняемого payload / вложенного кода: подпись контейнера не доказывает корректность подписи каждого вложенного компонента;
-- выполнить применимую Gatekeeper / `spctl` проверку;
-- сохранить signing authority, Team ID, notarization submission ID, результат notarization и hashes финальных файлов;
-- убедиться, что signing / notarization / stapling не были выполнены после зафиксированной проверки без создания нового идентифицированного кандидата.
-
-### Обязательная реальная проверка распространения
-
-Проверять не только локальный файл из build directory.
-
-Необходимо проверить **тот же способ доставки, который получит пользователь**:
-
-1. Опубликовать или поместить финальный пакет в эквивалентный реальному каналу загрузки.
-2. Скачать его обычным способом так, чтобы macOS установил quarantine metadata.
-3. Проверить на чистом Mac или чистом пользовательском окружении.
-4. Установить стандартным пользовательским способом.
-5. Запустить целевой host / приложение и убедиться, что продукт загружается и работает.
-6. Убедиться, что macOS не требует отключать Gatekeeper, удалять quarantine attribute или использовать исключения безопасности.
-
-Запрещено считать публичный macOS gate пройденным, если для установки или первого запуска требуется:
-
-- `xattr -d` / `xattr -dr com.apple.quarantine`;
-- `spctl --master-disable`;
-- отключение Gatekeeper;
-- ручное разрешение через `Open Anyway` как обязательная инструкция;
-- правый клик → Open как штатный способ обхода предупреждения;
-- удаление или обход подписи;
-- любые другие действия, снижающие системную защиту пользователя.
+Нельзя автоматически ослаблять общесистемные настройки безопасности или удалять quarantine metadata ради зелёного отчёта. Любое действие с пользовательской системой должно оставаться в пределах разрешённого scope; реально выполненные действия фиксировать честно. Это не вводит отдельного требования к Apple-сервисам.
 
 ### Финальный artifact
 
-Для artifact в scope этого gate публично передаваемый файл должен быть именно тем artifact, который прошёл:
+Передавать именно проверенные bytes. После изменений bundle/package, локальной подписи или другого post-processing создавать новую artifact identity, пересчитывать SHA-256 и повторять затронутые проверки. Source-only `.jsx`, pure `.ccx` и другие форматы проверяются по своему install/runtime scope; сертификат не заменяет такую проверку.
 
-- Developer ID signing;
-- notarization;
-- применимый stapling;
-- Gatekeeper validation;
-- реальную установку из quarantined download;
-- финальный smoke test.
-
-Для source-only / pure package artifact вне scope этого gate применяются его format-specific install/package checks, а не искусственное требование Apple code signing.
-
-После любого изменения байтов bundle / installer / archive необходимо заново:
-
-- зафиксировать artifact identity;
-- пересчитать SHA-256;
-- повторить необходимые signing / notarization проверки;
-- повторить затронутые smoke / integration проверки.
-
-Если artifact находится в scope этого gate, а обязательные Developer ID, notarization или реальная Gatekeeper-проверка недоступны, соответствующий Test Status — **BLOCKED**, а не PASS.
-
-Executable macOS distributable в scope этого gate не считается release-ready, пока его нельзя штатно установить и запустить без инструкций по отключению или обходу системной защиты.
-
+`macos-bundle-verify.sh` собирает artifact identity и проверяет соответствие текущим bytes. Его PASS относится только к целостности записанного artifact; actual download/install/host load остаются отдельными проверками. Он не требует account, certificate или удалённых сервисов.
 
 ---
 
@@ -341,4 +293,4 @@ SmartScreen reputation и предупреждения, зависящие от 
 
 ## Source and tooling boundary
 
-Time-sensitive platform claims: [SRC-APPLE-NOTARIZATION / SRC-MICROSOFT-TIMESTAMP / SRC-ADOBE-CEP-DISTRIBUTION](../SOURCES.md). `macos-bundle-verify.sh` selects local/public scope and explicit required/N/A stapling policy. `windows-release-verify.ps1` requires timestamp evidence by default; LocalCheck is limited local verification. A structural native-bundle PASS does not verify PiPL contents, arbitrary custom entry contracts, dependency policy or AE registration. Project-specific gates remain responsible for these checks.
+Time-sensitive format/platform claims: [SRC-ADOBE-UXP-PACKAGING / SRC-MICROSOFT-TIMESTAMP / SRC-ADOBE-CEP-DISTRIBUTION](../SOURCES.md). `macos-bundle-verify.sh` records and verifies artifact integrity without Apple distribution services. `windows-release-verify.ps1` requires timestamp evidence by default; LocalCheck is limited local verification. A structural native-bundle PASS does not verify PiPL contents, arbitrary custom entry contracts, dependency policy or AE registration. Project-specific gates remain responsible for these checks.

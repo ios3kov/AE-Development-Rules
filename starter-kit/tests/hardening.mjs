@@ -97,43 +97,33 @@ test('A08 invalid Mach-O never collects COMPLETE',{skip:process.platform!=='darw
  const plain=path.join(tmp,'plain.txt');fs.writeFileSync(plain,'not binary');assert.notEqual(run('zsh',[path.join(scripts,'macos-binary-audit.sh'),plain,path.join(tmp,'plain-audit')]).status,0);
 });
 test('A08 valid Mach-O with a failed required probe reports PARTIAL',{skip:process.platform!=='darwin'},()=>{
- const bin=path.join(tmp,'binary-stubs');fs.mkdirSync(bin);const code=path.join(bin,'codesign');fs.writeFileSync(code,'#!/bin/sh\nexit 7\n');fs.chmodSync(code,0o755);
+ const bin=path.join(tmp,'binary-stubs');fs.mkdirSync(bin);const code=path.join(bin,'lipo');fs.writeFileSync(code,'#!/bin/sh\nexit 7\n');fs.chmodSync(code,0o755);
  const output=path.join(tmp,'partial-macho.txt');const r=run('zsh',[path.join(scripts,'macos-binary-audit.sh'),process.execPath,output],{env:{...process.env,PATH:bin+path.delimiter+process.env.PATH}});
  assert.equal(r.status,2,r.stderr);const report=fs.readFileSync(output,'utf8');assert.match(report,/probe_exit=7/);assert.match(report,/collection_status=PARTIAL/);assert.ok(!report.includes('collection_status=COMPLETE'));
 });
-test('A12 required stapling failure blocks; explicit N/A needs a reason',{skip:!posix},()=>{
- const bin=path.join(tmp,'stubs');fs.mkdirSync(bin);
- for(const [name,body] of Object.entries({codesign:'exit 0',spctl:'exit 0',xattr:'exit 0',xcrun:'exit 65'})){const p=path.join(bin,name);fs.writeFileSync(p,'#!/bin/sh\n'+body+'\n');fs.chmodSync(p,0o755);}
- const app=path.join(tmp,'fixture.app');fs.mkdirSync(app);const env={...process.env,PATH:bin+path.delimiter+process.env.PATH};
- const script=path.join(scripts,'macos-bundle-verify.sh');
- assert.notEqual(run('zsh',[script,app,path.join(tmp,'staple-fail'),'public','required'],{env}).status,0);
- assert.notEqual(run('zsh',[script,app,path.join(tmp,'staple-na'),'local','na'],{env}).status,0);
- assert.equal(run('zsh',[script,app,path.join(tmp,'staple-na-reason'),'local','na'],{env:{...env,AE_STAPLING_NA_REASON:'project format excludes stapling'}}).status,0);
+test('A12 integrity wrapper rejects output reuse, overlapping evidence and legacy policy arguments',{skip:!posix},()=>{
+ const script=path.join(scripts,'macos-bundle-verify.sh'),app=path.join(tmp,'identity.app');fs.mkdirSync(app);fs.writeFileSync(path.join(app,'payload'),'unsigned fixture');
+ const out=path.join(tmp,'identity-evidence');
+ assert.equal(run('zsh',[script,app,out],{cwd:repo}).status,0);
+ const record=fs.readFileSync(path.join(out,'artifact-record.json'));
+ assert.equal(run('zsh',[script,app,out],{cwd:repo}).status,2);assert.deepEqual(fs.readFileSync(path.join(out,'artifact-record.json')),record);
+ assert.equal(run('zsh',[script,app,path.join(app,'evidence')],{cwd:repo}).status,2);assert.ok(!fs.existsSync(path.join(app,'evidence')));
+ assert.equal(run('zsh',[script,app,path.join(tmp,'legacy-evidence'),'public','required'],{cwd:repo}).status,2);assert.ok(!fs.existsSync(path.join(tmp,'legacy-evidence')));
 });
-test('R02 macOS app/pkg/dmg verification selects format-specific commands',{skip:!posix},()=>{
+test('R02 unsigned app/plugin/pkg/dmg integrity checks need no platform-service commands',{skip:!posix},()=>{
  const bin=path.join(tmp,'format-stubs');fs.mkdirSync(bin);const trace=path.join(tmp,'format-trace');
- const bodies={
-  codesign:'case "$*" in *.pkg*) exit 7;; esac\nexit 0',
-  pkgutil:'[ "$1" = "--check-signature" ] || exit 8\n[ "${AE_FIXTURE_BAD_PKG:-0}" = "0" ] || exit 9\nexit 0',
-  spctl:'case "$*" in *.dmg*) case "$*" in *"--context context:primary-signature"*) exit 0;; *) exit 10;; esac;; esac\nexit 0',
-  xattr:'exit 0',xcrun:'exit 0'
- };
- for(const [name,body] of Object.entries(bodies)){
-  const file=path.join(bin,name);fs.writeFileSync(file,'#!/bin/sh\nprintf "%s\\n" "$0 $*" >> "$AE_TEST_TRACE"\n'+body+'\n');fs.chmodSync(file,0o755);
+ for(const name of ['codesign','pkgutil','spctl','xcrun']){
+  const file=path.join(bin,name);fs.writeFileSync(file,'#!/bin/sh\nprintf "%s\\n" "$0 $*" >> "$AE_TEST_TRACE"\nexit 65\n');fs.chmodSync(file,0o755);
  }
- const env={...process.env,PATH:bin+path.delimiter+process.env.PATH,AE_TEST_TRACE:trace};
- const script=path.join(scripts,'macos-bundle-verify.sh');
- for(const extension of ['app','pkg','dmg']){
-  const target=path.join(tmp,'format.'+extension);fs.writeFileSync(target,'fixture');fs.writeFileSync(trace,'');
-  const result=run('zsh',[script,target,path.join(tmp,'format-'+extension+'.txt'),'public','required'],{env});
-  assert.equal(result.status,0,result.stdout+result.stderr);
-  const calls=fs.readFileSync(trace,'utf8');
-  if(extension==='pkg'){assert.match(calls,/pkgutil --check-signature/);assert.ok(!calls.includes('codesign '));assert.match(calls,/spctl --assess --type install/);}
-  else {assert.match(calls,/codesign --verify/);assert.ok(!calls.includes('pkgutil '));}
-  if(extension==='dmg')assert.match(calls,/--context context:primary-signature/);
+ const env={...process.env,PATH:bin+path.delimiter+process.env.PATH,AE_TEST_TRACE:trace},script=path.join(scripts,'macos-bundle-verify.sh');
+ for(const extension of ['app','plugin','pkg','dmg']){
+  const target=path.join(tmp,'format.'+extension);if(['app','plugin'].includes(extension)){fs.mkdirSync(target);fs.writeFileSync(path.join(target,'payload'),'unsigned fixture');}else fs.writeFileSync(target,'unsigned fixture');
+  const out=path.join(tmp,'format-'+extension),result=run('zsh',[script,target,out],{env,cwd:repo});
+  assert.equal(result.status,0,result.stdout+result.stderr);assert.match(result.stdout,/recorded artifact integrity only/);assert.match(result.stdout,/host_load=NOT_RUN/);
+  assert.ok(!fs.existsSync(trace),'no account/signature/service probes');
+  const record=path.join(out,'artifact-record.json');assert.equal(node('verify-artifact.mjs',[target,record]).status,0);
+  fs.appendFileSync(['app','plugin'].includes(extension)?path.join(target,'payload'):target,'changed');assert.equal(node('verify-artifact.mjs',[target,record]).status,1);
  }
- const failed=run('zsh',[script,path.join(tmp,'format.pkg'),path.join(tmp,'format-bad-pkg.txt'),'public','required'],{env:{...env,AE_FIXTURE_BAD_PKG:'1'}});
- assert.notEqual(failed.status,0);assert.match(failed.stdout,/pkgutil=FAIL/);
 });
 test('A01 empty resource cannot pass structural bundle check',{skip:process.platform!=='darwin'},()=>{
  const bundle=path.join(tmp,'Fake.plugin'),contents=path.join(bundle,'Contents');fs.mkdirSync(path.join(contents,'MacOS'),{recursive:true});fs.mkdirSync(path.join(contents,'Resources'));

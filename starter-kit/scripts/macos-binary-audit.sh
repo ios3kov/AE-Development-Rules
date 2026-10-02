@@ -63,10 +63,6 @@ file "$BIN" | grep -q 'Mach-O' || { echo "INCOMPLETE: target is not Mach-O" >&2;
   echo
   echo "## undefined external symbols"
   probe nm -u "$BIN"
-  echo
-  echo "## signing"
-  probe codesign -dv --verbose=4 "$TARGET"
-  probe codesign --verify --deep --strict --verbose=2 "$TARGET"
 } > "$OUT"
 
 {

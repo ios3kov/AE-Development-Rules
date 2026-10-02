@@ -78,7 +78,8 @@
 - [ ] Plugin ID matches distribution channel
 - [ ] No CEP ZXP signing requirement copied onto pure UXP CCX
 - [ ] Hybrid .uxpaddon platform/architecture layout verified where applicable
-- [ ] macOS hybrid .uxpaddon native binary signed/notarized where applicable
+- [ ] Hybrid native dependencies and actual target-host load verified
+- [ ] Selected distribution channel install tested; no unverified Marketplace acceptance claim
 - [ ] Clean install tested through supported Creative Cloud Desktop / distribution flow
 
 ## Runtime tests

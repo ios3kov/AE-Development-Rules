@@ -34,9 +34,9 @@
 
 ### SRC-ADOBE-UXP-PACKAGING
 - URL: https://developer.adobe.com/uxp/guides/how-to/distribution/package/
-- Scope: UXP packaging/distribution, CCX and hybrid/native add-on requirements.
-- Claim: Pure CCX lacks package-level signature/timestamp requirement; native macOS uxpaddon requires separate signing/notarization.
-- Last verified: 2026-10-01
+- Scope: UXP supported packaging flow, CCX format, plugin IDs, hybrid layout and channel-specific installation acceptance.
+- Claim: Pure CCX has no package-level signature/timestamp requirement; UDT creates packages, IDs distinguish channels, and hybrid native binaries need the target platform/architecture layout. Vendor channel acceptance is distinct from local host loading.
+- Last verified: 2026-10-02
 - Refresh interval days: 90
 
 ### SRC-GITHUB-ACTIONS-SECURE-USE
@@ -45,13 +45,6 @@
 - Claim: Third-party Actions should be pinned to full-length immutable SHA.
 - Last verified: 2026-10-01
 - Refresh interval days: 180
-
-### SRC-APPLE-NOTARIZATION
-- URL: https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution
-- Scope: Public Developer ID distribution; app/plugin notarization and ticket delivery.
-- Claim: Notarization checks Developer ID signed software; tickets can be attached or retrieved online; quarantined plugin loading has host requirements.
-- Last verified: 2026-10-01
-- Refresh interval days: 90
 
 ### SRC-MICROSOFT-TIMESTAMP
 - URL: https://learn.microsoft.com/en-us/windows/win32/seccrypto/time-stamping-authenticode-signatures

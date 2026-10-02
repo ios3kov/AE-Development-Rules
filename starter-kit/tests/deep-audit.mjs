@@ -117,13 +117,12 @@ test('D07 special directory mode changes invalidate v2 artifact records; legacy 
   fs.chmodSync(artifact,0o770);record.schema_version=1;fs.writeFileSync(p,JSON.stringify(record));const r=run('verify-artifact.mjs',[artifact,p]);assert.equal(r.status,1);assert.match(r.stderr,/legacy/);
 }));
 
-test('D04 whitespace-only stapling N/A rejects before platform commands',{skip:process.platform==='win32'},()=>withTemp(dir=>{
-  for(const reason of ['', ' ', '\t\n\r ', '\n', '\u00a0', '\u2003', '\ufeff']) {
-    const out=path.join(dir,'never-created.txt');const r=spawnSync('zsh',[path.join(root,'starter-kit/scripts/macos-bundle-verify.sh'),path.join(dir,'not-real.app'),out,'public','na'],{encoding:'utf8',env:{...process.env,AE_STAPLING_NA_REASON:reason}});
-    assert.equal(r.status,2,r.stderr);assert.match(r.stderr,/N\/A requires/);assert.ok(!fs.existsSync(out));
-  }
-  const r=spawnSync('zsh',[path.join(root,'starter-kit/scripts/macos-bundle-verify.sh'),path.join(dir,'not-real.app'),path.join(dir,'out'),'public','na'],{encoding:'utf8',env:{...process.env,AE_STAPLING_NA_REASON:'Approved project-specific exception'}});
-  assert.equal(r.status,1);assert.match(r.stderr,/bundle not found/,'substantive reason passes only syntax policy, not distribution');
+test('D04 removed policy arguments cannot silently reuse the new integrity-check interface',{skip:process.platform==='win32'},()=>withTemp(dir=>{
+ const script=path.join(root,'starter-kit/scripts/macos-bundle-verify.sh');
+ for(const legacy of [['public','required'],['local','na'],['public','na']]){
+  const out=path.join(dir,'never-created');const r=spawnSync('zsh',[script,path.join(dir,'not-real.app'),out,...legacy],{encoding:'utf8'});
+  assert.equal(r.status,2,r.stderr);assert.match(r.stderr,/Legacy distribution-policy arguments/);assert.ok(!fs.existsSync(out));
+ }
 }));
 
 test('D08 valid U+FFFD/Unicode/BOM accepts with original byte hashes; malformed bytes reject',()=>withTemp(dir=>{

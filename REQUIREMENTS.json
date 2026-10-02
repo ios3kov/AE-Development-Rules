@@ -53,7 +53,7 @@
       "id": "MAC-001",
       "source": "profiles/RELEASE.md",
       "section": "28",
-      "meaning": "Apply signing, notarization and stapling by actual format"
+      "meaning": "Verify exact macOS artifact integrity, documented installation and actual host loading without Apple distribution-service prerequisites"
     },
     {
       "id": "WIN-001",

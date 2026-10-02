@@ -154,7 +154,7 @@ Risk Profile и Delivery Gate выбираются отдельно.
 - явная маркировка, что artifact тестовый и не предназначен для публичного распространения;
 - честное перечисление того, что ещё не прошло Release Gate.
 
-Для Validation Build **не требуется автоматически** полный публичный Release Gate, notarization, Authenticode, финальный installer, полный Regression Level 2, полная compatibility matrix или публичный distribution-channel test, если именно эти свойства не являются предметом текущей проверки.
+Для Validation Build **не требуется автоматически** полный публичный Release Gate, Authenticode, финальный installer, полный Regression Level 2, полная compatibility matrix или публичный distribution-channel test, если именно эти свойства не являются предметом текущей проверки.
 
 До передачи отличать обязательные pre-handoff prerequisites от intended user-validation вопроса и release-acceptance по §26. Недоступность обязательного safety prerequisite блокирует передачу; ещё не полученный ответ на безопасный пользовательский вопрос после выполненных prerequisites её не блокирует.
 
@@ -528,7 +528,6 @@ Build metadata должна содержать:
 - packaging;
 - обфускацию;
 - signing;
-- stapling;
 - другие post-processing steps.
 
 Для многофайлового artifact использовать:

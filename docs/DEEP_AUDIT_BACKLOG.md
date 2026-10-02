@@ -1,5 +1,7 @@
 # Deep audit findings for version 5.0.0
 
+Historical 5.x findings: the macOS policy/checker contract is superseded only on explicit adoption of [6.0.0](releases/6.0.0.md); D04 is not a requirement to retain the removed gate.
+
 Baseline: `8d88b19afea726b7c79988c5f6958f65d13995ba`, published 5.0.0, audited 2026-10-02. This ledger records findings, versioned corrections and optional proposals; it does not amend canonical requirements, authorize release, or claim an actual AI configuration passed evaluation. Earlier F01–F12 remediation remains historical and is not reopened by adjacent findings.
 
 ## Confirmed findings — 5.1.0 disposition

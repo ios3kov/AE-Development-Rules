@@ -877,7 +877,7 @@ Test case должен проверять наблюдаемое требова�
 - [ExtendScript sanity-check](../starter-kit/scripts/check-extendscript.mjs)
 - [Adobe API inventory для compatibility audit](../starter-kit/scripts/scan-adobe-api.sh)
 - [macOS binary audit](../starter-kit/scripts/macos-binary-audit.sh)
-- [macOS bundle / signing / Gatekeeper verification](../starter-kit/scripts/macos-bundle-verify.sh)
+- [macOS artifact integrity verification](../starter-kit/scripts/macos-bundle-verify.sh)
 - [Native AE effect bundle verification on macOS](../starter-kit/scripts/verify-native-effect-bundle-macos.sh)
 - [Owned fail-closed AE test workspace](../starter-kit/scripts/create-owned-test-workspace.sh)
 - [Windows binary / dependency / Authenticode audit](../starter-kit/scripts/windows-binary-audit.ps1)

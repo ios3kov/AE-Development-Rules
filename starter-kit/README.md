@@ -45,12 +45,12 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 - `scripts/record-artifact.sh` — commit, dirty state, environment и SHA-256 artifact.
 - `scripts/check-extendscript.mjs` — быстрый parser sanity-check JSX/ExtendScript.
 - `scripts/scan-adobe-api.sh` — inventory PF/AEGP/SmartFX identifiers для compatibility audit.
-- `scripts/macos-binary-audit.sh` — evidence collector для Mach-O architectures, deployment target, linked libraries, symbols и signing; exit 0 не означает compatibility PASS.
-- `scripts/macos-bundle-verify.sh` — format-specific signature, stapling, Gatekeeper и quarantine evidence: codesign для app/dmg, pkgutil для pkg.
+- `scripts/macos-binary-audit.sh` — evidence collector для Mach-O architectures, deployment target, linked libraries и symbols; exit 0 не означает compatibility PASS.
+- `scripts/macos-bundle-verify.sh` — artifact identity/manifest и проверка целостности без Apple account/certificate/service prerequisites.
 - `scripts/windows-binary-audit.ps1` — evidence collector для PE/dependencies/AuthentiCode; report содержит collection status, а exit 0 не означает compatibility PASS.
 - `scripts/windows-release-verify.ps1` — SHA-256/AuthentiCode/Zone.Identifier release evidence.
 - `scripts/create-owned-test-workspace.sh` — создаёт уникальный fail-closed workspace для AE runtime tests.
-- `scripts/verify-native-effect-bundle-macos.sh` — проверяет ограниченный structural scope native effect bundle, ожидаемые exports, наличие непустых resources и подпись; PiPL semantics, dependency policy и реальная AE load требуют отдельных checks.
+- `scripts/verify-native-effect-bundle-macos.sh` — проверяет ограниченный structural scope native effect bundle, ожидаемые exports, наличие непустых resources; PiPL semantics, dependency policy и реальная AE load требуют отдельных checks.
 
 ## Templates
 
@@ -129,7 +129,7 @@ Node.js 22+ is required. Copy complete scripts/lib dependencies, including the v
 - [Filled adoption examples](examples/adoption/README.md), [render fixtures](examples/render/README.md), [requirement registry](../REQUIREMENTS.json).
 - `compare-render.mjs REFERENCE.json ACTUAL.json MAX_ABS_ERROR [NEW_DIFF.json]`: explicit tolerance, same dimensions/color/alpha/bpc; no implicit conversion.
 - `check-extendscript.mjs`: Node syntax subset plus target/targetengine/script/strict directives and literal relative includes. Tokenization distinguishes regex/division, comments, strings and templates so literal directive text is preserved. Unsupported directives, E4X and true ES3 checks need project-specific tooling; no JSX is executed.
-- `macos-bundle-verify.sh target new-report local|public required|na`: public mode requires quarantine; required stapling failure blocks; N/A needs AE_STAPLING_NA_REASON. PKG signatures use pkgutil; app/dmg use codesign. Gatekeeper uses execute/install/open by format, with primary-signature context for DMG. Package contents and actual host loading need separate checks.
+- `macos-bundle-verify.sh target NEW_EVIDENCE_DIR`: creates a fresh artifact record/manifest and verifies its bytes/types/modes; no certificate/service access or signature gate. Runs in the product Git checkout. Actual channel download, install and target-host load remain separate checks. Legacy local/public and required/na arguments are rejected; do not reuse old report files.
 - `windows-release-verify.ps1`: timestamp verification required by default; `-LocalCheck` permits explicitly limited local signature checking.
 - `preflight`: unstaged/staged checks and optional AE_PREFLIGHT_BASE_REF diff; missing Node/npm with package.json or non-executable present hooks block. A project check list must be selected before running.
 - Evidence collectors never reuse output paths. A binary collector exit 2 means incomplete collection; signing errors also remain visible as individual probe outcomes.
@@ -173,6 +173,10 @@ Optional `context.features` добавляет применимые reading over
 
 Artifact record/manifest v2 учитывает POSIX `07777`, включая special bits; Windows отмечает Node-emulated mode scope. ACLs/xattrs/ownership/timestamps не аттестуются. Fixture run snapshot v2 учитывает types/modes/empty directories и platform; observer не подтверждает поведение ИИ. Старые snapshots/records новым verifier отвергаются: сохранить их с исходными tools или собрать новую v2 observation, не переписывая исторические Evidence.
 
-Project-record schema остаётся 1: direct sparse/inherited arrays и reordered duplicate Evidence отвергаются. JSON comparisons ограничены depth 64 / 100000 nodes; object key order несущественен, array order сохраняется. UTF-8 collector проверяет исходные bytes строгим decoder, принимает literal U+FFFD/BOM и сохраняет original byte hash. Stapling N/A explanation должна содержать непробельный текст; это не подтверждает approval.
+Project-record schema остаётся 1: direct sparse/inherited arrays и reordered duplicate Evidence отвергаются. JSON comparisons ограничены depth 64 / 100000 nodes; object key order несущественен, array order сохраняется. UTF-8 collector проверяет исходные bytes строгим decoder, принимает literal U+FFFD/BOM и сохраняет original byte hash.
 
 [Примеры решений ИИ](../docs/AI_DECISION_EXAMPLES.md) и [IPC recovery guidance](../profiles/TOOLS.md#неизвестный-результат-ipc-mutation) не подменяют actual model/AE tests. Даты исходных vendor checks остаются неизменными до реальной перепроверки.
+
+### macOS distribution policy migration (6.0.0 candidate)
+
+[§28](../profiles/RELEASE.md#28-macos-дистрибутив-целостность-установка-и-загрузка) uses exact artifact identity, documented installation and actual host loading. Apple distribution services are excluded from project prerequisites. See [migration](../docs/releases/6.0.0.md). The native structural checker and Mach-O collector no longer require certificate/signature probes. Neither structural nor integrity PASS establishes runtime compatibility.

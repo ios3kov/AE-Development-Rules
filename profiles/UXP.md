@@ -127,7 +127,8 @@ Lifecycle handler должен быть коротким и укладывать
 - package создавать поддерживаемым Adobe tooling, а не считать ручной ZIP эквивалентом production package;
 - plugin ID должен соответствовать выбранному distribution channel;
 - hybrid plugin с native `.uxpaddon` требует отдельной проверки platform/architecture layout и native binaries;
-- для macOS hybrid `.uxpaddon` выполнять Adobe-required Developer ID signing/notarization native binary;
+- для hybrid проверять native dependencies и реальную загрузку в выбранном host; условия стороннего distribution channel не объявлять выполненными по локальному install;
+- macOS-приёмка следует §28: платные сертификаты и внешние Apple-сервисы не являются prerequisite нашего проекта; выбирать и проверять согласованный канал, а не обещать автоматическую доступность всех магазинов;
 - installation test выполнять через реальный поддерживаемый `.ccx` flow / Creative Cloud Desktop для заявленного distribution channel.
 
 Не переносить CEP ZXP signing rules на UXP CCX и наоборот.

@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.0.0 — Unreleased (2026-10-02)
+
+Changes the macOS distribution policy at the user's request: Apple account/certificate/service access is no longer a release prerequisite. MAC-001 now requires artifact identity, documented installation and actual host loading. This is an unpublished major candidate: mandatory gate meaning and a public checker interface change; adopted 5.x records/tools retain their original semantics. [Migration and verification](docs/releases/6.0.0.md).
+
+- Removes macOS certificate/remote-service gates from canonical rules, UXP/porting guidance and validation/release templates. Unsigned or locally ad-hoc-signed artifacts can qualify after actual install/runtime checks. No claim of warning-free installation or universal external-channel acceptance.
+- Replaces macos-bundle-verify.sh with artifact record/verification using a fresh evidence directory. Legacy policy arguments fail with migration guidance; integrity PASS is separate from install/host-load status.
+- Native structural and Mach-O collectors no longer require signature probes. Required structural/architecture/dependency collection failures still fail. Windows gates remain as before.
+- Preserves historical release/audit records; they describe their original baselines, not current macOS policy. The obsolete Apple source entry is removed; the UXP packaging source was actually rechecked on 2026-10-02.
+
 ## 5.1.0 — 2026-10-02
 
 Minor release. Repairs D01–D10 and implements optional I01–I04 from the five-pass 5.0.0 deep audit. No new universal MUST/gate contract is introduced. Existing project baselines remain frozen until explicit adoption. [Remediation](docs/DEEP_AUDIT_REMEDIATION_5_1.md), [errata](docs/ERRATA.md), [migration](docs/releases/5.1.0.md).
