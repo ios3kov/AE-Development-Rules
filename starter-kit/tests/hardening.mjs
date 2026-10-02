@@ -131,6 +131,11 @@ test('A01 empty resource cannot pass structural bundle check',{skip:process.plat
  const c=path.join(tmp,'fake.c');fs.writeFileSync(c,'void EffectMain(void){}\nvoid PluginDataEntryFunction2(void){}\n');assert.equal(run('clang',['-dynamiclib',c,'-o',path.join(contents,'MacOS/Fake')]).status,0);
  fs.writeFileSync(path.join(contents,'Resources/Fake.rsrc'),'');
  const r=run('zsh',[path.join(scripts,'verify-native-effect-bundle-macos.sh'),bundle]);assert.notEqual(r.status,0);assert.match(r.stdout+r.stderr,/empty resource/);
+ fs.writeFileSync(path.join(contents,'Resources/Fake.rsrc'),'controlled nonempty structural fixture');
+ const bin=path.join(tmp,'native-service-stubs');fs.mkdirSync(bin);const trace=path.join(tmp,'native-service-trace');
+ fs.writeFileSync(path.join(bin,'codesign'),'#!/bin/sh\necho called > \"$AE_TEST_TRACE\"\nexit 65\n');fs.chmodSync(path.join(bin,'codesign'),0o755);
+ const valid=run('zsh',[path.join(scripts,'verify-native-effect-bundle-macos.sh'),bundle],{env:{...process.env,PATH:bin+path.delimiter+process.env.PATH,AE_TEST_TRACE:trace}});
+ assert.equal(valid.status,0,valid.stdout+valid.stderr);assert.match(valid.stdout,/bundle structural checks only/);assert.match(valid.stdout,/pipl_semantics=NOT_RUN/);assert.ok(!fs.existsSync(trace),'no certificate probe needed for structural PASS');
 });
 const ps=['pwsh','powershell'].find(cmd=>run(cmd,['-NoLogo','-NoProfile','-Command','$PSVersionTable.PSVersion.ToString()']).status===0);
 test('A13 Windows timestamp and failing dumpbin contracts',{skip:!ps||process.platform!=='win32'},()=>{
