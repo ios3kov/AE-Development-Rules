@@ -177,6 +177,6 @@ Project-record schema остаётся 1: direct sparse/inherited arrays и reor
 
 [Примеры решений ИИ](../docs/AI_DECISION_EXAMPLES.md) и [IPC recovery guidance](../profiles/TOOLS.md#неизвестный-результат-ipc-mutation) не подменяют actual model/AE tests. Даты исходных vendor checks остаются неизменными до реальной перепроверки.
 
-### macOS/Windows distribution policy migration (6.0.0 candidate)
+### macOS/Windows distribution policy migration (6.0.0)
 
 [§28](../profiles/RELEASE.md#28-macos-дистрибутив-целостность-установка-и-загрузка) uses exact artifact identity, documented installation and actual host loading. Apple distribution services and Windows certificate/signing-service access are excluded from project prerequisites. See [migration](../docs/releases/6.0.0.md). The native structural checker and Mach-O/PE collectors no longer require certificate/signature probes. [Windows §30](../profiles/RELEASE.md#30-windows-дистрибутив-целостность-установка-и-загрузка) uses the same integrity/install/host-load acceptance. Neither structural nor integrity PASS establishes runtime compatibility.

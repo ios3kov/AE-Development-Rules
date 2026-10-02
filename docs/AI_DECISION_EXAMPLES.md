@@ -1,6 +1,6 @@
 # Короткие примеры решений для ИИ
 
-Guidance для версии **5.1.0**; это примеры решений, не результат исполнения модели. Source links ниже указывают canonical требования в том же checkout; exact commit и hashes примеров связываются с итоговым verification record. При копировании зафиксировать именно используемый commit. Примеры не заменяют Product Spec, выбранные SDK headers и реальные host проверки.
+Guidance для версии **6.0.0**; это примеры решений, не результат исполнения модели. Source links ниже указывают canonical требования в том же checkout; exact commit и hashes примеров связываются с итоговым verification record. При копировании зафиксировать именно используемый commit. Примеры не заменяют Product Spec, выбранные SDK headers и реальные host проверки.
 
 ## 1. Локальный JSX bugfix: Undo и частичный сбой
 

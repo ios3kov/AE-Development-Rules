@@ -1,8 +1,8 @@
 # Changelog
 
-## 6.0.0 — Unreleased (2026-10-02)
+## 6.0.0 — 2026-10-02
 
-Changes the macOS/Windows distribution policy at the user's request: certificate/signing-service access is no longer a release prerequisite. MAC-001/WIN-001 now require artifact identity, documented installation and actual host loading. This is an unpublished major candidate: mandatory gate meaning and a public checker interface change; adopted 5.x records/tools retain their original semantics. [Migration and verification](docs/releases/6.0.0.md).
+Changes the macOS/Windows distribution policy at the user's request: certificate/signing-service access is no longer a release prerequisite. MAC-001/WIN-001 now require artifact identity, documented installation and actual host loading. This is a major release: mandatory gate meaning and a public checker interface change; adopted 5.x records/tools retain their original semantics. [Migration and verification](docs/releases/6.0.0.md).
 
 - Removes macOS/Windows certificate/remote-service gates from canonical rules, UXP/porting guidance and validation/release templates. Unsigned or locally ad-hoc-signed artifacts can qualify after actual install/runtime checks. No claim of warning-free installation or universal external-channel acceptance.
 - Replaces macos-bundle-verify.sh with artifact record/verification using a fresh evidence directory. Legacy policy arguments fail with migration guidance; integrity PASS is separate from install/host-load status.

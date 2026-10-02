@@ -4,7 +4,7 @@ Known defects and temporary controls for adopted baselines. This registry does n
 
 Affected baseline for the entries below: **5.0.0**, published tag peeled to `8d88b19afea726b7c79988c5f6958f65d13995ba`. Observation date: 2026-10-02. Historical findings/reproductions: [deep-audit ledger](DEEP_AUDIT_BACKLOG.md). Correction tracking: [5.1 remediation](DEEP_AUDIT_REMEDIATION_5_1.md).
 
-Historical scope: D04 below describes the 5.0.0/5.1.0 checker contract. The [6.0.0 candidate](releases/6.0.0.md) removes that policy gate and changes the checker interface; the historical finding is retained, not a current requirement.
+Historical scope: D04 below describes the 5.0.0/5.1.0 checker contract. The [6.0.0 release](releases/6.0.0.md) removes that policy gate and changes the checker interface; the historical finding is retained, not a current requirement.
 
 | ID | Impact on affected baseline | Temporary control while retaining 5.0.0 | Corrected version / availability |
 | --- | --- | --- | --- |

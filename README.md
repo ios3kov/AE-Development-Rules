@@ -6,19 +6,22 @@
 
 ## Версия стандарта
 
-**Версия текущего checkout: v6.0.0 — не опубликована.**
+**Стабильная версия стандарта: v6.0.0 — 2026-10-02.**
 
-Текущий checkout содержит новую macOS/Windows-политику: выпуск без обязательных платных сертификатов и внешних сервисов подписания/проверки. Приёмка опирается на целостность artifact, установку и фактическую загрузку в AE. Последняя опубликованная стабильная версия — 5.1.0; кандидат 6.0.0 не заменяет её автоматически.
+6.0.0 устанавливает macOS/Windows-политику: выпуск без обязательных платных сертификатов и внешних сервисов подписания/проверки. Приёмка опирается на целостность artifact, установку и фактическую загрузку в AE. Точный released commit, платформенные CI и checksums архивов записаны в release-evidence.json у GitHub Release.
 
 - [VERSION](VERSION)
 - [CHANGELOG.md](CHANGELOG.md)
-- [Изменения и миграция кандидата 6.0.0](docs/releases/6.0.0.md)
+- [Описание релиза и переход на 6.0.0](docs/releases/6.0.0.md)
 - [Описание релиза и переход на 5.1.0](docs/releases/5.1.0.md)
 - [Описание релиза и переход на 5.0.0](docs/releases/5.0.0.md)
-- [GitHub Release v5.1.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v5.1.0)
+- [GitHub Release v6.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v6.0.0)
+- [Предыдущий GitHub Release v5.1.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v5.1.0)
 - [Предыдущий GitHub Release v5.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v5.0.0)
 
 Для release проекта фиксируйте и версию стандарта, и конкретный commit SHA.
+
+6.0.0 — major release: изменение macOS/Windows-приёмки и интерфейсов проверок. Переход оформляется осознанно; прежние Evidence и принятые baselines сохраняются.
 
 5.1.0 — minor release: исправления enforcement существующих требований и необязательные материалы для ИИ. Уже принятый проектом baseline сохраняется до осознанного перехода; миграция tooling описана отдельно. 5.0.0 — первая публикация этого репозитория через GitHub Release; предыдущие версии в CHANGELOG описывают историю правил, а не наличие опубликованных GitHub-тегов.
 
