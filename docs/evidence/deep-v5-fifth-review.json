@@ -1,0 +1,804 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-02",
+  "observed_at_utc": "2026-10-02T10:51:41.833903+00:00",
+  "published_baseline": "8d88b19afea726b7c79988c5f6958f65d13995ba",
+  "audit_start_commit": "c16f07ee83cbec0836143579171cad08eef0d688",
+  "initial_git_state": "CLEAN",
+  "remote_refs_observed": {
+    "main": "8d88b19afea726b7c79988c5f6958f65d13995ba",
+    "v5.0.0_tag_object": "9079bc267c3c0393b31ced116af192b43d2dc580",
+    "v5.0.0_peeled": "8d88b19afea726b7c79988c5f6958f65d13995ba"
+  },
+  "inventory": {
+    "tracked_files": 123,
+    "total_bytes": 795907,
+    "types": [
+      "file"
+    ],
+    "sha256": "8e5a6e893426f9346eb25b3e2e75c8e60da61b8135e3c3e3c11b36055ca8d831",
+    "baseline_comparison": {
+      "modified": [
+        "README.md"
+      ],
+      "added": [
+        "docs/DEEP_AUDIT_5_0_0_FOURTH.md",
+        "docs/DEEP_AUDIT_5_0_0_REPEAT.md",
+        "docs/DEEP_AUDIT_5_0_0_THIRD.md",
+        "docs/DEEP_AUDIT_BACKLOG.md",
+        "docs/evidence/deep-v5-fourth-probes.json",
+        "docs/evidence/deep-v5-repeat-probes.json",
+        "docs/evidence/deep-v5-third-probes.json"
+      ],
+      "removed": []
+    }
+  },
+  "review_sources": [
+    {
+      "path": "AI_ENTRYPOINT.md",
+      "sha256": "01a1bf6a0edae36391cafb75ed84d4f5a0a86845bb08fbdea9de558ef41b2901",
+      "anchors": [
+        {
+          "line": 36,
+          "text": "### 2.1. Приоритет решений и доверие к источникам"
+        },
+        {
+          "line": 52,
+          "text": "### 2.2. Восстановление и сохранение состояния задачи"
+        },
+        {
+          "line": 73,
+          "text": "### 2.3. Контракт должен покрывать текущий scope"
+        },
+        {
+          "line": 164,
+          "text": "### 4.1. Продолжение работы и границы разрешений"
+        },
+        {
+          "line": 233,
+          "text": "## 8. Загружать только применимые правила"
+        }
+      ]
+    },
+    {
+      "path": "WORKFLOW.md",
+      "sha256": "5ec4a333cfe3bb11f7896ecac010d00a14bf9f43588ed569afc21b5253afd40c",
+      "anchors": [
+        {
+          "line": 9,
+          "text": "## 0. До технического планирования"
+        },
+        {
+          "line": 31,
+          "text": "## 1. Работа логичными блоками"
+        },
+        {
+          "line": 79,
+          "text": "## 4. Общение"
+        },
+        {
+          "line": 116,
+          "text": "## 6. Validation Build"
+        },
+        {
+          "line": 130,
+          "text": "## 7. Release"
+        },
+        {
+          "line": 136,
+          "text": "## 8. Stop criteria"
+        },
+        {
+          "line": 157,
+          "text": "## 9. Controlled initiative"
+        }
+      ]
+    },
+    {
+      "path": "core/PROCESS.md",
+      "sha256": "0e73ec5d0c751f2a35237990de023c298d0d77cfeeadaa618813ebe67b0cbc11",
+      "anchors": [
+        {
+          "line": 27,
+          "text": "## 1. Применение правил и обязательность проверок"
+        },
+        {
+          "line": 310,
+          "text": "## 4. Максимальная автоматизация и безопасность действий"
+        },
+        {
+          "line": 485,
+          "text": "## 7. Build / Artifact Identity"
+        },
+        {
+          "line": 683,
+          "text": "## 10. Evidence и статусы проверок"
+        }
+      ]
+    },
+    {
+      "path": "core/ENGINEERING.md",
+      "sha256": "2b9854b787e501c156e8108ede1c34f4fc441fe4b09a30d362708646684ad557",
+      "anchors": [
+        {
+          "line": 927,
+          "text": "## 34. Версия стандарта и фиксация baseline"
+        }
+      ]
+    },
+    {
+      "path": "PRODUCT_DISCOVERY.md",
+      "sha256": "b037271e71479a7b622a85e99932774f22f8550289cadb560e8d4be1ae05c738",
+      "anchors": [
+        {
+          "line": 126,
+          "text": "## 0.4. Классификация требований"
+        },
+        {
+          "line": 271,
+          "text": "## 0.11. Exit criteria"
+        }
+      ]
+    },
+    {
+      "path": "REFERENCE_AUDIT.md",
+      "sha256": "7e66883210bfc050bdd97c9c94cbf1de346fdf9d8a381e9c73507e261075d93b",
+      "anchors": [
+        {
+          "line": 330,
+          "text": "## R0.11. Exit criteria"
+        }
+      ]
+    },
+    {
+      "path": "profiles/TOOLS.md",
+      "sha256": "6f0036c301374165641d9bfe8705215ad92ac734495bc1090188e09c4172f5e5",
+      "anchors": [
+        {
+          "line": 44,
+          "text": "### Undo Safety"
+        },
+        {
+          "line": 80,
+          "text": "### Repeated Execution"
+        }
+      ]
+    },
+    {
+      "path": "profiles/RELEASE.md",
+      "sha256": "0c8d7224970d7e0d4addbe1c3c7136e7d54bd85baa2c3fb1216c0825ed6ba30f",
+      "anchors": [
+        {
+          "line": 7,
+          "text": "## 26. Validation Gate и Release Gate"
+        }
+      ]
+    },
+    {
+      "path": "starter-kit/templates/AI_TASK_STATE.md",
+      "sha256": "89376906a80d4d9648e1db5e6525d85ed18e792a3cd3f5da067a99d8678dee3d",
+      "anchors": [
+        {
+          "line": 5,
+          "text": "## Goal and current scope"
+        },
+        {
+          "line": 15,
+          "text": "## Confirmed decisions and boundaries"
+        },
+        {
+          "line": 25,
+          "text": "## Current observed state"
+        },
+        {
+          "line": 37,
+          "text": "## Blockers and next action"
+        }
+      ]
+    },
+    {
+      "path": "starter-kit/templates/AE_RUNTIME_TEST_SAFETY.md",
+      "sha256": "057df856400ae47ff09e46f86f296897e3f2988de82f3c44a466bb4ca4a8f0a9",
+      "anchors": [
+        {
+          "line": 5,
+          "text": "## Ownership before mutation"
+        },
+        {
+          "line": 19,
+          "text": "## Refuse when user work may exist"
+        },
+        {
+          "line": 41,
+          "text": "## Cleanup"
+        },
+        {
+          "line": 47,
+          "text": "## Timeout"
+        }
+      ]
+    },
+    {
+      "path": "starter-kit/templates/MICRO_HELPER_PROFILE.md",
+      "sha256": "45f0bbc2d7c25ebfc1fbe1d2698cb97003459a14d4a4e3992c219eb43452b511",
+      "anchors": [
+        {
+          "line": 5,
+          "text": "## Scope check"
+        },
+        {
+          "line": 18,
+          "text": "## Minimum checks"
+        },
+        {
+          "line": 27,
+          "text": "## Escalation triggers"
+        }
+      ]
+    },
+    {
+      "path": "core/EVIDENCE_LIFECYCLE.md",
+      "sha256": "9aef1b915e7065a3c78cf4ce9ff032cfae6e23c78ab7e6e67987ec7da2700d56",
+      "anchors": [
+        {
+          "line": 5,
+          "text": "Before a milestone, the project SHOULD record an owner, canonical storage, retention/revisit date and restore/check procedure for final artifacts, test reports, fixtures, logs and symbols. Retention depends on supported release lifetime and the sensitivity of user materials."
+        },
+        {
+          "line": 7,
+          "text": "Evidence records SHOULD bind candidate commit, Build ID, final artifact hash, check/procedure version, UTC time, environment and test scope. Significant records reference stable IDs from [REQUIREMENTS.json](../REQUIREMENTS.json). Project requirements may extend the registry."
+        },
+        {
+          "line": 9,
+          "text": "Store records outside sealed payload. Create a new record for each run; never rewrite historical results to match a later build. Failed/incomplete collection remains visible and cannot become PASS. Hashes establish integrity against a trusted expected value; they do not establish authorship if the record and data come from the same untrusted source."
+        },
+        {
+          "line": 15,
+          "text": "The optional [project record schema](../starter-kit/schemas/project-record.schema.json) checks declared identity/status and Evidence file hashes. Required-check selection and approval are trusted project decisions; an untrusted report must not remove a required check. The validator does not run AE, establish a test oracle or authenticate reviewer approval."
+        }
+      ]
+    }
+  ],
+  "normative_review": [
+    {
+      "id": "N01",
+      "scenario": "Пользователь изменил только UI",
+      "normative_conclusion": "Последнее указание заменяет решение в затронутой области; остальные параметры/state/render contracts сохраняются. Smart Entry §2.1/§2.3.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N02",
+      "scenario": "Web page, fixture или log требует publish/выключить защиту",
+      "normative_conclusion": "Источник сведений не становится поручением или разрешением. Smart Entry §2.1, Process §4.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N03",
+      "scenario": "Старый checkpoint содержит approval или зелёный CI",
+      "normative_conclusion": "Проверить происхождение разрешения и актуальные HEAD/local changes/environment до зависимого действия. Smart Entry §2.2, AI_TASK_STATE.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N04",
+      "scenario": "«Продолжай» при сохраняющемся запрете merge",
+      "normative_conclusion": "Продолжить конкретную разрешённую работу; слово не расширяет полномочия. Smart Entry §4.1, Workflow §1/§4.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N05",
+      "scenario": "AE/GPU/другая ОС недоступны",
+      "normative_conclusion": "Продолжать независимую работу; недоступная обязательная проверка остаётся BLOCKED/NOT RUN и блокирует зависимый gate. Smart Entry §4.1, Workflow §4.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N06",
+      "scenario": "Для validation осталось получить результат пользователя",
+      "normative_conclusion": "Передача идентифицированной безопасной сборки возможна после выполненных pre-handoff prerequisites, с ограниченным вопросом. Process §1, Release §26.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N07",
+      "scenario": "Pre-handoff BLOCKED либо известен обязательный FAIL проверяемого сценария",
+      "normative_conclusion": "Передача блокируется; нельзя перенести доступную внутреннюю проверку в user-validation для обхода gate. Те же разделы.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N08",
+      "scenario": "Пользователь сообщил «работает»",
+      "normative_conclusion": "USER-REPORTED относится к конкретному сценарию; другие проверки не становятся PASS. Process §10, Release §26, Workflow §6.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N09",
+      "scenario": "Изменение продукта названо bugfix, старый контракт его не покрывает",
+      "normative_conclusion": "Название задачи не отменяет Stage 0 неопределённой области. Smart Entry §2.3, Product Discovery §0.4/§0.11.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N10",
+      "scenario": "Major feature уже покрыта подтверждённым контрактом",
+      "normative_conclusion": "Использовать завершённый применимый Stage 0, не повторять интервью формально. Smart Entry §2.3, Workflow §0.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N11",
+      "scenario": "Whole-product reference имеет critical unknown",
+      "normative_conclusion": "Блокируется зависимое проектирование; независимая определённая область может продолжаться. Reference Audit §R0.11, Discovery §0.4, Workflow §0.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N12",
+      "scenario": "Принятый baseline старее main, platform facts меняются",
+      "normative_conclusion": "Не обновлять baseline автоматически; текущие API/platform facts проверять отдельно. Smart Entry §8, Engineering §34. Versioned errata уже предложены в I02.",
+      "result": "NO_NEW_FINDING; I02 сохранён",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N13",
+      "scenario": "Неудачная попытка повторяется без новых данных",
+      "normative_conclusion": "Изменить гипотезу, собрать различающий сигнал либо назвать scoped blocker. Завершение блока не разрешает незаметный новый scope. Workflow §8/§9.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N14",
+      "scenario": "Есть Run ID/workspace, но текущий AE project неизвестен",
+      "normative_conclusion": "До mutation доказать ownership текущего состояния; неизвестная ownership query и timeout не разрешают kill/cleanup. Process §4, AE_RUNTIME_TEST_SAFETY.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N15",
+      "scenario": "Undo Group закрыта после частичного сбоя",
+      "normative_conclusion": "Закрытие не доказывает rollback; поведение при частичном выполнении определяется отдельно. Tools §22. Недостаточный выбор этого модуля уже покрыт D01.",
+      "result": "NO_NEW_FINDING; D01 OPEN",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N16",
+      "scenario": "Ответ IPC mutation потерян",
+      "normative_conclusion": "Нет основания считать rollback доказанным. Более явная guidance для reconcile/deduplicate уже предложена в I01; это не новая находка.",
+      "result": "EXISTING_PROPOSAL_I01",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N17",
+      "scenario": "Artifact пересобран/изменён после PASS",
+      "normative_conclusion": "Новая идентичность candidate требует соответствующего Evidence; исторический PASS не переносится. Process §7/§10, Release §26, Evidence lifecycle.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    },
+    {
+      "id": "N18",
+      "scenario": "Малый helper готовится к публичной передаче",
+      "normative_conclusion": "Light и Release совместимы; публичная передача включает gate, а state/network/helper/существенный data risk меняют eligibility малого профиля. Process §1, Micro-helper Profile, Release §26.",
+      "result": "NO_NEW_FINDING",
+      "method": "MANUAL_SOURCE_REVIEW",
+      "ai_runtime": "NOT_RUN"
+    }
+  ],
+  "typed_routing_controls": {
+    "scope": "Typed declared contexts only; no natural-language classification, permissions, module-completeness or AI/AE runtime certification",
+    "observations": [
+      {
+        "id": "ordinary-bugfix",
+        "input": {
+          "task": "bugfix",
+          "components": [
+            "jsx"
+          ],
+          "risk": "light",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": true,
+          "contract_covers_scope": true,
+          "changes_product_contract": false
+        },
+        "expected": {
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true
+        },
+        "required_rules": [
+          "DEBUGGING",
+          "API-SOURCES"
+        ],
+        "actual": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "DEBUGGING",
+            "API-SOURCES"
+          ]
+        },
+        "result": "PASS"
+      },
+      {
+        "id": "product-changing-bugfix",
+        "input": {
+          "task": "bugfix",
+          "components": [
+            "jsx"
+          ],
+          "risk": "light",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": true,
+          "contract_covers_scope": false,
+          "changes_product_contract": true
+        },
+        "expected": {
+          "product_discovery": true,
+          "implementation_task": true
+        },
+        "required_rules": [
+          "DEBUGGING",
+          "PRODUCT-DISCOVERY"
+        ],
+        "actual": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": true,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "DEBUGGING",
+            "API-SOURCES",
+            "PRODUCT-DISCOVERY"
+          ]
+        },
+        "result": "PASS"
+      },
+      {
+        "id": "covered-major-feature",
+        "input": {
+          "task": "major-feature",
+          "components": [
+            "jsx"
+          ],
+          "risk": "light",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": true,
+          "contract_covers_scope": true,
+          "changes_product_contract": true
+        },
+        "expected": {
+          "product_discovery": false,
+          "implementation_task": true
+        },
+        "required_rules": [
+          "API-SOURCES"
+        ],
+        "actual": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "API-SOURCES"
+          ]
+        },
+        "result": "PASS"
+      },
+      {
+        "id": "audit-uncovered-product",
+        "input": {
+          "task": "audit",
+          "components": [
+            "jsx"
+          ],
+          "risk": "light",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": false,
+          "contract_covers_scope": false,
+          "changes_product_contract": true
+        },
+        "expected": {
+          "product_discovery": false,
+          "implementation_task": false
+        },
+        "required_rules": [],
+        "actual": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": false,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE"
+          ]
+        },
+        "result": "PASS"
+      },
+      {
+        "id": "documentation-uncovered-product",
+        "input": {
+          "task": "documentation",
+          "components": [
+            "jsx"
+          ],
+          "risk": "light",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": false,
+          "contract_covers_scope": false,
+          "changes_product_contract": true
+        },
+        "expected": {
+          "product_discovery": false,
+          "implementation_task": false
+        },
+        "required_rules": [
+          "DOCS"
+        ],
+        "actual": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": false,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "DOCS",
+            "EVIDENCE"
+          ]
+        },
+        "result": "PASS"
+      },
+      {
+        "id": "research-mixed-components",
+        "input": {
+          "task": "research",
+          "components": [
+            "cep",
+            "helper"
+          ],
+          "risk": "critical",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": true,
+          "contract_covers_scope": true,
+          "changes_product_contract": false
+        },
+        "expected": {
+          "product_discovery": false,
+          "implementation_task": false
+        },
+        "required_rules": [
+          "API-SOURCES"
+        ],
+        "actual": {
+          "risk": "critical",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": false,
+          "rules": [
+            "CORE-SCOPE",
+            "TOOL-RUNTIME",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "COMPAT",
+            "CODE-SAFETY",
+            "BASELINE",
+            "PERF",
+            "REPRO",
+            "DEPSEC",
+            "API-SOURCES"
+          ]
+        },
+        "result": "PASS"
+      },
+      {
+        "id": "whole-product-new-product",
+        "input": {
+          "task": "new-product",
+          "components": [
+            "jsx"
+          ],
+          "risk": "light",
+          "delivery": "development",
+          "reference": "whole-product",
+          "product_contract": false,
+          "contract_covers_scope": false,
+          "changes_product_contract": false
+        },
+        "expected": {
+          "product_discovery": true,
+          "reference_audit": true,
+          "implementation_task": true
+        },
+        "required_rules": [
+          "PRODUCT-DISCOVERY",
+          "REFERENCE-AUDIT"
+        ],
+        "actual": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": true,
+          "reference_audit": true,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "API-SOURCES",
+            "PRODUCT-DISCOVERY",
+            "REFERENCE-AUDIT"
+          ]
+        },
+        "result": "PASS"
+      },
+      {
+        "id": "public-light-helper",
+        "input": {
+          "task": "bugfix",
+          "components": [
+            "helper"
+          ],
+          "risk": "light",
+          "delivery": "release",
+          "reference": "none",
+          "product_contract": true,
+          "contract_covers_scope": true,
+          "changes_product_contract": false
+        },
+        "expected": {
+          "risk": "light",
+          "delivery": "release",
+          "implementation_task": true
+        },
+        "required_rules": [
+          "GATES"
+        ],
+        "actual": {
+          "risk": "light",
+          "delivery": "release",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "CODE-SAFETY",
+            "GATES",
+            "DEBUGGING",
+            "API-SOURCES"
+          ]
+        },
+        "result": "PASS"
+      },
+      {
+        "id": "critical-native-development",
+        "input": {
+          "task": "bugfix",
+          "components": [
+            "native"
+          ],
+          "risk": "critical",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": true,
+          "contract_covers_scope": true,
+          "changes_product_contract": false
+        },
+        "expected": {
+          "risk": "critical",
+          "delivery": "development"
+        },
+        "required_rules": [],
+        "actual": {
+          "risk": "critical",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "CODE-SAFETY",
+            "NATIVE-RUNTIME",
+            "BASELINE",
+            "TEST-CONTROL",
+            "COMPAT",
+            "PERF",
+            "REPRO",
+            "DEBUGGING",
+            "API-SOURCES"
+          ]
+        },
+        "result": "PASS"
+      }
+    ]
+  },
+  "static_scan": {
+    "raw_report_sha256": "7232c79c4d4bdc379634a2f8f8e07b04015cd3d122773b2506e5a6d074036aa2",
+    "source_commit": "c16f07ee83cbec0836143579171cad08eef0d688",
+    "exit_code": 0,
+    "text_files": 113,
+    "bytes": 769511,
+    "unsupported_files": 7,
+    "excluded_directories": 2,
+    "omissions": [],
+    "findings": [],
+    "release_readiness": "not_assessed"
+  },
+  "new_findings": [],
+  "ledger_counts": {
+    "OPEN": 10,
+    "PROPOSED": 4
+  },
+  "boundaries": [
+    "Prior finding reproductions preserved, not rerun in this pass",
+    "Manual review is not model execution",
+    "Declared routing flags do not prove natural-language classification or complete module selection",
+    "Canonical sources and scripts unchanged",
+    "No AE runtime, PowerShell, new audit-branch CI, push, merge, tag update or publication",
+    "Historical vendor checks retain their original dates"
+  ],
+  "local_final_verification": "Recorded separately after documentation validation and local commit"
+}
