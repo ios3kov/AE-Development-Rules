@@ -21,7 +21,7 @@ try {
   if (fs.existsSync(output) || (() => { try { fs.lstatSync(output); return true; } catch (e) { if (e.code !== 'ENOENT') throw e; return false; } })()) throw new Error('Evidence destination already exists');
   const commit = git('-C', root, 'rev-parse', 'HEAD');
   const state = git('-C', root, 'status', '--porcelain');
-  const record = { schema_version: 1, run_id: id, utc: new Date().toISOString(), source_commit: commit, source_state: state ? 'DIRTY' : 'CLEAN', artifact, platform: process.platform, node: process.version, manifest_sha256: sha256(JSON.stringify(before)), manifest: before };
+  const record = { schema_version: 2, run_id: id, utc: new Date().toISOString(), source_commit: commit, source_state: state ? 'DIRTY' : 'CLEAN', artifact, platform: process.platform, node: process.version, manifest_sha256: sha256(JSON.stringify(before)), manifest: before };
   // Reserve outside the payload and keep INCOMPLETE until all record files are written.
   fs.mkdirSync(path.dirname(output), { recursive: true });
   fs.mkdirSync(output); // Exclusive reservation; never reuse history.

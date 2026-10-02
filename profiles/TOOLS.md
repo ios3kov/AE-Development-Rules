@@ -167,6 +167,17 @@ Browser-like stack или JavaScript exception не следует тракто�
 - disconnect/restart;
 - protocol-version mismatch.
 
+#### Неизвестный результат IPC mutation
+<!-- REQ: IPC-RECOVERY-001 -->
+
+Timeout, disconnect или потеря ответа после отправки mutating request не доказывают, что операция не началась, завершилась либо была отменена. Не приравнивать такой результат к rollback или успешному выполнению. Это тот же partial-failure риск, что и у host/filesystem операции; закрытие Undo Group само по себе его не устраняет.
+
+Для затронутого IPC workflow SHOULD определить состояния `not sent`, `in flight`, `confirmed applied`, `confirmed rejected` и `outcome unknown`, привязав observations к operation/correlation ID, process/session identity и фактическому состоянию. Конкретные названия и протокол выбирает проект.
+
+При `outcome unknown` SHOULD сначала получить различающий сигнал: статус исходной операции, фактическое состояние или подтверждённую deduplication/idempotency гарантию этого протокола. Повтор с новым ID может создать вторую mutation; отмена ожидания клиента не доказывает отмену работы host. Idempotency key полезен только при реально определённой области/сроке дедупликации и проверке одинакового payload.
+
+Если исход неизвестен и безопасный reconcile/retry не доказан, SHOULD оставить зависимый retry BLOCKED; сохранить запрос, IDs, доступные observations и ограничения, продолжая независимую разрешённую работу. Не откатывать неизвестное пользовательское состояние автоматически. Автоочистка и host mutation сохраняют ownership/permission границы Process §4.
+
+По применимости SHOULD проверять: ответ потерян до/после применения, повтор в той же session, restart с потерей deduplication history, changed payload under the same key и частичную операцию. Synthetic transport test подтверждает свой state machine, а не delivery semantics AE или недокументированного host API.
+
 ---
-
-

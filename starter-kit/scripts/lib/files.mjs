@@ -30,7 +30,7 @@ export function snapshot(input) {
   const boundary = isDirectory ? root : path.dirname(root);
   function visit(file, relative) {
     const stat = fs.lstatSync(file);
-    const entry = { path: relative.split(path.sep).join('/'), mode: stat.mode & 0o777 };
+    const entry = { path: relative.split(path.sep).join('/'), mode: stat.mode & 0o7777 };
     if (stat.isSymbolicLink()) {
       const target = fs.readlinkSync(file);
       if (path.isAbsolute(target) || !inside(boundary, fs.realpathSync(file))) throw new Error('external or dangling symlink');
@@ -49,5 +49,5 @@ export function snapshot(input) {
     if (entries.length > 100000) throw new Error('artifact entry limit exceeded');
   }
   visit(root, '.');
-  return { schema_version: 1, platform: process.platform, entries };
+  return { schema_version: 2, platform: process.platform, mode_scope: process.platform === 'win32' ? 'node-emulated-permissions' : 'posix-07777', entries };
 }

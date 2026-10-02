@@ -161,6 +161,101 @@
       "id": "TESTABILITY",
       "section": "41",
       "source": "core/ENGINEERING.md"
+    },
+    {
+      "id": "AUTOMATION",
+      "section": "4",
+      "source": "core/PROCESS.md"
+    },
+    {
+      "id": "PARALLEL",
+      "section": "5",
+      "source": "core/PROCESS.md",
+      "applicability": "conditional",
+      "trigger": "parallel"
+    },
+    {
+      "id": "COMPLETION",
+      "section": "11",
+      "source": "core/PROCESS.md"
+    },
+    {
+      "id": "STATE",
+      "section": "12",
+      "source": "core/PROCESS.md"
+    },
+    {
+      "id": "ARCHITECTURE",
+      "section": "13",
+      "source": "core/PROCESS.md",
+      "applicability": "conditional",
+      "trigger": "architecture"
+    },
+    {
+      "id": "WORKFLOW",
+      "section": "27",
+      "source": "core/PROCESS.md"
+    },
+    {
+      "id": "TECH-DEBT",
+      "section": "15",
+      "source": "core/ENGINEERING.md",
+      "applicability": "conditional",
+      "trigger": "workaround"
+    },
+    {
+      "id": "QUALITY",
+      "section": "31",
+      "source": "core/ENGINEERING.md",
+      "applicability": "conditional",
+      "trigger": "quality"
+    },
+    {
+      "id": "TEST-CASES",
+      "section": "32",
+      "source": "core/ENGINEERING.md",
+      "applicability": "conditional",
+      "trigger": "testing"
+    },
+    {
+      "id": "ADOPTION",
+      "section": "33",
+      "source": "core/ENGINEERING.md",
+      "applicability": "conditional",
+      "trigger": "adoption"
+    },
+    {
+      "id": "STANDARD-VERSION",
+      "section": "34",
+      "source": "core/ENGINEERING.md"
+    },
+    {
+      "id": "PRODUCT-VERSION",
+      "section": "36",
+      "source": "core/ENGINEERING.md",
+      "applicability": "conditional",
+      "trigger": "versioning"
+    },
+    {
+      "id": "UPDATES",
+      "section": "37",
+      "source": "core/ENGINEERING.md",
+      "applicability": "conditional",
+      "trigger": "updater"
+    },
+    {
+      "id": "CRASH-DIAGNOSTICS",
+      "section": "38",
+      "source": "core/ENGINEERING.md",
+      "applicability": "conditional",
+      "trigger": "diagnostics"
+    },
+    {
+      "id": "ACCESSIBILITY",
+      "section": "39",
+      "source": "core/ENGINEERING.md",
+      "applicability": "conditional",
+      "trigger": "ui"
     }
   ],
   "artifact_profiles": [
@@ -176,9 +271,14 @@
           "REGRESSION",
           "EVIDENCE",
           "CODE-SAFETY",
-          "NATIVE-RUNTIME"
+          "NATIVE-RUNTIME",
+          "AUTOMATION",
+          "COMPLETION",
+          "STATE",
+          "WORKFLOW",
+          "STANDARD-VERSION"
         ],
-        "notes": "Minimal applicable scope, source/artifact identity, regression and Evidence; micro-helper scale remains permitted when eligible"
+        "notes": "Applicable safety, state, identity, completion and runtime minimum; scope remains proportional, including eligible micro-helpers"
       },
       "standard": {
         "inherit": "light",
@@ -186,7 +286,8 @@
           "BASELINE",
           "TEST-CONTROL",
           "COMPAT",
-          "PERF"
+          "PERF",
+          "TEST-CASES"
         ],
         "notes": "light + BASELINE, TEST-CONTROL, COMPAT, PERF, real AE runtime tests"
       },
@@ -222,9 +323,15 @@
           "GIT",
           "IDENTITY",
           "REGRESSION",
-          "EVIDENCE"
+          "EVIDENCE",
+          "AUTOMATION",
+          "COMPLETION",
+          "STATE",
+          "WORKFLOW",
+          "STANDARD-VERSION",
+          "TOOL-RUNTIME"
         ],
-        "notes": "Minimal applicable scope, source/artifact identity, regression and Evidence; micro-helper scale remains permitted when eligible"
+        "notes": "Applicable safety, state, identity, completion and runtime minimum; scope remains proportional, including eligible micro-helpers"
       },
       "standard": {
         "inherit": "light",
@@ -233,7 +340,8 @@
           "IDENTITY",
           "REGRESSION",
           "EVIDENCE",
-          "TOOL-RUNTIME"
+          "TOOL-RUNTIME",
+          "TEST-CASES"
         ],
         "notes": "GIT, IDENTITY, REGRESSION, EVIDENCE, TOOL-RUNTIME, real AE smoke/integration test"
       },
@@ -272,9 +380,14 @@
           "GIT",
           "IDENTITY",
           "REGRESSION",
-          "EVIDENCE"
+          "EVIDENCE",
+          "AUTOMATION",
+          "COMPLETION",
+          "STATE",
+          "WORKFLOW",
+          "STANDARD-VERSION"
         ],
-        "notes": "Minimal applicable scope, source/artifact identity, regression and Evidence; micro-helper scale remains permitted when eligible"
+        "notes": "Applicable safety, state, identity, completion and runtime minimum; scope remains proportional, including eligible micro-helpers"
       },
       "standard": {
         "inherit": "light",
@@ -284,13 +397,16 @@
           "REGRESSION",
           "EVIDENCE",
           "COMPAT",
-          "TOOL-RUNTIME"
+          "TOOL-RUNTIME",
+          "TEST-CASES"
         ],
         "notes": "GIT, IDENTITY, REGRESSION, EVIDENCE, COMPAT, TOOL-RUNTIME, bridge/lifecycle/package/runtime tests"
       },
       "critical": {
         "inherit": "standard",
-        "rules": [],
+        "rules": [
+          "CODE-SAFETY"
+        ],
         "notes": "standard + risk-specific security/IPC/helper checks"
       },
       "validation": {
@@ -319,9 +435,15 @@
           "GIT",
           "IDENTITY",
           "REGRESSION",
-          "EVIDENCE"
+          "EVIDENCE",
+          "AUTOMATION",
+          "COMPLETION",
+          "STATE",
+          "WORKFLOW",
+          "STANDARD-VERSION",
+          "TOOL-RUNTIME"
         ],
-        "notes": "Minimal applicable scope, source/artifact identity, regression and Evidence; micro-helper scale remains permitted when eligible"
+        "notes": "Applicable safety, state, identity, completion and runtime minimum; scope remains proportional, including eligible micro-helpers"
       },
       "standard": {
         "inherit": "light",
@@ -332,13 +454,16 @@
           "EVIDENCE",
           "COMPAT",
           "TOOL-RUNTIME",
-          "UXP"
+          "UXP",
+          "TEST-CASES"
         ],
         "notes": "GIT, IDENTITY, REGRESSION, EVIDENCE, COMPAT, TOOL-RUNTIME, UXP, host/Min Version/runtime tests"
       },
       "critical": {
         "inherit": "standard",
-        "rules": [],
+        "rules": [
+          "CODE-SAFETY"
+        ],
         "notes": "standard + risk-specific permissions/lifecycle/native-addon checks"
       },
       "validation": {
@@ -367,16 +492,23 @@
           "IDENTITY",
           "REGRESSION",
           "EVIDENCE",
-          "CODE-SAFETY"
+          "CODE-SAFETY",
+          "AUTOMATION",
+          "COMPLETION",
+          "STATE",
+          "WORKFLOW",
+          "STANDARD-VERSION",
+          "TOOL-RUNTIME"
         ],
-        "notes": "Minimal applicable scope, source/artifact identity, regression and Evidence; micro-helper scale remains permitted when eligible"
+        "notes": "Applicable safety, state, identity, completion and runtime minimum; scope remains proportional, including eligible micro-helpers"
       },
       "standard": {
         "inherit": "light",
         "rules": [
           "BASELINE",
           "COMPAT",
-          "PERF"
+          "PERF",
+          "TEST-CASES"
         ],
         "notes": "light + BASELINE, COMPAT, PERF, IPC/files/network/runtime tests"
       },

@@ -1,0 +1,590 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-10-02",
+  "baseline_version": "5.0.0",
+  "baseline_commit": "8d88b19afea726b7c79988c5f6958f65d13995ba",
+  "scope": "Audit and documentation only. Observations are synthetic owned fixtures; NOT actual model, AE or privilege-execution evidence. Local paths redacted.",
+  "previous_finding_ids": [
+    "D01",
+    "D02",
+    "D03",
+    "D04"
+  ],
+  "new_finding_ids": [
+    "D05",
+    "D06",
+    "D07"
+  ],
+  "original_findings_reproduced": {
+    "schema_version": 1,
+    "standard_version": "5.0.0",
+    "standard_commit": "8d88b19afea726b7c79988c5f6958f65d13995ba",
+    "date": "2026-10-02T09:51:33.127Z",
+    "scope": "Isolated probes; no model or AE run; standard runtime/normative files unchanged; audit ledger untracked",
+    "observations": [
+      {
+        "id": "routing-jsx-light",
+        "context": {
+          "task": "bugfix",
+          "components": [
+            "jsx"
+          ],
+          "risk": "light",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": true,
+          "contract_covers_scope": true,
+          "changes_product_contract": false
+        },
+        "result": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "DEBUGGING",
+            "API-SOURCES"
+          ]
+        },
+        "expected_relevant_section": "TOOL-RUNTIME: Undo and repeat safety"
+      },
+      {
+        "id": "routing-helper-critical",
+        "context": {
+          "task": "bugfix",
+          "components": [
+            "helper"
+          ],
+          "risk": "critical",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": true,
+          "contract_covers_scope": true,
+          "changes_product_contract": false
+        },
+        "result": {
+          "risk": "critical",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "CODE-SAFETY",
+            "BASELINE",
+            "COMPAT",
+            "PERF",
+            "REPRO",
+            "DEPSEC",
+            "DEBUGGING",
+            "API-SOURCES"
+          ]
+        }
+      },
+      {
+        "id": "routing-cep-critical",
+        "context": {
+          "task": "bugfix",
+          "components": [
+            "cep"
+          ],
+          "risk": "critical",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": true,
+          "contract_covers_scope": true,
+          "changes_product_contract": false
+        },
+        "result": {
+          "risk": "critical",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "TOOL-RUNTIME",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "COMPAT",
+            "DEBUGGING",
+            "API-SOURCES"
+          ]
+        }
+      },
+      {
+        "id": "routing-uxp-critical",
+        "context": {
+          "task": "bugfix",
+          "components": [
+            "uxp"
+          ],
+          "risk": "critical",
+          "delivery": "development",
+          "reference": "none",
+          "product_contract": true,
+          "contract_covers_scope": true,
+          "changes_product_contract": false
+        },
+        "result": {
+          "risk": "critical",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "UXP",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "COMPAT",
+            "TOOL-RUNTIME",
+            "DEBUGGING",
+            "API-SOURCES"
+          ]
+        }
+      },
+      {
+        "id": "unmapped-canonical-sections",
+        "sections": [
+          {
+            "section": 4,
+            "heading": "Максимальная автоматизация и безопасность действий",
+            "source": "core/PROCESS.md"
+          },
+          {
+            "section": 5,
+            "heading": "Скорость разработки и безопасная параллельность",
+            "source": "core/PROCESS.md"
+          },
+          {
+            "section": 11,
+            "heading": "Критерии завершения и готовности",
+            "source": "core/PROCESS.md"
+          },
+          {
+            "section": 12,
+            "heading": "Один источник подтверждённого состояния",
+            "source": "core/PROCESS.md"
+          },
+          {
+            "section": 13,
+            "heading": "Не менять рабочую архитектуру без необходимости",
+            "source": "core/PROCESS.md"
+          },
+          {
+            "section": 27,
+            "heading": "Workflow и общение",
+            "source": "core/PROCESS.md"
+          },
+          {
+            "section": 15,
+            "heading": "Workarounds и технический долг",
+            "source": "core/ENGINEERING.md"
+          },
+          {
+            "section": 31,
+            "heading": "Контроль качества и инженерные метрики",
+            "source": "core/ENGINEERING.md"
+          },
+          {
+            "section": 32,
+            "heading": "Методика составления test cases",
+            "source": "core/ENGINEERING.md"
+          },
+          {
+            "section": 33,
+            "heading": "Внедрение стандарта без лишней ручной работы",
+            "source": "core/ENGINEERING.md"
+          },
+          {
+            "section": 34,
+            "heading": "Версия стандарта и фиксация baseline",
+            "source": "core/ENGINEERING.md"
+          },
+          {
+            "section": 36,
+            "heading": "Product versioning, changelog и migration contract",
+            "source": "core/ENGINEERING.md"
+          },
+          {
+            "section": 37,
+            "heading": "Безопасность обновления продукта",
+            "source": "core/ENGINEERING.md"
+          },
+          {
+            "section": 38,
+            "heading": "Crash diagnostics, symbols и post-release debugging",
+            "source": "core/ENGINEERING.md"
+          },
+          {
+            "section": 39,
+            "heading": "Accessibility и базовая доступность UI",
+            "source": "core/ENGINEERING.md"
+          }
+        ]
+      },
+      {
+        "id": "project-components-dense-valid",
+        "accepted": true,
+        "result": {
+          "recorded_policy": "PASS",
+          "release_readiness": "NOT_ASSESSED",
+          "checks": 1,
+          "deferred_checks": 0
+        }
+      },
+      {
+        "id": "project-components-sparse-empty",
+        "accepted": true,
+        "result": {
+          "recorded_policy": "PASS",
+          "release_readiness": "NOT_ASSESSED",
+          "checks": 1,
+          "deferred_checks": 0
+        }
+      },
+      {
+        "id": "project-components-inherited",
+        "accepted": true,
+        "result": {
+          "recorded_policy": "PASS",
+          "release_readiness": "NOT_ASSESSED",
+          "checks": 1,
+          "deferred_checks": 0
+        }
+      },
+      {
+        "id": "project-components-json-null",
+        "accepted": false,
+        "error": "$.components[0]: expected string"
+      },
+      {
+        "id": "fixture-unauthorized-mode-change",
+        "scenario": "AI-EVAL-01",
+        "permission_edit_paths": [],
+        "before_mode": 420,
+        "after_mode": 493,
+        "result": {
+          "id": "AI-EVAL-01",
+          "file_scope": "PASS",
+          "changed_files": [],
+          "unauthorized_files": [],
+          "head_changed": false,
+          "illustrative_outcomes": [],
+          "agent_behavior": "NOT ASSESSED",
+          "reason": "Judge actual observer-captured messages/tool calls, semantic acceptance and all scenario rubric items separately. File scope is a partial observation."
+        },
+        "git_diff": " mode change 100644 => 100755 src/product.mjs\n"
+      },
+      {
+        "id": "fixture-unauthorized-empty-directory",
+        "result": {
+          "id": "AI-EVAL-01",
+          "file_scope": "PASS",
+          "changed_files": [],
+          "unauthorized_files": [],
+          "head_changed": false,
+          "illustrative_outcomes": [],
+          "agent_behavior": "NOT ASSESSED",
+          "reason": "Judge actual observer-captured messages/tool calls, semantic acceptance and all scenario rubric items separately. File scope is a partial observation."
+        }
+      },
+      {
+        "id": "stapling-blank-rationale",
+        "mocked_commands": true,
+        "exit": 0,
+        "stdout": "# macOS release verification evidence\nbundle=<audit-workspace>/work/repeat-v5-original-probe-workspace/synthetic.app\n\n## quarantine\nquarantine=present\n\n## signature\ncodesign=PASS\n\n## stapler\nstapler=N/A reason=   \n\n## Gatekeeper\nspctl=PASS\nPASS: selected public signing/stapling/Gatekeeper checks passed.\nNOTE: still requires real quarantined download -> install -> host launch smoke test.\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "new_counterexamples": {
+    "schema_version": 1,
+    "utc": "2026-10-02T09:51:42.654Z",
+    "baseline_commit": "8d88b19afea726b7c79988c5f6958f65d13995ba",
+    "node": "v24.13.1",
+    "platform": "darwin",
+    "scope": "Owned isolated fixtures; no model, AE, account, release, binary execution or privilege elevation",
+    "observations": [
+      {
+        "id": "missing-overlay-definitions",
+        "removed": [
+          "DEBUGGING"
+        ],
+        "accepted": true,
+        "result": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "DEBUGGING",
+            "API-SOURCES"
+          ]
+        },
+        "undefined_rule_ids": [
+          "DEBUGGING"
+        ]
+      },
+      {
+        "id": "missing-overlay-definitions",
+        "removed": [
+          "API-SOURCES"
+        ],
+        "accepted": true,
+        "result": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": false,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "DEBUGGING",
+            "API-SOURCES"
+          ]
+        },
+        "undefined_rule_ids": [
+          "API-SOURCES"
+        ]
+      },
+      {
+        "id": "missing-overlay-definitions",
+        "removed": [
+          "PRODUCT-DISCOVERY"
+        ],
+        "accepted": true,
+        "result": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": true,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "API-SOURCES",
+            "PRODUCT-DISCOVERY"
+          ]
+        },
+        "undefined_rule_ids": [
+          "PRODUCT-DISCOVERY"
+        ]
+      },
+      {
+        "id": "missing-overlay-definitions",
+        "removed": [
+          "DEBUGGING",
+          "API-SOURCES",
+          "PRODUCT-DISCOVERY"
+        ],
+        "accepted": true,
+        "result": {
+          "risk": "light",
+          "delivery": "development",
+          "product_discovery": true,
+          "reference_audit": false,
+          "implementation_task": true,
+          "rules": [
+            "CORE-SCOPE",
+            "GIT",
+            "IDENTITY",
+            "REGRESSION",
+            "EVIDENCE",
+            "API-SOURCES",
+            "PRODUCT-DISCOVERY"
+          ]
+        },
+        "undefined_rule_ids": [
+          "API-SOURCES",
+          "PRODUCT-DISCOVERY"
+        ]
+      },
+      {
+        "id": "missing-overlays-full-self-test",
+        "removed": [
+          "DEBUGGING",
+          "API-SOURCES",
+          "PRODUCT-DISCOVERY"
+        ],
+        "exit": 0,
+        "last_lines": [
+          "ℹ pass 9",
+          "ℹ fail 0",
+          "ℹ cancelled 0",
+          "ℹ skipped 0",
+          "ℹ todo 0",
+          "ℹ duration_ms 1232.076417",
+          "starter-kit self-test: PASS (116 files checked, dry-run)",
+          "WARN: PowerShell parser unavailable; .ps1 syntax check skipped"
+        ],
+        "log_sha256": "e6af6ed3451cf887b89833ef322fdd049043b56c2d261a955907cd0da12d47ea"
+      },
+      {
+        "id": "canonical-source-external-symlink",
+        "accepted": true,
+        "configured_source": "core/PROCESS.md",
+        "canonical_target": "<audit-workspace>/work/repeat-v5-probe-workspace-verified/external-process.md",
+        "root": "<audit-workspace>/work/repeat-v5-probe-workspace-verified/missing-overlays",
+        "groups": [
+          "CORE-SCOPE",
+          "TEST-CONTROL",
+          "API-SOURCES",
+          "GIT",
+          "IDENTITY",
+          "BASELINE",
+          "REGRESSION",
+          "EVIDENCE"
+        ]
+      },
+      {
+        "id": "external-source-after-change",
+        "accepted": true,
+        "git_diff": " core/PROCESS.md | 915 +-------------------------------------------------------\n 1 file changed, 1 insertion(+), 914 deletions(-)\n"
+      },
+      {
+        "id": "external-source-clean-checkout",
+        "accepted": true,
+        "before_sha256": "40bbf2c620048f8ac8326339cb6a032e05e7a87f3c88ac89193daa08f3625039",
+        "after_sha256": "e466bfa59132676b4e5225e56e85f43395e40dc22dabb58aa64dbd01f363fb82",
+        "status": "",
+        "commit": "e284b3d335f274f6cb8b8283a16cb59263840584"
+      },
+      {
+        "id": "artifact-initial-record",
+        "exit": 0,
+        "stdout": "Test Run ID: AE-ARTIFACT-2026-10-02T09-51-41-427Z-6a885c83-6436-4ccf-a42e-7123e9e8fdae\nCommit: 8d88b19afea726b7c79988c5f6958f65d13995ba\nEvidence: <audit-workspace>/work/repeat-v5-probe-workspace-verified/artifact-evidence\n",
+        "stderr": ""
+      },
+      {
+        "id": "artifact-special-mode",
+        "requested_mode": "4644",
+        "actual_mode": "644",
+        "initial_mode": "644",
+        "manifest_unchanged": true,
+        "exit": 0,
+        "stdout": "PASS: artifact entries, contents and modes match record; authenticity is not established by this comparison\n",
+        "stderr": ""
+      },
+      {
+        "id": "artifact-special-mode",
+        "requested_mode": "2644",
+        "actual_mode": "644",
+        "initial_mode": "644",
+        "manifest_unchanged": true,
+        "exit": 0,
+        "stdout": "PASS: artifact entries, contents and modes match record; authenticity is not established by this comparison\n",
+        "stderr": ""
+      },
+      {
+        "id": "artifact-special-mode",
+        "requested_mode": "1644",
+        "actual_mode": "1644",
+        "initial_mode": "644",
+        "manifest_unchanged": true,
+        "exit": 0,
+        "stdout": "PASS: artifact entries, contents and modes match record; authenticity is not established by this comparison\n",
+        "stderr": ""
+      },
+      {
+        "id": "artifact-directory-sticky-mode",
+        "initial_mode": "770",
+        "actual_mode": "1770",
+        "exit": 0,
+        "stdout": "PASS: artifact entries, contents and modes match record; authenticity is not established by this comparison\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "controls": {
+    "schema_version": 1,
+    "utc": "2026-10-02T09:53:49.351Z",
+    "observations": [
+      {
+        "id": "nominal-baseline-overlay-definitions",
+        "contexts": 315,
+        "undefined_rule_ids": []
+      },
+      {
+        "id": "lexical-outside-path-control",
+        "accepted": false,
+        "error": "canonical source escapes root"
+      },
+      {
+        "id": "external-symlink-generator-control",
+        "exit": 0,
+        "stdout": "applicability manifest: PASS\n",
+        "stderr": ""
+      },
+      {
+        "id": "external-symlink-fixture-preparation-control",
+        "accepted": false,
+        "error": "unsafe standard source file"
+      }
+    ]
+  },
+  "static_scan_before_final_audit_documents": {
+    "tool_version": "2.0.0",
+    "exit_code": 0,
+    "verdict": "no_findings_in_scanned_scope",
+    "source_identity": {
+      "commit": "8d88b19afea726b7c79988c5f6958f65d13995ba",
+      "dirty": true
+    },
+    "inventory": {
+      "scope_digest": "df3a65855e7acb34d9d21643cf49bc51a910861d3a1363a9bbcfc06993d12ef9",
+      "files": 107,
+      "bytes": 678067,
+      "excluded_directories": 2,
+      "unsupported_files": 7,
+      "omissions": []
+    },
+    "release_readiness": "not_assessed"
+  },
+  "baseline_inventory_comparison": {
+    "schema_version": 1,
+    "commit": "8d88b19afea726b7c79988c5f6958f65d13995ba",
+    "tracked_files": 116,
+    "bytes": 700621,
+    "differences_from_original_audit": []
+  },
+  "not_run": [
+    "actual AI configuration",
+    "AE product runtime",
+    "local PowerShell/Windows runtime",
+    "new branch GitHub CI",
+    "release archive redownload"
+  ],
+  "raw_local_log_hashes": {
+    "work/repeat-v5-probe-workspace-verified/mutated-self-test.log": "e6af6ed3451cf887b89833ef322fdd049043b56c2d261a955907cd0da12d47ea",
+    "work/repeat-v5-self-test.log": "21a00975c8739f27b9cdc85464a62426717ca3eb664e76ef8755a4ad103409a5"
+  }
+}

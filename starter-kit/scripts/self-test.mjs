@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { checkVersion } from './lib/version.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(__filename), "..", "..");
@@ -83,10 +84,9 @@ for (const p of required) {
 
 const versionPath = path.join(repoRoot, "VERSION");
 if (fs.existsSync(versionPath)) {
-  const version = fs.readFileSync(versionPath, "utf8").trim();
-  if (!/^\d+\.\d+\.\d+$/.test(version)) fail("VERSION is not semver: " + version);
-  const readme = fs.readFileSync(path.join(repoRoot, "README.md"), "utf8");
-  if (!readme.includes("v" + version)) fail("README baseline does not match VERSION " + version);
+  try {
+    checkVersion(fs.readFileSync(versionPath,'utf8'), fs.readFileSync(path.join(repoRoot,'README.md'),'utf8'), fs.readFileSync(path.join(repoRoot,'CHANGELOG.md'),'utf8'));
+  } catch (e) { fail(e.message); }
 }
 
 const files = walk(repoRoot);
@@ -399,7 +399,7 @@ const requirePowerShell = process.argv.includes("--require-powershell");
 if (requirePosix && (process.platform === "win32" || run("zsh", ["--version"]).status !== 0)) fail("required POSIX runtime unavailable");
 if (requirePowerShell && !ps) fail("required PowerShell runtime unavailable");
 console.log("coverage: Node=RUN; POSIX=" + (process.platform !== "win32" && run("zsh", ["--version"]).status === 0 ? "RUN" : "NOT RUN") + "; PowerShell=" + (ps ? "RUN" : "NOT RUN"));
-for (const suite of ["hardening.mjs", "contracts.mjs", "followup.mjs"]) {
+for (const suite of ["hardening.mjs", "contracts.mjs", "followup.mjs", "deep-audit.mjs"]) {
   const r = run(process.execPath, [path.join(repoRoot, "starter-kit/tests", suite)]);
   process.stdout.write(r.stdout || "");
   if (r.status !== 0) fail(suite + ": " + (r.stderr || r.stdout).trim());

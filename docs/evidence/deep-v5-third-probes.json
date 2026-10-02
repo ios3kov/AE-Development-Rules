@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "kind": "audit_observations_not_release_certification",
+  "baseline_commit": "8d88b19afea726b7c79988c5f6958f65d13995ba",
+  "audit_start_commit": "cdfef14f27538458e6c20da70198b03c7117eb3b",
+  "utc": "2026-10-02T10:12:36.774Z",
+  "environment": {
+    "node": "v24.13.1",
+    "platform": "darwin",
+    "compiler": {
+      "exit": 0,
+      "stdout": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+      "stderr": ""
+    }
+  },
+  "inventory": {
+    "schema_version": 1,
+    "commit": "cdfef14f27538458e6c20da70198b03c7117eb3b",
+    "git_status": "",
+    "tracked_files": 119,
+    "bytes": 738960,
+    "differences_from_published_audit": [
+      "README.md"
+    ],
+    "added_audit_files": [
+      "docs/DEEP_AUDIT_5_0_0_REPEAT.md",
+      "docs/DEEP_AUDIT_BACKLOG.md",
+      "docs/evidence/deep-v5-repeat-probes.json"
+    ],
+    "removed_files": [],
+    "nonregular_tracked_files": []
+  },
+  "probe_harness_sha256": "3b2c0d4b862ff447c127e4f3c8e5a81fec73e2ab3d74f9281cc4efe9e14e6405",
+  "input_sources": [
+    {
+      "case": "ordinary",
+      "path": "source.cpp",
+      "bytes_hex": "696e742050465f436d645f52454e444552203d20303b0a636f6e737420636861722a206d61726b6572203d2022706c61696e223b0a"
+    },
+    {
+      "case": "cyrillic",
+      "path": "source.cpp",
+      "bytes_hex": "696e742050465f436d645f52454e444552203d20303b0a636f6e737420636861722a206d61726b6572203d2022d182d0b5d181d182223b0a"
+    },
+    {
+      "case": "valid-replacement-character",
+      "path": "source.cpp",
+      "bytes_hex": "696e742050465f436d645f52454e444552203d20303b0a636f6e737420636861722a206d61726b6572203d2022efbfbd223b0a"
+    },
+    {
+      "case": "malformed-utf8",
+      "path": "source.cpp",
+      "bytes_hex": "696e742050465f436d645f52454e444552203d20303b0a2f2f20ff0a"
+    }
+  ],
+  "observations": [
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "standard.commit",
+      "suffix_codepoints": [
+        10
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.standard.commit: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "standard.commit",
+      "suffix_codepoints": [
+        13
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.standard.commit: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "standard.commit",
+      "suffix_codepoints": [
+        13,
+        10
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.standard.commit: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "standard.commit",
+      "suffix_codepoints": [
+        8232
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.standard.commit: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "standard.commit",
+      "suffix_codepoints": [
+        8233
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.standard.commit: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "candidate.commit",
+      "suffix_codepoints": [
+        10
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.candidate.commit: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "candidate.commit",
+      "suffix_codepoints": [
+        13
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.candidate.commit: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "candidate.commit",
+      "suffix_codepoints": [
+        13,
+        10
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.candidate.commit: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "candidate.commit",
+      "suffix_codepoints": [
+        8232
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.candidate.commit: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "candidate.commit",
+      "suffix_codepoints": [
+        8233
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.candidate.commit: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "candidate.sha256",
+      "suffix_codepoints": [
+        10
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.candidate.sha256: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "candidate.sha256",
+      "suffix_codepoints": [
+        13
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.candidate.sha256: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "candidate.sha256",
+      "suffix_codepoints": [
+        13,
+        10
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.candidate.sha256: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "candidate.sha256",
+      "suffix_codepoints": [
+        8232
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.candidate.sha256: invalid pattern\n"
+    },
+    {
+      "id": "identity-trailing-linebreak-candidate",
+      "field": "candidate.sha256",
+      "suffix_codepoints": [
+        8233
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: $.candidate.sha256: invalid pattern\n"
+    },
+    {
+      "id": "declared-policy-phase-matrix",
+      "cases": 240,
+      "mismatches": [],
+      "scope": "Cross-check declared gate/phase/status/source-state policy only; project classification and AE results not certified"
+    },
+    {
+      "id": "api-source-encoding",
+      "case": "ordinary",
+      "source_sha256": "e0d6b60a4df49f1a7a4886d5945199c3f4094f96e665f4e4dc2c33d02374e577",
+      "valid_utf8": true,
+      "exit": 0,
+      "stdout": "Collection: COMPLETE (1 candidate files)\nEvidence: <owned-probe-workspace>/ordinary-inventory\nNOTE: lexical inventory only; map suite revisions/Min Versions separately; excluded generated/build dependencies need separate audit\n",
+      "stderr": "",
+      "syntax_only": {
+        "exit": 0,
+        "stderr": ""
+      },
+      "scope": "Synthetic C++ syntax/lexical inventory; PF name is synthetic, no real Adobe SDK/API use or AE run"
+    },
+    {
+      "id": "api-source-encoding",
+      "case": "cyrillic",
+      "source_sha256": "bc311a889bf41e1700df650c89545a6764fe344defdb739321e1e314ea1e326f",
+      "valid_utf8": true,
+      "exit": 0,
+      "stdout": "Collection: COMPLETE (1 candidate files)\nEvidence: <owned-probe-workspace>/cyrillic-inventory\nNOTE: lexical inventory only; map suite revisions/Min Versions separately; excluded generated/build dependencies need separate audit\n",
+      "stderr": "",
+      "syntax_only": {
+        "exit": 0,
+        "stderr": ""
+      },
+      "scope": "Synthetic C++ syntax/lexical inventory; PF name is synthetic, no real Adobe SDK/API use or AE run"
+    },
+    {
+      "id": "api-source-encoding",
+      "case": "valid-replacement-character",
+      "source_sha256": "d57e00a8773b4c74fa9717e861d555dc9e673d31f68b5a70f744949752be2a28",
+      "valid_utf8": true,
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: non UTF-8 candidate\n",
+      "syntax_only": {
+        "exit": 0,
+        "stderr": ""
+      },
+      "scope": "Synthetic C++ syntax/lexical inventory; PF name is synthetic, no real Adobe SDK/API use or AE run"
+    },
+    {
+      "id": "api-source-encoding",
+      "case": "malformed-utf8",
+      "source_sha256": "373e8b4057c02126a3cc724315afea3cc9381f4ca0617ce8724f6730a2df6fb9",
+      "valid_utf8": false,
+      "decoder_error": "The encoded data was not valid for encoding utf-8",
+      "exit": 2,
+      "stdout": "",
+      "stderr": "INCOMPLETE: non UTF-8 candidate\n",
+      "syntax_only": {
+        "exit": 0,
+        "stderr": ""
+      },
+      "scope": "Synthetic C++ syntax/lexical inventory; PF name is synthetic, no real Adobe SDK/API use or AE run"
+    }
+  ],
+  "controls": {
+    "identity_without_trailing_linebreak": {
+      "exit": 0,
+      "stdout": "{\n  \"recorded_policy\": \"PASS\",\n  \"release_readiness\": \"NOT_ASSESSED\",\n  \"checks\": 1,\n  \"deferred_checks\": 0\n}\n",
+      "stderr": ""
+    }
+  },
+  "static_scan": {
+    "schema_version": 1,
+    "tool_version": "2.0.0",
+    "time_utc": "2026-10-02T10:14:50.749133+00:00",
+    "source_identity": {
+      "commit": "cdfef14f27538458e6c20da70198b03c7117eb3b",
+      "dirty": false
+    },
+    "profile": "code",
+    "release_readiness": "not_assessed",
+    "inventory": {
+      "scope_digest": "a18536f1050dc72aad2376dee7f1eac0f6c20ded3a9ed543f6cdeaf445352866",
+      "files": 109,
+      "bytes": 712564,
+      "excluded_directories": 2,
+      "unsupported_files": 7,
+      "omissions": []
+    },
+    "checks": [
+      {
+        "id": "inventory",
+        "status": "completed",
+        "reason": "Bounded text scope inventoried."
+      },
+      {
+        "id": "core.static",
+        "status": "completed"
+      },
+      {
+        "id": "git.index",
+        "status": "completed"
+      },
+      {
+        "id": "vibe.check_config",
+        "status": "completed"
+      },
+      {
+        "id": "vibe.check_platform_flags",
+        "status": "completed"
+      },
+      {
+        "id": "vibe.check_rate_limit_and_ai",
+        "status": "completed"
+      },
+      {
+        "id": "vibe.check_authz",
+        "status": "completed"
+      },
+      {
+        "id": "vibe.check_platform_configs",
+        "status": "completed"
+      },
+      {
+        "id": "supply_chain.github_actions",
+        "status": "completed",
+        "files_scanned": 1
+      }
+    ],
+    "findings": [],
+    "not_assessed": [
+      "Git history",
+      "runtime headers/cookies",
+      "browser flows and accessibility",
+      "authorization and E2EE",
+      "performance under load",
+      "backup restore and rollback",
+      "legal applicability",
+      "dependency vulnerabilities"
+    ],
+    "scope_note": "Generated/dependency directories and unsupported file types excluded. No finding is a safety guarantee.",
+    "exit_code": 0,
+    "verdict": "no_findings_in_scanned_scope"
+  },
+  "finding_ids": [
+    "D08"
+  ],
+  "rejected_candidates": [
+    "identity-trailing-linebreak-candidate",
+    "declared-policy-phase-matrix"
+  ],
+  "prior_findings": "D01-D07 remain OPEN; retained previous reproductions, not rerun by this probe harness",
+  "limits": [
+    "Synthetic C++ identifiers; no Adobe SDK/API invocation",
+    "Fatal UTF-8 decoding is the encoding oracle; compiler syntax alone is insufficient",
+    "Declared policy matrix only; real applicability, N/A approval and safety classification not certified",
+    "Actual AI behavior NOT RUN",
+    "AE runtime NOT RUN",
+    "Windows and Linux runtime probes NOT RUN",
+    "Audit documentation only; canonical requirements and tools unchanged"
+  ]
+}

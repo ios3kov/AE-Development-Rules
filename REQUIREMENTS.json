@@ -84,6 +84,12 @@
       "source": "AI_ENTRYPOINT.md",
       "section": "3",
       "meaning": "Risk and delivery remain independent"
+    },
+    {
+      "id": "IPC-RECOVERY-001",
+      "source": "profiles/TOOLS.md",
+      "section": "22",
+      "meaning": "Do not infer rollback from unknown IPC mutation outcome; scoped reconcile/retry guidance"
     }
   ]
 }

@@ -6,16 +6,20 @@
 
 ## Версия стандарта
 
-**Стабильная версия стандарта: v5.0.0 — 2026-10-02.**
+**Стабильная версия стандарта: v5.1.0 — 2026-10-02.**
+
+5.1.0 включает исправления глубокого аудита 5.0.0. Доказательства выпуска с точным commit, платформенными CI и checksums архивов приложены к GitHub Release.
 
 - [VERSION](VERSION)
 - [CHANGELOG.md](CHANGELOG.md)
+- [Описание релиза и переход на 5.1.0](docs/releases/5.1.0.md)
 - [Описание релиза и переход на 5.0.0](docs/releases/5.0.0.md)
-- [GitHub Release v5.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v5.0.0)
+- [GitHub Release v5.1.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v5.1.0)
+- [Предыдущий GitHub Release v5.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v5.0.0)
 
 Для release проекта фиксируйте и версию стандарта, и конкретный commit SHA.
 
-Это major-обновление процесса. Уже принятый проектом baseline сохраняется до осознанного перехода; порядок миграции указан в описании релиза. 5.0.0 — первая публикация этого репозитория через GitHub Release; предыдущие версии в CHANGELOG описывают историю правил, а не наличие опубликованных GitHub-тегов.
+5.1.0 — minor release: исправления enforcement существующих требований и необязательные материалы для ИИ. Уже принятый проектом baseline сохраняется до осознанного перехода; миграция tooling описана отдельно. 5.0.0 — первая публикация этого репозитория через GitHub Release; предыдущие версии в CHANGELOG описывают историю правил, а не наличие опубликованных GitHub-тегов.
 
 ## С чего начинать
 
@@ -77,5 +81,9 @@
 - [Шаблон состояния продолжающейся задачи](starter-kit/templates/AI_TASK_STATE.md)
 - [Изменения протокола ИИ и проверка обновления](docs/AI_PROTOCOL_UPDATE.md)
 - [Дальнейший аудит и список доработок протокола ИИ](docs/AI_PROTOCOL_BACKLOG.md)
+- [Замечания глубокого аудита 5.0.0 и их состояние](docs/DEEP_AUDIT_BACKLOG.md)
+- [Исправления D01–D10 и внедрение I01–I04](docs/DEEP_AUDIT_REMEDIATION_5_1.md)
+- [Versioned errata для принятых baseline](docs/ERRATA.md)
+- [Краткие примеры решений для ИИ](docs/AI_DECISION_EXAMPLES.md)
 
 Скрипты требуют Node.js 22+; POSIX wrappers также требуют zsh. При копировании сохранять весь каталог `scripts`, включая `lib`, и соответствующие schemas/registry для project-record tooling.

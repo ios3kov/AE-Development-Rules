@@ -30,7 +30,7 @@ test('F08 reversed/unbounded/missing section ranges reject; valid ranges and R0 
     const write = section => { const changed=structuredClone(m); changed.rule_groups.find(g=>g.id==='PERF').section=section; fs.writeFileSync(path.join(tmp,'rules-manifest.yaml'),JSON.stringify(changed)); };
     for (const section of ['19-17','17-1000000000','9007199254740992','17-22','00']) { write(section); assert.throws(()=>loadManifest(tmp),section); }
     write('17-19'); assert.doesNotThrow(()=>loadManifest(tmp));
-    write('17'); assert.doesNotThrow(()=>loadManifest(tmp));
+    write('17'); assert.throws(()=>loadManifest(tmp),/unmapped canonical section/);
   } finally { fs.rmSync(tmp,{recursive:true,force:true}); }
 });
 
@@ -88,8 +88,8 @@ test('F06 Validation separates prerequisites from user-only questions; Release a
 import { prepareScenario, inspectScenario } from '../scripts/lib/ai-fixtures.mjs';
 test('F05 fixtures cover every scenario; preparation preserves resume state and inspection observes unauthorized changes', () => {
   const catalog=read('starter-kit/fixtures/ai/cases.json');
-  assert.equal(new Set(catalog.cases.map(c=>c.id)).size,21);
-  for (let n=1;n<=20;n++) assert.ok(catalog.cases.some(c=>c.id===`AI-EVAL-${String(n).padStart(2,'0')}`));
+  assert.equal(new Set(catalog.cases.map(c=>c.id)).size,31);
+  for (let n=1;n<=25;n++) assert.ok(catalog.cases.some(c=>c.id===`AI-EVAL-${String(n).padStart(2,'0')}`));
   for (const c of catalog.cases) {assert.ok(c.rubric.expected.length);assert.ok(c.rubric.forbidden.length);}
   const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'ae-agent-fixture-'));
   try {
