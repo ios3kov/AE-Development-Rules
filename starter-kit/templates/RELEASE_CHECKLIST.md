@@ -35,6 +35,7 @@ This checklist is for a **Release Candidate**, not a normal Validation Build. Fo
 
 - [ ] Install/update/uninstall checked where applicable
 - [ ] User guide matches this exact release
+- [ ] Applicable install/update, first run/core workflow, supported versions and known limitations are covered; mandatory gaps are resolved before publication
 - [ ] Supported AE versions come from compatibility evidence
 - [ ] Known limitations documented
 - [ ] Artifact type identified before applying signing gates
@@ -76,3 +77,14 @@ Certificate/signing-service access is not a prerequisite. Integrity-tool PASS do
 - [ ] No mandatory Test: BLOCKED / NOT RUN
 - [ ] Every Test: N/A has a reason
 - [ ] Evidence belongs to this exact candidate
+
+## After confirmed publication
+
+Follow [Release §26](../../profiles/RELEASE.md#пользовательская-документация-и-передача-после-релиза).
+
+- [ ] Final reply contains verified release and version-matching user-guide links/accessible paths
+- [ ] User is explicitly invited to open the install/getting-started instructions
+- [ ] Additional documentation gaps have a concrete proposed next scope; when none exist, direct the user to the existing guide
+- [ ] A subsequent “what next?” first checks documentation and points to the guide or identifies the actual gap
+
+These are handoff actions after publication, not results to mark complete in advance. A missing mandatory guide is not an optional follow-up; report a late discovery honestly without silently rewriting released artifacts/tags. Additional documentation does not authorize product changes or a new publication.
