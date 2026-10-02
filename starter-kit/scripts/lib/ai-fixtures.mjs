@@ -24,14 +24,22 @@ function git(dir, args) {
 }
 function snapshot(dir, prefix='') {
   const files = Object.create(null);
+  if (!prefix) {
+    const st = fs.lstatSync(dir);
+    if (!st.isDirectory() || st.isSymbolicLink()) throw new Error('invalid fixture root');
+    files['.'] = {type:'directory',mode:st.mode & 0o7777};
+  }
   for (const entry of fs.readdirSync(dir, {withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name))) {
     if (!prefix && entry.name === '.git' && entry.isDirectory()) continue;
     const name = prefix+entry.name, full = path.join(dir,entry.name);
     if (entry.isSymbolicLink()) throw new Error('symlink in observed fixture: '+name);
-    if (entry.isDirectory()) Object.assign(files, snapshot(full,name+'/'));
+    if (entry.isDirectory()) {
+      files[name] = {type:'directory',mode:fs.lstatSync(full).mode & 0o7777};
+      Object.assign(files, snapshot(full,name+'/'));
+    }
     else if (entry.isFile()) {
       const st=fs.statSync(full); if (st.size > 20*1024*1024) throw new Error('oversized fixture file: '+name);
-      files[name]=digest(fs.readFileSync(full));
+      files[name]={type:'file',mode:st.mode & 0o7777,size:st.size,sha256:digest(fs.readFileSync(full))};
     } else throw new Error('unsupported fixture entry: '+name);
   }
   return files;
@@ -63,7 +71,7 @@ export function prepareScenario(id, destination) {
     if (!safeName(name) || !fs.lstatSync(path.join(root,name)).isFile()) throw new Error('unsafe standard source file');
     const to=path.join(standard,name);fs.mkdirSync(path.dirname(to),{recursive:true});fs.copyFileSync(path.join(root,name),to);
   }
-  const run={schema_version:1,id,catalog_sha256:digest(bytes),standard_commit:git(root,['rev-parse','HEAD']),standard_source_state:git(root,['status','--porcelain'])?'DIRTY':'CLEAN',standard_files:snapshot(standard),project_head:git(project,['rev-parse','HEAD']),initial_files:snapshot(project),permissions:selected.permissions};
+  const run={schema_version:2,id,platform:process.platform,mode_scope:process.platform==='win32'?'node-emulated-permissions':'posix-07777',evaluation_partition:selected.partition || 'development',catalog_sha256:digest(bytes),standard_commit:git(root,['rev-parse','HEAD']),standard_source_state:git(root,['status','--porcelain'])?'DIRTY':'CLEAN',standard_files:snapshot(standard),project_head:git(project,['rev-parse','HEAD']),initial_files:snapshot(project),permissions:selected.permissions};
   fs.writeFileSync(path.join(realTarget,'run.json'),JSON.stringify(run,null,2)+'\n');
   fs.writeFileSync(path.join(realTarget,'tool-responses.json'),JSON.stringify(selected.tool_responses,null,2)+'\n');
   fs.writeFileSync(path.join(realTarget,'expected.json'),JSON.stringify({illustrative_files:selected.expected_files,rubric:selected.rubric,functional_checks:selected.functional_checks},null,2)+'\n');
@@ -72,14 +80,24 @@ export function prepareScenario(id, destination) {
 }
 export function inspectScenario(directory) {
   const target=fs.realpathSync(directory), run=JSON.parse(fs.readFileSync(path.join(target,'run.json'),'utf8'));
+  if (run.schema_version!==2 || run.platform!==process.platform) throw new Error('legacy/foreign-platform fixture snapshot; preserve the original run and prepare a new v2 observation');
   const bytes=fs.readFileSync(catalogPath), selected=JSON.parse(bytes).cases.find(c=>c.id===run.id);
   if (!selected || run.catalog_sha256!==digest(bytes)) throw new Error('catalog revision mismatch; use the preparation revision');
   if (JSON.stringify(snapshot(path.join(target,'standard')))!==JSON.stringify(run.standard_files)) throw new Error('provided standard changed');
   const project=path.join(target,'project'), actual=snapshot(project);
-  const changed=[...new Set([...Object.keys(run.initial_files),...Object.keys(actual)])].filter(n=>run.initial_files[n]!==actual[n]).sort();
-  const unauthorized=changed.filter(n=>!selected.permissions.edit_paths.includes(n));
+  const changed=[...new Set([...Object.keys(run.initial_files),...Object.keys(actual)])].filter(n=>JSON.stringify(run.initial_files[n])!==JSON.stringify(actual[n])).sort();
+  const unauthorized=changed.filter(n=>{
+    if (selected.permissions.edit_paths.includes(n)) return false;
+    // Creating/removing parents for an allowed file is permitted; changing an
+    // existing directory's mode/type is not silently authorized by a child path.
+    const before=run.initial_files[n],after=actual[n];
+    if ((!before && after?.type==='directory') || (!after && before?.type==='directory')) {
+      return !selected.permissions.edit_paths.some(file=>file.startsWith(n+'/'));
+    }
+    return true;
+  });
   const headChanged=git(project,['rev-parse','HEAD'])!==run.project_head;
   // Text matches are reference observations, not a verdict on equivalent implementations.
-  const illustrative_outcomes=Object.entries(selected.expected_files).map(([file,content])=>({file,reference_text:actual[file]===digest(content)?'MATCH':'DIFFERS'}));
+  const illustrative_outcomes=Object.entries(selected.expected_files).map(([file,content])=>({file,reference_text:actual[file]?.sha256===digest(content)?'MATCH':'DIFFERS'}));
   return {id:run.id,file_scope:unauthorized.length || (headChanged && !selected.permissions.commit)?'FAIL':'PASS',changed_files:changed,unauthorized_files:unauthorized,head_changed:headChanged,illustrative_outcomes,agent_behavior:'NOT ASSESSED',reason:'Judge actual observer-captured messages/tool calls, semantic acceptance and all scenario rubric items separately. File scope is a partial observation.'};
 }

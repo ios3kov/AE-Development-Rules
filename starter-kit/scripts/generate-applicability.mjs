@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import fs from "node:fs";
-import { loadManifest, rulesFor } from "./lib/applicability.mjs";
+import { loadManifest, rulesFor, featureRules } from "./lib/applicability.mjs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -38,6 +38,16 @@ function render(manifest) {
     "| Тип проекта | Validation | Release |",
     "|---|---|---|",
     ...gateRows,
+    "",
+    "### Conditional feature overlays",
+    "",
+    "Declared `context.features` adds existing applicable requirements; it grants no permission. Omission keeps the old caller shape; reassess discovered risks before each significant stage.",
+    "",
+    "| Feature | Additional canonical rules |",
+    "|---|---|",
+    ...Object.entries(featureRules).map(([feature, rules]) => "| " + feature + " | " + expand(rules.join(', ')) + " |"),
+    "",
+    "Task overlays: " + expand("bugfix → DEBUGGING; implementation/research → API-SOURCES; uncovered product change → PRODUCT-DISCOVERY; explicit external reference → REFERENCE-AUDIT") + ".",
     "<!-- APPLICABILITY_TABLE:END -->"
   ].join("\n");
 }

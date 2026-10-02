@@ -15,10 +15,14 @@ try {
       if (stat.isDirectory()) walk(file);
       else if (/\.(c|cc|cpp|cxx|h|hpp|hxx|inl|ixx|r|m|mm)$/i.test(name)) {
         if (!stat.isFile() || stat.size > 2 * 1024 ** 2) throw new Error('unsupported/oversized candidate');
-        const text = fs.readFileSync(file, 'utf8');
-        if (text.includes('\uFFFD')) throw new Error('non UTF-8 candidate');
+        const bytes = fs.readFileSync(file);
+        // Fatal decoding rejects malformed original bytes, not a valid literal U+FFFD.
+        // Retain an initial BOM in text and hash the exact original bytes.
+        let text;
+        try { text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes); }
+        catch { throw new Error('non UTF-8 candidate'); }
         const relative = path.relative(source, file).split(path.sep).join('/');
-        candidates.push({ path: relative, sha256: sha256(text) });
+        candidates.push({ path: relative, sha256: sha256(bytes) });
         text.split(/\r?\n/).forEach((line, i) => {
           if (/(PF_|AEGP_|SmartFX|SmartPreRender|SmartRender|kPF|kAEGP)/.test(line)) usages.push(`${relative}:${i + 1}:${line}`);
           for (const m of line.matchAll(/\b(PF_[A-Za-z0-9_]+|AEGP_[A-Za-z0-9_]+|kPF[A-Za-z0-9_]*|kAEGP[A-Za-z0-9_]*)\b/g)) symbols.add(m[0]);

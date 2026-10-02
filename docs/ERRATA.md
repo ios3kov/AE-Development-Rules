@@ -1,0 +1,22 @@
+# Versioned errata
+
+Known defects and temporary controls for adopted baselines. This registry does not change an adopted version in place, authenticate approvals, close mandatory product checks or certify an AI configuration. Keep original reports/Evidence. Adoption remains governed by [Engineering §34](../core/ENGINEERING.md#34-версия-стандарта-и-фиксация-baseline).
+
+Affected baseline for the entries below: **5.0.0**, published tag peeled to `8d88b19afea726b7c79988c5f6958f65d13995ba`. Observation date: 2026-10-02. Historical findings/reproductions: [deep-audit ledger](DEEP_AUDIT_BACKLOG.md). Correction tracking: [5.1 remediation](DEEP_AUDIT_REMEDIATION_5_1.md).
+
+| ID | Impact on affected baseline | Temporary control while retaining 5.0.0 | Corrected version / availability |
+| --- | --- | --- | --- |
+| D01 | Reading map can omit applicable runtime/safety and unmapped sections. | Read Tools §22 for JSX/helper/IPC, Engineering §14 for security-sensitive panels and applicable missing sections directly. Keep micro-helper scope proportional. | 5.1.0 candidate, unpublished |
+| D02 | Fixture file_scope misses chmod/empty directory metadata changes. | Review filesystem types/modes and actual tool traces separately; never infer agent PASS from file_scope alone. | 5.1.0 candidate, run snapshot v2, unpublished |
+| D03 | Sparse/inherited direct-JS record arrays can be accepted. | Feed the validator parsed JSON through the CLI; do not use non-JSON/sparse direct-library inputs. | 5.1.0 candidate, unpublished |
+| D04 | Whitespace-only stapling N/A explanation passes wrapper syntax. | Independently require a substantive project-approved explanation; signing/download checks retain their own scope. | 5.1.0 candidate, unpublished |
+| D05 | Missing task overlays can produce undefined selected IDs. | Keep released definitions; manually verify DEBUGGING/API-SOURCES/PRODUCT-DISCOVERY identity and every returned ID against the manifest. | 5.1.0 candidate, unpublished |
+| D06 | Canonical source link may escape checkout and change with clean Git. | Use ordinary canonical files/ancestors from the adopted checkout; verify source hashes, not HEAD alone. | 5.1.0 candidate, unpublished |
+| D07 | Artifact comparison omits special POSIX mode bits. | Separately inspect relevant bits; do not claim that v1 record attests them. Preserve record/verifier v1 together. | 5.1.0 candidate, artifact/manifest v2, unpublished |
+| D08 | Valid literal U+FFFD can be rejected as non-UTF-8. | Validate original bytes with strict UTF-8 tooling; record the false rejection rather than dropping the source from inventory. | 5.1.0 candidate, unpublished |
+| D09 | Version substring/leading-zero checks can miss metadata errors. | Manually compare the authoritative README version, VERSION and current CHANGELOG heading before release. | 5.1.0 candidate, unpublished |
+| D10 | Reordered object keys can conceal duplicate Evidence items. | Deduplicate Evidence by actual JSON value/path/hash; repeated items are not independent corroboration. | 5.1.0 candidate, unpublished |
+
+Only the listed baseline was examined; other versions are not automatically declared affected or corrected. Candidate fixes require matching local regression Evidence, recorded in remediation. None of these candidates has a release URL yet. When an authorized release exists, record its immutable tag/commit and replace availability with that verified identity; do not edit the old findings into historical PASS.
+
+For future entries SHOULD retain: stable ID, affected version/commit/range with basis, observation date, impact/applicability, actual owner where assigned, temporary control, correction version/commit and publication state, regression link, disposition/revisit condition. Unassigned ownership remains explicitly unassigned; no invented approval. A proposed process requirement that changes MUST/gate semantics still needs §34 compatibility/version analysis.

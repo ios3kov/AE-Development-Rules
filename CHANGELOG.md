@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.1.0 — Unreleased (2026-10-02)
+
+Minor candidate; not a published tag/release. Repairs D01–D10 and implements optional I01–I04 from the five-pass 5.0.0 deep audit. No new universal MUST/gate contract is introduced. Existing project baselines remain frozen until explicit adoption. [Remediation](docs/DEEP_AUDIT_REMEDIATION_5_1.md), [errata](docs/ERRATA.md), [migration](docs/releases/5.1.0.md).
+
+- Reading map now covers all canonical §§1–41: component/runtime and Critical code-safety minima, scoped state/completion/automation guidance and optional typed feature overlays. Undefined selected IDs, deleted/misbound task overlays and linked canonical sources/ancestors reject.
+- Fixture snapshot v2 records types, modes and empty directories; artifact/manifest v2 includes POSIX special mode bits. Windows mode scope remains Node-emulated. Legacy records are preserved with their original tools; new verifiers reject them rather than silently asserting stronger Evidence.
+- Direct record validation rejects sparse/inherited array items. JSON uniqueness ignores object member order while retaining array order, with bounded comparisons.
+- Whitespace-only stapling N/A explanations reject. API inventory uses strict UTF-8 decoding and original byte hashes, accepting literal U+FFFD/BOM. Version checks compare one authoritative full README field and current CHANGELOG with normal SemVer VERSION.
+- Unknown IPC outcome guidance recommends scoped reconciliation/deduplication without inferring rollback from timeout. Versioned errata preserve affected baseline, temporary controls and candidate availability.
+- Adds five AE behavior scenarios and five held-out variants: 25 scenarios / 31 starting states. Fixture preparation and illustrative pure/mock acceptance checks do not run/certify a model or AE. Adds three source-linked decision examples.
+- New focused regressions preserve the existing routing/product/delivery contracts. Local checks do not imply Windows/AE/model/remote CI execution or release readiness.
+
 ## 5.0.0 — 2026-10-02
 
 Major AI/process release. Adds mandatory trust, resume-state and scoped-autonomy contracts for AI-assisted work, plus target-source verification when adding/changing host API use. Includes the unreleased 4.1.0 audit remediation below; no separate 4.1.0 release is implied. 5.0.0 is the first GitHub Release/tag for this repository; earlier version sections record the standard's development history. The previous 4.0.0 project baseline is retained until consciously migrated. See [release notes](docs/releases/5.0.0.md).

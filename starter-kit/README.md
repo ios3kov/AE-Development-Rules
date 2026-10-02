@@ -138,7 +138,7 @@ Self-test coverage is printed. CI requires POSIX on Linux/macOS and PowerShell o
 
 ### AI follow-up evaluation
 
-[Controlled fixtures](fixtures/ai/README.md) cover 20 scenarios with 21 starting states. `prepare-ai-scenario.mjs ID NEW_DIRECTORY` creates an isolated synthetic repository and observer inputs; `inspect-ai-scenario.mjs DIRECTORY` observes file scope and illustrative outcomes. An external runner must enforce permissions and capture actual traces; these tools do not run/certify a model or provide an OS sandbox. Follow-up regressions cover F01/F05/F06/F08/F09/F10/F12. Actual agent behavior remains a separate recorded evaluation.
+[Controlled fixtures](fixtures/ai/README.md) cover 25 scenarios with 31 starting states, including five held-out AE variants. `prepare-ai-scenario.mjs ID NEW_DIRECTORY` creates an isolated synthetic repository and observer inputs; `inspect-ai-scenario.mjs DIRECTORY` observes file scope and illustrative outcomes. An external runner must enforce permissions and capture actual traces; these tools do not run/certify a model or provide an OS sandbox. Follow-up regressions cover F01/F05/F06/F08/F09/F10/F12. Actual agent behavior remains a separate recorded evaluation.
 
 Use [REQUIREMENT_TRACEABILITY.md](templates/REQUIREMENT_TRACEABILITY.md) as a compact optional section of the existing product plan; do not confuse product requirement IDs with the standard's REQUIREMENTS.json IDs.
 
@@ -164,3 +164,15 @@ Here an older confirmed product contract exists, but does not cover the new scop
 Bugfix adds DEBUGGING; implementation/research adds API-SOURCES. Light profiles expose the applicable minimum Git, candidate identity, regression and Evidence sections even for JSX; apply their existing scope exceptions proportionally. The helper validates typed context and selects reading, not permissions, applicability approval or Stage 0 completion. Components must be a dense own list of known unique IDs.
 
 CI требует POSIX runtime на Linux/macOS и PowerShell на Windows. В отчёте явно указаны RUN/NOT RUN и platform skips; платформенная проверка не считается выполненной на другом runner. Примеры CI передают базовый commit PR в preflight; локально тот же scope задаётся через `AE_PREFLIGHT_BASE_REF`.
+
+### Deep-audit migration (5.1 candidate)
+
+См. [полную миграцию](../docs/releases/5.1.0.md) и [errata 5.0.0](../docs/ERRATA.md). Это рабочая версия, ещё не опубликованный release. D01–D10 проверяются отдельной `tests/deep-audit.mjs`; self-test запускает её вместе с прежними suites.
+
+Optional `context.features` добавляет применимые reading overlays, например `['ipc']`, `['ui']`, `['updater']` или `['testing']`. Полный список генерируется в DEVELOPMENT_RULES.md. Поле можно опустить для прежнего caller shape; список должен быть dense/unique/known. Наличие feature не разрешает mutation/publication и не делает audit implementation-задачей. Все §§1–41 представлены в карте; JSX/helper получают runtime минимум, Critical CEP/UXP — code safety. Требования внутри разделов остаются соразмерными scope.
+
+Artifact record/manifest v2 учитывает POSIX `07777`, включая special bits; Windows отмечает Node-emulated mode scope. ACLs/xattrs/ownership/timestamps не аттестуются. Fixture run snapshot v2 учитывает types/modes/empty directories и platform; observer не подтверждает поведение ИИ. Старые snapshots/records новым verifier отвергаются: сохранить их с исходными tools или собрать новую v2 observation, не переписывая исторические Evidence.
+
+Project-record schema остаётся 1: direct sparse/inherited arrays и reordered duplicate Evidence отвергаются. JSON comparisons ограничены depth 64 / 100000 nodes; object key order несущественен, array order сохраняется. UTF-8 collector проверяет исходные bytes строгим decoder, принимает literal U+FFFD/BOM и сохраняет original byte hash. Stapling N/A explanation должна содержать непробельный текст; это не подтверждает approval.
+
+[Примеры решений ИИ](../docs/AI_DECISION_EXAMPLES.md) и [IPC recovery guidance](../profiles/TOOLS.md#неизвестный-результат-ipc-mutation) не подменяют actual model/AE tests. Даты исходных vendor checks остаются неизменными до реальной перепроверки.

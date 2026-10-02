@@ -249,6 +249,8 @@
 
 Если scope меняется, набор правил пересчитывается.
 
+При затронутых IPC, UI, updater, diagnostics, architecture, testing или других feature-specific рисках дополнить минимум по [generated feature overlays](DEVELOPMENT_RULES.md#conditional-feature-overlays). Routing helper принимает необязательный dense/unique `features`; отсутствие этого поля сохраняет прежний формат caller, но не отменяет применимое canonical требование. Выбор reading map и любого feature overlay не является разрешением на действия. Короткие [примеры решений](docs/AI_DECISION_EXAMPLES.md) показывают применение правил; это guidance, а не runtime Evidence.
+
 Routing helper добавляет `DEBUGGING` для bugfix и `API-SOURCES` (§3) для implementation/research независимо от Risk Profile. Light-профили сохраняют ссылки на минимальные Git/identity/regression/Evidence требования; масштаб их выполнения определяется scope, включая допустимый micro-helper. Документация и аудит сами по себе не разрешают implementation.
 
 Это оптимизация чтения, а не ослабление требований: обнаруженный существенный риск нельзя игнорировать только потому, что соответствующий модуль не был выбран сначала.

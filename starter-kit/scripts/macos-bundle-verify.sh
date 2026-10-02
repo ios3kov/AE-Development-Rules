@@ -13,7 +13,7 @@ MODE="${3:-local}"
 STAPLING="${4:-required}"
 [[ "$MODE" == "local" || "$MODE" == "public" ]] || { echo "ERROR: invalid mode" >&2; exit 2; }
 [[ "$STAPLING" == "required" || "$STAPLING" == "na" ]] || { echo "ERROR: invalid stapling policy" >&2; exit 2; }
-if [[ "$STAPLING" == "na" && -z "${AE_STAPLING_NA_REASON:-}" ]]; then
+if [[ "$STAPLING" == "na" && "${AE_STAPLING_NA_REASON:-}" != *[^[:space:]$'\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000\ufeff']* ]]; then
   echo "BLOCKED: N/A requires AE_STAPLING_NA_REASON" >&2; exit 2
 fi
 [[ ! -e "$OUT" && ! -L "$OUT" ]] || { echo "ERROR: evidence output exists" >&2; exit 2; }
