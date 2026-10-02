@@ -39,6 +39,10 @@ function snapshot(dir, prefix='') {
 export function prepareScenario(id, destination) {
   const bytes=fs.readFileSync(catalogPath), catalog=JSON.parse(bytes), selected=catalog.cases.find(c=>c.id===id);
   if (!selected) throw new Error('unknown scenario ID');
+  let sourceRoot;
+  try { sourceRoot=fs.realpathSync(git(root,['rev-parse','--show-toplevel'])); }
+  catch { throw new Error('prepare requires a Git checkout of the standard, not a source archive'); }
+  if (sourceRoot!==fs.realpathSync(root)) throw new Error('standard source must be its own Git checkout; parent repository identity is invalid');
   const target=path.resolve(destination), parent=fs.realpathSync(path.dirname(target)), realTarget=path.join(parent,path.basename(target));
   if (within(fs.realpathSync(root),realTarget)) throw new Error('prepare outside the standard repository');
   if (fs.existsSync(target) || fs.lstatSync(parent).isSymbolicLink()) throw new Error('destination must be new');

@@ -12,6 +12,7 @@ Major AI/process release. Adds mandatory trust, resume-state and scoped-autonomy
 - Newly used/changed host APIs need exact target header/doc/signature/revision applicability records; unknown API contracts cannot be fabricated.
 - Adds 20 agent-behavior scenarios with 21 controlled fixtures (two Validation variants), preparation/file-inspection tools and a reusable task-state template. Automated helper tests and actual model evaluation remain separate Evidence.
 - Follow-up F01–F12: bugfix/API and minimal Light reading coverage; no-progress handling; blocking-assumption exit criteria; compact product traceability; pre-handoff/user-question/final-acceptance distinction; PKG/payload checklist alignment; adopted-baseline instructions. Reject reversed/unbounded section ranges, sparse components/pixels, nonfinite derived render metrics and blank N/A reasons.
+- Release packaging review: fixture preparation requires the standard's own Git checkout and rejects a source archive nested in another repository before creating a run, preserving accurate source identity.
 
 ### Migration to 5.0
 

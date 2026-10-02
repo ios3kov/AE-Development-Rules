@@ -127,3 +127,19 @@ test('F05 supplied bugfix/feature outcomes satisfy unchanged acceptance tests; m
     }
   } finally {fs.rmSync(tmp,{recursive:true,force:true});}
 });
+
+test('release packaging: a nested source archive cannot borrow the parent repository identity', () => {
+  const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'ae-archive-source-'));
+  try {
+    for (const args of [['init','--initial-branch=main'],['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','-c','commit.gpgsign=false','commit','--allow-empty','-m','Parent repository']]) {
+      const r=spawnSync('git',args,{cwd:tmp,encoding:'utf8'});assert.equal(r.status,0,r.stderr);
+    }
+    const archive=path.join(tmp,'archive');
+    for (const file of ['starter-kit/scripts/prepare-ai-scenario.mjs','starter-kit/scripts/lib/ai-fixtures.mjs','starter-kit/fixtures/ai/cases.json']) {
+      fs.mkdirSync(path.dirname(path.join(archive,file)),{recursive:true});fs.copyFileSync(path.join(root,file),path.join(archive,file));
+    }
+    const dest=path.join(tmp,'new-run');
+    const r=spawnSync(process.execPath,[path.join(archive,'starter-kit/scripts/prepare-ai-scenario.mjs'),'AI-EVAL-02',dest],{encoding:'utf8'});
+    assert.equal(r.status,1,r.stderr);assert.match(r.stderr,/own Git checkout/);assert.ok(!fs.existsSync(dest));
+  } finally {fs.rmSync(tmp,{recursive:true,force:true});}
+});
