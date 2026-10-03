@@ -54,6 +54,7 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 
 ## Templates
 
+- `templates/FEATURE_SET_CHANGE.md` — delta/impact/tasks/checks для новых функций в текущем проекте
 - `templates/AI_TASK_STATE.md` — встраивается в существующий canonical status для продолжающейся задачи; отдельный файл не обязателен.
 - `templates/REFERENCE_SPECIFICATION_TEMPLATE.md`
 - `templates/PRODUCT_DISCOVERY_TEMPLATE.md`
@@ -142,7 +143,7 @@ Self-test coverage is printed. CI requires POSIX on Linux/macOS and PowerShell o
 
 [Controlled fixtures](fixtures/ai/README.md) cover 25 scenarios with 31 starting states, including five held-out AE variants. `prepare-ai-scenario.mjs ID NEW_DIRECTORY` creates an isolated synthetic repository and observer inputs; `inspect-ai-scenario.mjs DIRECTORY` observes file scope and illustrative outcomes. An external runner must enforce permissions and capture actual traces; these tools do not run/certify a model or provide an OS sandbox. Follow-up regressions cover F01/F05/F06/F08/F09/F10/F12. Actual agent behavior remains a separate recorded evaluation.
 
-Use [REQUIREMENT_TRACEABILITY.md](templates/REQUIREMENT_TRACEABILITY.md) as a compact optional section of the existing product plan; do not confuse product requirement IDs with the standard's REQUIREMENTS.json IDs.
+Use [REQUIREMENT_TRACEABILITY.md](templates/REQUIREMENT_TRACEABILITY.md) as a compact section of the existing product plan or use an equivalent record; a separate template file is optional; do not confuse product requirement IDs with the standard's REQUIREMENTS.json IDs.
 
 ### Routing context migration (5.0)
 
@@ -190,3 +191,7 @@ Follow [Engineering §21](../core/ENGINEERING.md#21-совместимость-�
 ## Safe cleanup after development
 
 Use [Process §6](../core/PROCESS.md#безопасная-уборка-репозитория-после-разработки) and the [cleanup plan/report](templates/REPOSITORY_CLEANUP.md). Review actual state and parallel ownership, preserve ignored/untracked data and verify recovery before any scoped removal. Recheck state at action time; leave unknown/changed items in place. Moving is not inherently safe. Archive managed worktrees through their supported lifecycle. Keep frozen/released artifacts and historical Evidence unchanged; backup retention/purge needs its own permission. A plan or clean Git status does not establish that cleanup was executed or correct.
+
+## End-to-end task control and new feature sets
+
+For significant work, [Process §11](../core/PROCESS.md#контроль-прохождения-задачи-и-финальная-сверка) requires applicable work/check mapping, block updates and final reconciliation against actual scope/candidate/Evidence. Use the existing task checkpoint and traceability, without duplicate documents. [Smart Entry §2.4](../AI_ENTRYPOINT.md#24-новый-набор-функций-в-текущей-разработке) and [feature delta template](templates/FEATURE_SET_CHANGE.md) preserve existing commitments while adding functions. Reuse covered Stage 0 decisions; investigate only uncovered scope. Neither a checklist nor static tests certify model behavior or AE runtime.

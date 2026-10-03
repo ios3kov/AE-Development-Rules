@@ -14,6 +14,12 @@
       "meaning": "Restore and persist actual scoped task state for continuing AI work"
     },
     {
+      "id": "FEATURE-SET-001",
+      "source": "AI_ENTRYPOINT.md",
+      "section": "2.4",
+      "meaning": "Add features by restoring actual baseline, assessing delta and revising scoped contract/tasks/checks while retaining obligations and permissions"
+    },
+    {
       "id": "AI-AUTO-001",
       "source": "AI_ENTRYPOINT.md",
       "section": "4.1",
@@ -36,6 +42,12 @@
       "source": "core/PROCESS.md",
       "section": "10",
       "meaning": "Bind evidence to the checked candidate and scope"
+    },
+    {
+      "id": "TASK-CLOSE-001",
+      "source": "core/PROCESS.md",
+      "section": "11",
+      "meaning": "Map applicable work to actual acceptance evidence and reconcile all current obligations before making a scoped completion claim"
     },
     {
       "id": "SAFE-001",
