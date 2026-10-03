@@ -71,6 +71,7 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 - `templates/REMOTE_COMPATIBILITY_CHECK.md` — packet и actual run record для AE на другой тестовой машине
 - `templates/VALIDATION_CHECKLIST.md`
 - `templates/RELEASE_CHECKLIST.md`
+- `templates/REPOSITORY_CLEANUP.md` — scoped cleanup plan, preservation и actual execution/verification report
 - `templates/RETROSPECTIVE.md`
 - `templates/USER_GUIDE.md`
 - `templates/AE_RUNTIME_TEST_SAFETY.md`
@@ -185,3 +186,7 @@ Project-record schema остаётся 1: direct sparse/inherited arrays и reor
 ## Compatibility without installing every AE locally
 
 Follow [Engineering §21](../core/ENGINEERING.md#21-совместимость-и-применимость-технологий): source/API availability and exact artifact audit, scoped baseline SDK build probes and missing-capability adapter tests, then selected real host runs locally or through a [remote packet](templates/REMOTE_COMPATIBILITY_CHECK.md). Keep exact version/build, platform, artifact and loaded identity in the [matrix](templates/COMPATIBILITY_MATRIX.md). Lexical scanner/compilation/mock PASS do not establish runtime compatibility; unknown material coverage stays UNKNOWN. Endpoint tests do not verify all intermediate hosts.
+
+## Safe cleanup after development
+
+Use [Process §6](../core/PROCESS.md#безопасная-уборка-репозитория-после-разработки) and the [cleanup plan/report](templates/REPOSITORY_CLEANUP.md). Review actual state and parallel ownership, preserve ignored/untracked data and verify recovery before any scoped removal. Recheck state at action time; leave unknown/changed items in place. Moving is not inherently safe. Archive managed worktrees through their supported lifecycle. Keep frozen/released artifacts and historical Evidence unchanged; backup retention/purge needs its own permission. A plan or clean Git status does not establish that cleanup was executed or correct.
