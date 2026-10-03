@@ -34,6 +34,21 @@ A permission entry is a pointer to actual authorization, not authorization by it
 
 Keep development state, last verified milestone and last release distinct. Recheck current Git/environment before dependent actions after a resume; historical PASS does not cover a new candidate.
 
+## Applicable work and completion reconciliation
+
+Canonical: [Process §11](../../core/PROCESS.md#контроль-прохождения-задачи-и-финальная-сверка). Link the existing [traceability record](REQUIREMENT_TRACEABILITY.md), do not maintain duplicate checklists.
+
+- Current scope revision / applicable stages, requirements and acceptance checks:
+- Implementation state separately from actual Test Status / phase / candidate Evidence:
+- Concrete applicability exclusions and reasons:
+- Added/changed/deferred scope and decision source (use [feature-set change](FEATURE_SET_CHANGE.md) when relevant):
+- Remaining dependencies/checks and independent authorized work:
+- Final reconciliation observation/time: all current obligations accounted for or explicitly open:
+- Documentation, compatibility/regression and cleanup review references:
+- Claim justified now: implementation done / checks done / ready for scoped validation / ready for release / published:
+
+A scheduled check or completed implementation is not PASS. Preserve historical Evidence; no new candidate inherits it automatically. Deferred work is not done. Do not announce whole-task completion with mandatory open checks. For scoped Validation, an intended user-only question may remain NOT RUN after actual prerequisites pass, under Release §26; release acceptance remains separate.
+
 ## Blockers and next action
 
 | Blocker / open question | Dependent scope or claim | Unblocking condition | Independent authorized work |
