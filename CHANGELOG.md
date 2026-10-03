@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 8.0.0 — 2026-10-03
 
-- Adds TASK-CLOSE-001 / Process §11: applicable requirement/task/check mapping, actual block updates and final reconciliation before completion claims, preserving phased Validation and explicit open prerequisites. Adds FEATURE-SET-001 / Smart Entry §2.4: scoped feature delta/impact/contract/tasks/check updates in existing work, retained obligations, targeted discovery and permission boundaries. Existing task-state/traceability templates are reconciled and a feature-set change template is added. No model/AE execution or release is claimed.
+- Adds TASK-CLOSE-001 / Process §11: applicable requirement/task/check mapping, actual block updates and final reconciliation before completion claims, preserving phased Validation and explicit open prerequisites. Adds FEATURE-SET-001 / Smart Entry §2.4: scoped feature delta/impact/contract/tasks/check updates in existing work, retained obligations, targeted discovery and permission boundaries. Existing task-state/traceability templates are reconciled and a feature-set change template is added. Major process contract: significant tasks now require explicit applicable-work mapping and final reconciliation. Existing baselines remain until explicit adoption. No actual model/AE execution is claimed by this rules release.
 
 ## 7.0.0 — 2026-10-03
 
