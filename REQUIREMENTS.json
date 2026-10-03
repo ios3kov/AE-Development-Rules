@@ -44,6 +44,12 @@
       "meaning": "Prove test ownership before mutation or cleanup"
     },
     {
+      "id": "CLEANUP-001",
+      "source": "core/PROCESS.md",
+      "section": "6",
+      "meaning": "Review cleanup needs and perform only scoped owned recoverable actions, preserve concurrent work and frozen artifacts, leave unknown materials in place"
+    },
+    {
       "id": "GATE-001",
       "source": "profiles/RELEASE.md",
       "section": "26",

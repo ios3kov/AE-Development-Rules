@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Adds CLEANUP-001 / Process §6: scoped repository cleanup after development, with inventory, parallel ownership, reviewed action plan, canonical path guards, preservation/recovery, action-time rechecks, dependency-safe moves, managed worktree closure, verification and separate retention policy. Unknown/changed materials stay in place. Frozen artifacts and historical Evidence are preserved. Smart Entry/Workflow, registry and a reusable plan/report template are reconciled. This is documentation only; no cleanup, model execution or publication is claimed.
+
 ## 6.2.0 — 2026-10-02
 
 - Expands Engineering §21 into a protocol for compatibility without installing all AE versions locally: source/API coverage and documented minimum host versions, exact artifact analysis, scoped SDK/fallback probes, risk-based runtime selection and remote packet/run evidence. Endpoint tests, lexical inventory and mock/compile PASS do not establish untested host compatibility. Existing Compatibility Status and per-supported-version runtime requirements remain intact. Templates and COMPAT-001 are reconciled; no actual AE/model runs are claimed by this rules release.
