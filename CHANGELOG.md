@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 7.0.0 — 2026-10-03
 
-- Adds CLEANUP-001 / Process §6: scoped repository cleanup after development, with inventory, parallel ownership, reviewed action plan, canonical path guards, preservation/recovery, action-time rechecks, dependency-safe moves, managed worktree closure, verification and separate retention policy. Unknown/changed materials stay in place. Frozen artifacts and historical Evidence are preserved. Smart Entry/Workflow, registry and a reusable plan/report template are reconciled. This is documentation only; no cleanup, model execution or publication is claimed.
+- Adds CLEANUP-001 / Process §6: scoped repository cleanup after development, with inventory, parallel ownership, reviewed action plan, canonical path guards, preservation/recovery, action-time rechecks, dependency-safe moves, managed worktree closure, verification and separate retention policy. Unknown/changed materials stay in place. Frozen artifacts and historical Evidence are preserved. Smart Entry/Workflow, registry and a reusable plan/report template are reconciled. Major process change: reviewing cleanup needs at development completion is now required. Existing project baselines remain until explicit adoption. This rules release does not execute project cleanup or model/AE tests.
 
 ## 6.2.0 — 2026-10-02
 

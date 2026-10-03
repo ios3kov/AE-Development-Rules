@@ -6,9 +6,11 @@
 
 ## Версия стандарта
 
-**Стабильная версия стандарта: v6.2.0 — 2026-10-02.**
+**Стабильная версия стандарта: v7.0.0 — 2026-10-03.**
 
-6.2.0 уточняет проверку совместимости без локальной установки всех AE: аудит API и exact artifact, SDK/fallback probes и переносимый пакет для реального запуска на другой машине. Static/mock/build checks не подтверждают непроверенные версии AE.
+7.0.0 вводит проверку потребности в безопасной уборке после разработки и протокол её выполнения: ownership, защита параллельной работы, план, проверенное восстановление и сохранность релизных материалов. Неизвестные материалы остаются на месте; перемещение тоже требует проверки зависимостей.
+
+Сохраняется введённый в 6.2.0 протокол проверки совместимости без локальной установки всех AE: аудит API и exact artifact, SDK/fallback probes и переносимый пакет для реального запуска на другой машине. Static/mock/build checks не подтверждают непроверенные версии AE.
 
 Сохраняется введённая в 6.1.0 явная передача пользовательской документации после релиза: ИИ даёт ссылку на руководство и предлагает перейти к нему; ответ на «что дальше?» начинается с проверки документации. Необходимые инструкции готовятся до публикации.
 
@@ -16,12 +18,14 @@
 
 - [VERSION](VERSION)
 - [CHANGELOG.md](CHANGELOG.md)
+- [Описание релиза и переход на 7.0.0](docs/releases/7.0.0.md)
 - [Описание релиза и переход на 6.2.0](docs/releases/6.2.0.md)
 - [Описание релиза и переход на 6.1.0](docs/releases/6.1.0.md)
 - [Описание релиза и переход на 6.0.0](docs/releases/6.0.0.md)
 - [Описание релиза и переход на 5.1.0](docs/releases/5.1.0.md)
 - [Описание релиза и переход на 5.0.0](docs/releases/5.0.0.md)
-- [GitHub Release v6.2.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v6.2.0)
+- [GitHub Release v7.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v7.0.0)
+- [Предыдущий GitHub Release v6.2.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v6.2.0)
 - [Предыдущий GitHub Release v6.1.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v6.1.0)
 - [Предыдущий GitHub Release v6.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v6.0.0)
 - [Предыдущий GitHub Release v5.1.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v5.1.0)
