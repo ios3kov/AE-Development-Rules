@@ -28,7 +28,7 @@ test('D01 runtime/safety minima, all numbered sections and optional feature rout
   for(const component of ['native','jsx','cep','uxp','helper']) assert.ok(route(m,{...context,components:[component],risk:'critical'}).rules.includes('CODE-SAFETY'),component);
   const seen=new Set();
   for(const g of m.rule_groups){if(g.section==='R0')continue;const [a,b=a]=g.section.split('-').map(Number);for(let n=a;n<=b;n++)if(n>0)seen.add(n);}
-  assert.deepEqual([...seen].sort((a,b)=>a-b),Array.from({length:41},(_,i)=>i+1));
+  assert.deepEqual([...seen].sort((a,b)=>a-b),Array.from({length:42},(_,i)=>i+1));
   for(const [feature,ids] of Object.entries(featureRules)) for(const id of ids) assert.ok(route(m,{...context,features:[feature]}).rules.includes(id),feature+'/'+id);
   assert.ok(!route(m,context).rules.includes('UPDATES'));
   for(const features of [null,['unknown'],['ui','ui'],new Array(1),Object.assign(new Array(2),{0:'ui'})]) assert.throws(()=>route(m,{...context,features}));
