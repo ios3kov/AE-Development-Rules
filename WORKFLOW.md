@@ -22,11 +22,13 @@
 
 - сначала использовать уже известный контекст;
 - задавать только вопросы, способные materially изменить продукт;
+- при взаимозависимых материальных решениях включать conditional DECISION-GRILL (§42): design tree → текущий frontier → рекомендации → следующий frontier;
+- доступные факты исследовать самостоятельно, а не перекладывать их на пользователя;
 - не отправлять большую анкету без необходимости;
 - отличать Confirmed Requirement / Derived Requirement / Assumption / Open Question / Idea / Non-goal;
 - после достаточной ясности собрать Product Vision, Product Scope, Core User Flows и Success Criteria.
 
-После применимых Reference Audit / Stage 0 переходить к Product Spec → Technical Design → Production Plan. Эти этапы MAY уточнять друг друга итеративно, но применимые exit criteria должны быть закрыты до технического проектирования соответствующего scope.
+После применимых Reference Audit / Stage 0 и закрытия triggered DECISION-GRILL переходить к Product Spec → Technical Design → Production Plan. Эти этапы MAY уточнять друг друга итеративно, но применимые exit criteria должны быть закрыты до технического проектирования соответствующего scope.
 
 ### Добавление функций в текущую работу
 
