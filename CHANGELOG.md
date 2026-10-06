@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Adds DECISION-GRILL / Process §42 and DECISION-GRILL-001: material dependent product/UX/scope decisions are resolved as a design tree/frontier interview with an explicit recommendation per question. Facts available from code, repository state, tools or sources remain the agent's responsibility. The overlay is conditional, so covered bugfixes and clear small changes do not gain an interview. Smart Entry, Product Discovery, Workflow, routing, registry and manual behavior cases are reconciled. No release or baseline upgrade is implied.
+
 ## 8.0.0 — 2026-10-03
 
 - Adds TASK-CLOSE-001 / Process §11: applicable requirement/task/check mapping, actual block updates and final reconciliation before completion claims, preserving phased Validation and explicit open prerequisites. Adds FEATURE-SET-001 / Smart Entry §2.4: scoped feature delta/impact/contract/tasks/check updates in existing work, retained obligations, targeted discovery and permission boundaries. Existing task-state/traceability templates are reconciled and a feature-set change template is added. Major process contract: significant tasks now require explicit applicable-work mapping and final reconciliation. Existing baselines remain until explicit adoption. No actual model/AE execution is claimed by this rules release.
