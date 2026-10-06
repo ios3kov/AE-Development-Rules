@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## 9.0.0 — 2026-10-06
 
-- Adds DECISION-GRILL / Process §42 and DECISION-GRILL-001: material dependent product/UX/scope decisions are resolved as a design tree/frontier interview with an explicit recommendation per question. Facts available from code, repository state, tools or sources remain the agent's responsibility. The overlay is conditional, so covered bugfixes and clear small changes do not gain an interview. Smart Entry, Product Discovery, Workflow, routing, registry and manual behavior cases are reconciled. No release or baseline upgrade is implied.
+- Adds DECISION-GRILL / Process §42 and DECISION-GRILL-001: material dependent product/UX/scope decisions are resolved as a design tree/frontier interview with an explicit recommendation per question. Facts available from code, repository state, tools or sources remain the agent's responsibility.
+- Adds conditional `decision-grill` routing overlay, Smart Entry / Product Discovery / Workflow integration, registry coverage and manual behavior review cases. Covered bugfixes and clear small changes remain interview-free.
+- Major release under Engineering §34: the new conditional MUST can require a process change for a previously compliant project when unresolved material dependent decisions exist. Existing adopted baselines remain frozen until explicit adoption. Migration and adoption notes: `docs/releases/9.0.0.md`.
 
 ## 8.0.0 — 2026-10-03
 
