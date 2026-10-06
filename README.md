@@ -83,6 +83,12 @@
 Написанный код — не проверенный продукт. **Risk Profile** (Light / Standard / Critical) и **Delivery Gate** (Development / Validation / Release) выбираются независимо. Пользовательская validation не заменяет внутренний QA.
 
 
+
+## Методические источники
+
+Conditional **DECISION-GRILL (§42)** адаптирует design-tree / frontier-rounds подход из MIT-репозитория [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me), проверенного 2026-10-06. В стандарт перенесён общий процесс принятия решений, а не текст skill: агент сам добывает доступные факты, пользователь закрывает материальные решения, зависимые вопросы открываются только после prerequisites.
+
+
 ## Starter kit
 
 Практические scripts и шаблоны для внедрения стандарта без лишней ручной работы:
