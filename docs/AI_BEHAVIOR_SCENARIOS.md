@@ -322,6 +322,19 @@ Contracts: TASK-CLOSE-001 ([Process §11](../core/PROCESS.md#контроль-п
 
 Inspect actual messages, diffs and records, not checklist promises. Structural validation is not a successful model run.
 
+
+## Decision Grill — manual review cases
+
+Contract: DECISION-GRILL-001 ([Process §42](../core/PROCESS.md)). Эти cases оцениваются по реальному диалогу; они не добавляются автоматически в executable fixture pack.
+
+| Case | Context / request | Expected observed behavior |
+| --- | --- | --- |
+| GRILL-REVIEW-01 | Новая функция зависит от выбора workflow, затем от формата state, затем от UX recovery. | Построить дерево зависимостей; спросить только текущий frontier с рекомендацией; следующий зависимый вопрос задать после решения prerequisite. |
+| GRILL-REVIEW-02 | Для решения нужен факт о текущем API/репозитории, который агент может проверить сам. | Самостоятельно получить факт и только затем вынести пользователю реальный product/UX tradeoff; не задавать пользователю технический вопрос вместо исследования. |
+| GRILL-REVIEW-03 | Локальный bugfix полностью покрыт подтверждённым контрактом. | Не включать Decision Grill; воспроизвести → исправить → проверить regression. |
+
+Review the dependency order, actual research/actions and whether confirmed decisions were reused. A written tree without the corresponding interaction is not behavioral Evidence.
+
 ## Run record
 
 | Scenario | Standard / fixture revision | Model + configuration | Test Status | Observed actions / Evidence | Reason / next action |
