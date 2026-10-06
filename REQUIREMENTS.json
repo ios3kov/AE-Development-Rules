@@ -26,6 +26,12 @@
       "meaning": "Continue authorized work with scoped permissions and dependency blockers"
     },
     {
+      "id": "DECISION-GRILL-001",
+      "source": "core/PROCESS.md",
+      "section": "42",
+      "meaning": "Resolve material dependent user decisions as a design tree/frontier interview while researching accessible facts independently"
+    },
+    {
       "id": "API-SOURCE-001",
       "source": "core/PROCESS.md",
       "section": "3",

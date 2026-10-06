@@ -118,6 +118,7 @@ Declared `context.features` adds existing applicable requirements; it grants no 
 |---|---|
 | parallel | PARALLEL ([§5](core/PROCESS.md)) |
 | architecture | ARCHITECTURE ([§13](core/PROCESS.md)), TESTABILITY ([§41](core/ENGINEERING.md)) |
+| decision-grill | DECISION-GRILL ([§42](core/PROCESS.md)) |
 | workaround | TECH-DEBT ([§15](core/ENGINEERING.md)) |
 | quality | QUALITY ([§31](core/ENGINEERING.md)) |
 | testing | TEST-CASES ([§32](core/ENGINEERING.md)), TEST-CONTROL ([§2](core/PROCESS.md)) |
@@ -148,7 +149,7 @@ Task overlays remain separate from these artifact/risk tables: bugfix selects `D
 
 Для смешанного продукта использовать объединение профилей его компонентов. Например, UXP panel с native helper проверяется как UXP + Helper, а native addon получает отдельные platform requirements.
 
-Conditional Rule Groups не обязаны появляться в artifact matrix. Например, **REFERENCE-AUDIT (§R0)** применяется по trigger `explicit_external_reference`, независимо от типа artifact.
+Conditional Rule Groups не обязаны появляться в artifact matrix. Например, **REFERENCE-AUDIT (§R0)** применяется по trigger `explicit_external_reference`, а **DECISION-GRILL (§42)** — когда следующий существенный шаг зависит от материальных взаимозависимых решений пользователя.
 
 Организационный порядок работы и формат коротких статусов вынесены в [WORKFLOW.md](WORKFLOW.md).
 
@@ -161,7 +162,7 @@ Conditional Rule Groups не обязаны появляться в artifact mat
 - [AI Smart Entry](AI_ENTRYPOINT.md) — пользовательский вход в стандарт для AI-assisted работы.
 - [Reference Audit](REFERENCE_AUDIT.md) — conditional reference-driven path / §R0.
 - [Product Discovery](PRODUCT_DISCOVERY.md) — Stage 0 / §0.
-- [Process Core](core/PROCESS.md) — §§1–13, §27.
+- [Process Core](core/PROCESS.md) — §§1–13, §27, §42.
 - [Engineering Core](core/ENGINEERING.md) — §§14–21, §§24–25, §§31–39, §41.
 - [Tools / Panels Runtime](profiles/TOOLS.md) — §22.
 - [Native Effect / Render Plugin](profiles/NATIVE.md) — §23.

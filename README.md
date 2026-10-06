@@ -6,7 +6,9 @@
 
 ## Версия стандарта
 
-**Стабильная версия стандарта: v8.0.0 — 2026-10-03.**
+**Стабильная версия стандарта: v9.0.0 — 2026-10-06.**
+
+9.0.0 вводит **Decision Grill** для материальных взаимозависимых решений: агент строит design tree, сам исследует доступные факты и задаёт пользователю только текущий frontier с рекомендуемым вариантом. Ясные bugfix/малые правки остаются без интервью. Это major process release по §34.
 
 8.0.0 вводит явный контроль существенной задачи: применимые требования связываются с tasks/checks/Evidence, перед завершением сверяются все текущие обязательства. Для нового набора фичей в текущем проекте восстановить baseline, оценить impact и обновить scope/план/приёмку без потери прежних решений.
 
@@ -19,6 +21,7 @@
 Сохраняется установленная в 6.0.0 macOS/Windows-политика: выпуск без обязательных платных сертификатов и внешних сервисов подписания/проверки. Приёмка опирается на целостность artifact, установку и фактическую загрузку в AE. Точный released commit, платформенные CI и checksums архивов записаны в release-evidence.json у GitHub Release.
 
 - [VERSION](VERSION)
+- [Описание релиза и переход на 9.0.0](docs/releases/9.0.0.md)
 - [CHANGELOG.md](CHANGELOG.md)
 - [Описание релиза и переход на 8.0.0](docs/releases/8.0.0.md)
 - [Описание релиза и переход на 7.0.0](docs/releases/7.0.0.md)
@@ -27,6 +30,7 @@
 - [Описание релиза и переход на 6.0.0](docs/releases/6.0.0.md)
 - [Описание релиза и переход на 5.1.0](docs/releases/5.1.0.md)
 - [Описание релиза и переход на 5.0.0](docs/releases/5.0.0.md)
+- [GitHub Release v9.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v9.0.0)
 - [GitHub Release v8.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v8.0.0)
 - [Предыдущий GitHub Release v7.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v7.0.0)
 - [Предыдущий GitHub Release v6.2.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v6.2.0)
@@ -81,6 +85,12 @@
 ## Принцип
 
 Написанный код — не проверенный продукт. **Risk Profile** (Light / Standard / Critical) и **Delivery Gate** (Development / Validation / Release) выбираются независимо. Пользовательская validation не заменяет внутренний QA.
+
+
+
+## Методические источники
+
+Conditional **DECISION-GRILL (§42)** адаптирует design-tree / frontier-rounds подход из MIT-репозитория [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me), проверенного 2026-10-06. В стандарт перенесён общий процесс принятия решений, а не текст skill: агент сам добывает доступные факты, пользователь закрывает материальные решения, зависимые вопросы открываются только после prerequisites.
 
 
 ## Starter kit

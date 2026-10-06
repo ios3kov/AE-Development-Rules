@@ -197,6 +197,13 @@
       "source": "core/PROCESS.md"
     },
     {
+      "id": "DECISION-GRILL",
+      "section": "42",
+      "source": "core/PROCESS.md",
+      "applicability": "conditional",
+      "trigger": "decision-grill"
+    },
+    {
       "id": "TECH-DEBT",
       "section": "15",
       "source": "core/ENGINEERING.md",

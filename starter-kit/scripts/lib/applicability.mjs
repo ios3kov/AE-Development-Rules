@@ -11,6 +11,7 @@ const overlays = {
 export const featureRules = {
   parallel: ['PARALLEL'],
   architecture: ['ARCHITECTURE', 'TESTABILITY'],
+  'decision-grill': ['DECISION-GRILL'],
   workaround: ['TECH-DEBT'],
   quality: ['QUALITY'],
   testing: ['TEST-CASES', 'TEST-CONTROL'],

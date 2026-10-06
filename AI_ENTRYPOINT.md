@@ -121,7 +121,7 @@
 
 Если Product Vision ещё не определён:
 
-**Smart Entry → Stage 0 Product Discovery → Product Vision → Scope → Product Spec → Technical Design → Production Plan → Development.**
+**Smart Entry → Stage 0 Product Discovery → DECISION-GRILL по триггеру → Product Vision / Scope → Product Spec → Technical Design → Production Plan → Development.**
 
 ### Крупная новая функция / изменение продукта
 
@@ -169,6 +169,8 @@
 - distribution;
 - объём работы;
 - acceptance criteria.
+
+Если таких решений несколько и они зависят друг от друга, включить conditional **DECISION-GRILL (§42)**: построить design tree, спрашивать только текущий frontier, к каждому вопросу давать рекомендуемый вариант и после ответов пересчитывать следующий frontier. Доступные технические/внешние факты исследовать самостоятельно; пользователю оставлять именно решения.
 
 Предпочтительно задавать **1–3 связанных вопроса за один заход**, а не большую анкету.
 
@@ -237,6 +239,7 @@
 
 - triggered ли Reference Audit и какой у него scope;
 - нужен ли Stage 0;
+- нужен ли conditional DECISION-GRILL для материальных взаимозависимых решений;
 - тип artifact / компонентов;
 - Risk Profile;
 - Delivery Gate;
