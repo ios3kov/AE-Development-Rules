@@ -17,16 +17,16 @@ Affected baseline: **10.0.0**, exact source `d65baf37d76cc7c25981250d64a8d93c55c
 
 Historical released 10.0.0 artifacts and reports retain their original bytes and subjects. Publication is evidenced above; agent effectiveness and independent custody are not established by these corrections.
 
-## 10.0.1 automation corrections under review
+## 10.0.1 automation corrections in 10.0.2
 
-Affected inspected main: **10.0.1**, `62e78aa278954900fcd1a4a9465bb6a949b9e52a`, observed 2026-10-08. The following are local corrections under review, not a published 10.0.2 release. VERSION remains the adopted 10.0.1 baseline until a separately verified release.
+Affected inspected main: **10.0.1**, `62e78aa278954900fcd1a4a9465bb6a949b9e52a`, observed 2026-10-08. The corrections below are included in the 10.0.2 source. Availability is confirmed only by [GitHub Release v10.0.2](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v10.0.2) and its exact-commit CI/archive Evidence. Existing product baselines stay frozen until explicit adoption.
 
 | ID | Defect / temporary control | Correction state |
 | --- | --- | --- |
-| FIX-1002-01 | Distinct checks on unchanged files consume no-progress/repair budgets. Review which check and outcome repeats. | Candidate: per-alias snapshot/outcome accounting; initial distinct checks do not consume repair retries. |
-| FIX-1002-02 | Identical package bytes from different source commits make digest-only rollback ambiguous. | Candidate: externally pinned policy selects the source identity; matching history and full authorization remain mandatory. |
-| FIX-1002-03 | Witness does not bind the implementation owner path inside the same commit. Require explicit independent review of that association. | Candidate: every capture requires `owner_sha256`, the canonical digest of the complete obligation `owner` object. Old unbound manifests fail closed and require a fresh independent review/pin; do not relabel historical Evidence. |
-| FIX-1002-04 | Explicit reference research and plain release omit applicable reading. Read Reference Audit and version/dependency sections directly meanwhile. | Candidate: explicit reference triggers Reference Audit independently of implementation permission; release profiles include STANDARD-VERSION, PRODUCT-VERSION and DEPSEC. |
+| FIX-1002-01 | Distinct checks on unchanged files consume no-progress/repair budgets. Review which check and outcome repeats. | 10.0.2: per-alias snapshot/outcome accounting; initial distinct checks do not consume repair retries. |
+| FIX-1002-02 | Identical package bytes from different source commits make digest-only rollback ambiguous. | 10.0.2: externally pinned policy selects the source identity; matching history and full authorization remain mandatory. |
+| FIX-1002-03 | Witness does not bind the implementation owner path inside the same commit. Require explicit independent review of that association. | 10.0.2: every capture requires `owner_sha256`, the canonical digest of the complete obligation `owner` object. Old unbound manifests fail closed and require a fresh independent review/pin; do not relabel historical Evidence. |
+| FIX-1002-04 | Explicit reference research and plain release omit applicable reading. Read Reference Audit and version/dependency sections directly meanwhile. | 10.0.2: explicit reference triggers Reference Audit independently of implementation permission; release profiles include STANDARD-VERSION, PRODUCT-VERSION and DEPSEC. |
 | FIX-1002-05 | Errata calls published 10.0.1 an unpublished local candidate. | Corrected documentation above distinguishes publication, basic protection and unresolved independent custody. |
 
 Regressions: `starter-kit/tests/test_agent_evaluation.py`, `test_agent_skills.py` (real rollback CLI), `test_reference_witness.py`, and `contracts.mjs`. Synthetic contracts do not establish agent effectiveness or real AE acceptance. No human approval is inferred from these changes.

@@ -1,5 +1,15 @@
 # Changelog
 
+## 10.0.2 — 2026-10-08
+
+Targeted corrections to the existing automation; publication is confirmed by GitHub Release v10.0.2 and its exact-commit Evidence. [Migration and limits](docs/releases/10.0.2.md). Existing normative AE requirements remain unchanged.
+
+- First executions of distinct check aliases do not consume repair retries. Repeated checks compare per-alias project snapshot and observed outcome; global retries/actions/deadline remain bounded.
+- Skills rollback selects the source commit from the externally pinned policy and requires the exact history identity plus full admission checks, even when multiple commits contain identical bytes.
+- Every protected witness capture binds the complete implementation owner via `owner_sha256`. Unbound legacy manifests fail closed and need independently reviewed replacement/pinning; historical Evidence remains frozen.
+- An explicitly selected reference retains Reference Audit for research/audit/documentation without granting implementation permission. All release profiles include existing standard version, product version and dependency/security reading.
+- Errata records the published 10.0.1, enabled basic main protection and the separately BLOCKED independent custody. Comparative real-agent effectiveness remains NOT_RUN.
+
 ## 10.0.1 — 2026-10-08
 
 Correction release for the 10.0.0 tools; publication is confirmed by GitHub Release v10.0.1 and its exact-commit Evidence. No new normative rule, schema or mandatory process is introduced. [Correction scope, migration and open gates](docs/releases/10.0.1.md).
