@@ -39,6 +39,11 @@ class WitnessTests(unittest.TestCase):
     def test_missing_runner(self):
         del self.manifest["captures"][0]["runner_id"]
         self.assertTrue(self.check())
+    def test_invalid_trusted_pin(self):
+        self.assertTrue(self.check("not-a-digest"))
+    def test_verifier_authority_mismatch(self):
+        self.ledger["obligations"][0]["verifier"]["authority"] = "device"
+        self.assertTrue(self.check())
     def test_duplicate_witness(self):
         self.manifest["captures"].append(dict(self.manifest["captures"][0]))
         self.assertTrue(self.check())
