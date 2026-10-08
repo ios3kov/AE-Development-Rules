@@ -1,5 +1,11 @@
 # Changelog
 
+### Unreleased conditional agent skills and engineering extension
+
+- Adds conditional §43 skill admission/full-package integrity/managed lifecycle, protected complete-scan consistency and task/tool selection. Retains standard SKILL.md and existing Evidence authority; no external installation or general security certificate.
+- Extends the existing evaluation with a protected observer/bounded launcher, skill/no-skill and Russian/ambiguous tune/select/final fixtures. Adds task/resource/review receipts and original offline native property/fuzz/dimensional/red-green examples.
+- See [scope, obligation mapping and adoption analysis](docs/AGENT_SKILLS_IMPLEMENTATION.md). VERSION and published 9.0.0 remain frozen; conditional mandatory deltas require a future authorized compatibility/version decision. No merge/release/settings change or live-model/AE acceptance is implied.
+
 ### Unreleased conditional reference tooling
 
 - Completes reviewed reference obligations, local Evidence/owner hashes, typed case results and pinned witness comparison; adds offline scenario/trace/graph/version/tool/UI helpers, negative tests and standard CI integration. Existing project gates/registry remain authoritative; draft-tool schema v1 requires migration.

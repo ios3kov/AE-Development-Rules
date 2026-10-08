@@ -120,6 +120,48 @@
       "source": "profiles/TOOLS.md",
       "section": "22",
       "meaning": "Do not infer rollback from unknown IPC mutation outcome; scoped reconcile/retry guidance"
+    },
+    {
+      "id": "SKILL-ADMISSION-001",
+      "source": "core/AGENT_SKILLS.md",
+      "section": "43",
+      "meaning": "Conditional task/tool/license applicable independent admission"
+    },
+    {
+      "id": "SKILL-INTEGRITY-001",
+      "source": "core/AGENT_SKILLS.md",
+      "section": "43",
+      "meaning": "Pinned full-package restored-byte integrity and single-owner lifecycle"
+    },
+    {
+      "id": "SKILL-SECURITY-001",
+      "source": "core/AGENT_SKILLS.md",
+      "section": "43",
+      "meaning": "Protected complete scanning and enforceable environment capabilities"
+    },
+    {
+      "id": "SKILL-EVALUATION-001",
+      "source": "core/AGENT_SKILLS.md",
+      "section": "43",
+      "meaning": "Actual independent baseline versus selected-skill evaluation and held-out acceptance"
+    },
+    {
+      "id": "TASK-EXEC-001",
+      "source": "core/PROCESS.md",
+      "section": "5",
+      "meaning": "Risk-scoped dependency readiness, owned task boundaries and shared resources"
+    },
+    {
+      "id": "REVIEW-SPLIT-001",
+      "source": "core/ENGINEERING.md",
+      "section": "14",
+      "meaning": "Separate spec compliance and implementation-quality review with testable findings"
+    },
+    {
+      "id": "NATIVE-REVIEW-001",
+      "source": "profiles/NATIVE.md",
+      "section": "23",
+      "meaning": "Scoped native memory/numeric/ownership/concurrency/units review and uncovered risks"
     }
   ]
 }

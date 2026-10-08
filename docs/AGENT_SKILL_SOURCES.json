@@ -1,0 +1,77 @@
+{
+  "checked_at": "2026-10-08",
+  "sources": [
+    {
+      "repository": "vercel-labs/skills",
+      "commit": "87a266971d9460a3d2606075b8e91edc83325472",
+      "license": "MIT",
+      "license_url": "https://github.com/vercel-labs/skills/blob/87a266971d9460a3d2606075b8e91edc83325472/LICENSE",
+      "reviewed_files": [
+        "LICENSE",
+        "src/local-lock.ts",
+        "src/install.ts",
+        "src/installer.ts",
+        "src/source-parser.ts",
+        "src/update.ts",
+        "src/telemetry.ts",
+        "src/download-source.ts",
+        "src/sanitize.ts"
+      ],
+      "transfer": "Method only; independently written tools and prose; no upstream implementation or skill installed/copied",
+      "scope": "Package/ownership/integrity and canonical minimal adapters"
+    },
+    {
+      "repository": "agentskills/agentskills",
+      "commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/agentskills/agentskills/blob/69ef37e9424c0a7ea9dd2293b559e43ec8176379/LICENSE",
+      "reviewed_files": [
+        "LICENSE",
+        "docs/specification.mdx"
+      ],
+      "transfer": "Method only; independently written tools and prose; no upstream implementation or skill installed/copied",
+      "scope": "Standard SKILL.md compatibility; progressive disclosure"
+    },
+    {
+      "repository": "github/awesome-copilot",
+      "commit": "7cce7cfb4b61196c36d7e8eb8475ae84b356b126",
+      "license": "MIT",
+      "license_url": "https://github.com/github/awesome-copilot/blob/7cce7cfb4b61196c36d7e8eb8475ae84b356b126/LICENSE",
+      "reviewed_files": [
+        "LICENSE",
+        "AGENTS.md",
+        "eng/validate-skills.mjs",
+        "eng/external-plugin-validation.mjs",
+        "instructions/security-and-owasp.instructions.md",
+        ".schemas/tools.schema.json"
+      ],
+      "transfer": "Method only; independently written tools and prose; no upstream implementation or skill installed/copied",
+      "scope": "Package/ownership/integrity and canonical minimal adapters"
+    },
+    {
+      "repository": "cisco-ai-defense/skill-scanner",
+      "commit": "c3d7fd9fee50cf2ea45f0b381eb61f857360f825",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/cisco-ai-defense/skill-scanner/blob/c3d7fd9fee50cf2ea45f0b381eb61f857360f825/LICENSE",
+      "reviewed_files": [
+        "LICENSE",
+        "docs/user-guide/custom-policy-configuration.md",
+        "TESTING.md"
+      ],
+      "transfer": "Method only; independently written tools and prose; no upstream implementation or skill installed/copied",
+      "scope": "Optional independent scanner; policy/exception ownership and complete/incomplete distinction"
+    },
+    {
+      "repository": "numman-ali/openskills",
+      "commit": "57d933a4f0d5c8659bd8b285f50fb9554360f0b3",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/numman-ali/openskills/blob/57d933a4f0d5c8659bd8b285f50fb9554360f0b3/LICENSE",
+      "reviewed_files": [
+        "LICENSE",
+        "src/commands/sync.ts"
+      ],
+      "transfer": "Method only; independently written tools and prose; no upstream implementation or skill installed/copied",
+      "scope": "Optional index adapter only; never second owner/manager"
+    }
+  ]
+}

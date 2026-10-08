@@ -8,6 +8,15 @@ import {validate} from '../scripts/lib/schema.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
 const m=loadManifest(root),registry=read('REQUIREMENTS.json'),schema=read('starter-kit/schemas/project-record.schema.json');
+test('skills admission reading is conditional and old small-task caller is unaffected',()=>{
+ const context={task:'bugfix',components:['jsx'],risk:'light',delivery:'development',reference:'none',product_contract:true,contract_covers_scope:true,changes_product_contract:false};
+ const ordinary=route(m,context);assert.ok(!ordinary.rules.includes('AGENT-SKILLS'));
+ assert.deepEqual(route(m,{...context,features:[]}),ordinary);
+ const skilled=route(m,{...context,features:['skills']});
+ assert.deepEqual(skilled.rules.filter(id=>!ordinary.rules.includes(id)),['AGENT-SKILLS']);
+ assert.equal(skilled.delivery,'development');assert.equal(skilled.product_discovery,false);
+ assert.equal(skilled.reference_audit,false);
+});
 test('A05 manifest rejects empty/missing profiles, fields, duplicate IDs and unknown rules',()=>{
  const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'ae-manifest-'));
  try{

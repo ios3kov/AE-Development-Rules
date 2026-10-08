@@ -21,6 +21,15 @@
 
 Ни один non-interactive render path не должен требовать UI.
 
+### Покрытие native review и единицы (unreleased)
+<!-- REQ: NATIVE-REVIEW-001 -->
+
+Для затронутых C/C++ функций SHOULD сохранить inventory проверенных/непроверенных участков с exact candidate/source digest и основанием. Memory bounds/allocation/lifetime, numeric bounds/overflow/NaN/Inf, ownership/error/cancel cleanup и concurrency/thread affinity рассматриваются отдельно; UNREVIEWED/BLOCKED не превращать в REVIEWED по факту общей сборки. Необязательный [native review record](../starter-kit/templates/NATIVE_REVIEW.md), schema и `check_native_review.py` сверяют объявленный reviewed scope, actual source/Evidence bytes и пять областей, не исполняют SDK callbacks и не выдают host certification.
+
+При затронутой арифметике SHOULD явно назвать input/output units и conversion/invariant: кадры ↔ секунды при заданном fps; image pixels ↔ composition coordinates с render scale/pixel aspect/ROI; integer channel scale ↔ float/HDR при выбранном bit depth. Generic `16-bit` не определяет native AE channel maximum: сверить выбранные SDK headers и применимые Adobe docs. Назвать rounding, precision/tolerance и диапазон, не нормализовать HDR/negative float/alpha неявно. Property/fuzz checks pure math/parser/state и примеры ошибки units — Engineering §41; existing render comparator сохраняет явные bpc/alpha/color-management contracts.
+
+Primary authority для API — headers точной выбранной SDK версии и применимые Adobe документы. General skills, Context7 results, обучающий offline fixture, flags и static review не подтверждают runtime AE correctness. Сохраняются все нижеследующие MFR/SmartFX, alpha/bit-depth/color-management и real-host checks.
+
 ### Host API и ресурсы
 
 Проверять:

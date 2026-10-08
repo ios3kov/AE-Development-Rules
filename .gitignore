@@ -1,0 +1,3 @@
+# Owned interpreter caches; source fixtures and Evidence remain tracked.
+__pycache__/
+*.pyc

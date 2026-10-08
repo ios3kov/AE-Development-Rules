@@ -116,6 +116,7 @@ Declared `context.features` adds existing applicable requirements; it grants no 
 
 | Feature | Additional canonical rules |
 |---|---|
+| skills | AGENT-SKILLS ([§43](core/AGENT_SKILLS.md)) |
 | parallel | PARALLEL ([§5](core/PROCESS.md)) |
 | architecture | ARCHITECTURE ([§13](core/PROCESS.md)), TESTABILITY ([§41](core/ENGINEERING.md)) |
 | decision-grill | DECISION-GRILL ([§42](core/PROCESS.md)) |
@@ -163,6 +164,7 @@ Conditional Rule Groups не обязаны появляться в artifact mat
 - [Reference Audit](REFERENCE_AUDIT.md) — conditional reference-driven path / §R0.
 - [Product Discovery](PRODUCT_DISCOVERY.md) — Stage 0 / §0.
 - [Process Core](core/PROCESS.md) — §§1–13, §27, §42.
+- [Agent Skills](core/AGENT_SKILLS.md) — conditional §43, безопасный допуск и actual evaluation.
 - [Engineering Core](core/ENGINEERING.md) — §§14–21, §§24–25, §§31–39, §41.
 - [Tools / Panels Runtime](profiles/TOOLS.md) — §22.
 - [Native Effect / Render Plugin](profiles/NATIVE.md) — §23.

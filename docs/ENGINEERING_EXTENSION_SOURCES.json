@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-08",
+  "transfer": "Independent original implementation of generic methods. No upstream implementation/text/assets copied. Pinned licenses and file digests record research provenance; they confer no runtime permissions.",
+  "sources": [
+    {
+      "repository": "obra/superpowers",
+      "commit": "8ca22dba9a94f28898bbce59f2537ff4d87c747d",
+      "license": "MIT",
+      "license_url": "https://github.com/obra/superpowers/blob/8ca22dba9a94f28898bbce59f2537ff4d87c747d/LICENSE",
+      "method": "Compare spec and implementation quality separately; reproduce original defect; distinguish measured skill behavior from format checks. Existing debugging and stopping policy retained; no fixed retry mandate, required second agent or TDD deletion.",
+      "files": [
+        {
+          "file": "LICENSE",
+          "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+          "url": "https://github.com/obra/superpowers/blob/8ca22dba9a94f28898bbce59f2537ff4d87c747d/LICENSE"
+        },
+        {
+          "file": "skills/systematic-debugging/SKILL.md",
+          "sha256": "808fc5717aa88ad65efff312b11c186294d3e6ee301afb584e2f86599b137787",
+          "url": "https://github.com/obra/superpowers/blob/8ca22dba9a94f28898bbce59f2537ff4d87c747d/skills/systematic-debugging/SKILL.md"
+        },
+        {
+          "file": "skills/subagent-driven-development/SKILL.md",
+          "sha256": "8dde5589ee083fb4999106d116f01c8fdaf3116a8a9813fdedeb80329de49046",
+          "url": "https://github.com/obra/superpowers/blob/8ca22dba9a94f28898bbce59f2537ff4d87c747d/skills/subagent-driven-development/SKILL.md"
+        },
+        {
+          "file": "skills/writing-skills/SKILL.md",
+          "sha256": "bbdfe742f853562e643a3d40d64476359d47881e39cef80a189283fa26d11ab9",
+          "url": "https://github.com/obra/superpowers/blob/8ca22dba9a94f28898bbce59f2537ff4d87c747d/skills/writing-skills/SKILL.md"
+        }
+      ]
+    },
+    {
+      "repository": "getsentry/skills",
+      "commit": "d18b7aa8ba878354e5c348310230e652f7690f9c",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/getsentry/skills/blob/d18b7aa8ba878354e5c348310230e652f7690f9c/LICENSE",
+      "method": "Task specific concise agent instructions and evidence supported actionable review findings; check current PR state before a bounded iteration. No upstream PR messaging or execution imported.",
+      "files": [
+        {
+          "file": "LICENSE",
+          "sha256": "96e78a9ce85795b117c8929887bdb78f88bf23f7b85a31f0872cde4dff7e92cd",
+          "url": "https://github.com/getsentry/skills/blob/d18b7aa8ba878354e5c348310230e652f7690f9c/LICENSE"
+        },
+        {
+          "file": "skills/agents-md/SKILL.md",
+          "sha256": "8a91ada35068f43ef7ee03e38937863bac4f407878b06f0a4f1ddb4af24bec7e",
+          "url": "https://github.com/getsentry/skills/blob/d18b7aa8ba878354e5c348310230e652f7690f9c/skills/agents-md/SKILL.md"
+        },
+        {
+          "file": "skills/code-review/SKILL.md",
+          "sha256": "ec5fc8855cb4648b4f2c79b608f8c8824a2da6a683330524c4d6283e4a3954c4",
+          "url": "https://github.com/getsentry/skills/blob/d18b7aa8ba878354e5c348310230e652f7690f9c/skills/code-review/SKILL.md"
+        },
+        {
+          "file": "skills/iterate-pr/SKILL.md",
+          "sha256": "d57ecb10e3f0619796a2b71045fbe6725b4ba6cf60aaf63d4c8860a83a83279e",
+          "url": "https://github.com/getsentry/skills/blob/d18b7aa8ba878354e5c348310230e652f7690f9c/skills/iterate-pr/SKILL.md"
+        }
+      ]
+    },
+    {
+      "repository": "gastownhall/beads",
+      "commit": "0ed6d47ba3c95dfefc9c114d55fc457ef039e3a2",
+      "license": "MIT",
+      "license_url": "https://github.com/gastownhall/beads/blob/0ed6d47ba3c95dfefc9c114d55fc457ef039e3a2/LICENSE",
+      "method": "Explicit task dependency readiness and ownership; no Beads or Dolt infrastructure.",
+      "files": [
+        {
+          "file": "LICENSE",
+          "sha256": "caa2c60efbbf71e18b45ef6006a18213f8a42554b235af88883f6f1ec240b7db",
+          "url": "https://github.com/gastownhall/beads/blob/0ed6d47ba3c95dfefc9c114d55fc457ef039e3a2/LICENSE"
+        },
+        {
+          "file": "README.md",
+          "sha256": "a116eab1805d1e22f90e0a26cbfa6d38b4ee3fd3a689c6138299aa227dc21b16",
+          "url": "https://github.com/gastownhall/beads/blob/0ed6d47ba3c95dfefc9c114d55fc457ef039e3a2/README.md"
+        },
+        {
+          "file": "docs/architecture/dolt.md",
+          "sha256": "75183b0cd986fb8303e8df5b6df79e67e8fc2ca958e8a2ddf10c9781749be825",
+          "url": "https://github.com/gastownhall/beads/blob/0ed6d47ba3c95dfefc9c114d55fc457ef039e3a2/docs/architecture/dolt.md"
+        }
+      ]
+    },
+    {
+      "repository": "trailofbits/skills",
+      "commit": "82fe8226252622fa807643bdca1710901198553a",
+      "license": "CC-BY-SA-4.0",
+      "license_url": "https://github.com/trailofbits/skills/blob/82fe8226252622fa807643bdca1710901198553a/LICENSE",
+      "method": "Scope inventory with reviewed/unreviewed coverage, C/C++ ownership and arithmetic risk review, dimensional reasoning. Generic engineering concepts independently implemented; no copied expressions, annotations, code, prompts or workflow. CC-BY-SA text/code is research-only, not vendored or translated.",
+      "files": [
+        {
+          "file": "LICENSE",
+          "sha256": "7abe19ec9bb73b36141b999b861d24ad855e808bafe0f81e84cce28556f6c297",
+          "url": "https://github.com/trailofbits/skills/blob/82fe8226252622fa807643bdca1710901198553a/LICENSE"
+        },
+        {
+          "file": "plugins/c-review/skills/c-review/SKILL.md",
+          "sha256": "3fc2fc7f3dba9decd2dd9e449150395cf62ee156c8dd1c48d09a233318f4dc69",
+          "url": "https://github.com/trailofbits/skills/blob/82fe8226252622fa807643bdca1710901198553a/plugins/c-review/skills/c-review/SKILL.md"
+        },
+        {
+          "file": "plugins/c-review/scripts/check_ledger.py",
+          "sha256": "a24898bd9cac8e0c74b0934a676a1332275a676bd5e26b3ffec0d74c0e31ca86",
+          "url": "https://github.com/trailofbits/skills/blob/82fe8226252622fa807643bdca1710901198553a/plugins/c-review/scripts/check_ledger.py"
+        },
+        {
+          "file": "plugins/differential-review/skills/differential-review/methodology.md",
+          "sha256": "16b335d24cf2145e3dc4a37f50056550d29db2efa20e6df78fec95ec1e6fb0b4",
+          "url": "https://github.com/trailofbits/skills/blob/82fe8226252622fa807643bdca1710901198553a/plugins/differential-review/skills/differential-review/methodology.md"
+        },
+        {
+          "file": "plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+          "sha256": "0434b5ec95a0ae3037160e24d38d6579c3127ad86d0020e6f430d5f71c18c66b",
+          "url": "https://github.com/trailofbits/skills/blob/82fe8226252622fa807643bdca1710901198553a/plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md"
+        },
+        {
+          "file": "plugins/dimensional-analysis/skills/dimensional-analysis/references/dimension-algebra.md",
+          "sha256": "e60adc2108c89cb698626a8c62fe3ed65480e434c00b44a2bc9f2e43deb2bfd7",
+          "url": "https://github.com/trailofbits/skills/blob/82fe8226252622fa807643bdca1710901198553a/plugins/dimensional-analysis/skills/dimensional-analysis/references/dimension-algebra.md"
+        }
+      ]
+    },
+    {
+      "repository": "upstash/context7",
+      "commit": "ba9d74c4daf5b0b1a8df5ee3b3b7c0af51aa252f",
+      "license": "MIT",
+      "license_url": "https://github.com/upstash/context7/blob/ba9d74c4daf5b0b1a8df5ee3b3b7c0af51aa252f/LICENSE",
+      "method": "Optional documentation discovery; selected Adobe SDK headers and applicable Adobe documents remain authority. No MCP installation, API calls or automatic new permission.",
+      "files": [
+        {
+          "file": "LICENSE",
+          "sha256": "85cfb556dc2b22b55d2565674fcdaac82f3f2f6b7a928d27003132721bb6736c",
+          "url": "https://github.com/upstash/context7/blob/ba9d74c4daf5b0b1a8df5ee3b3b7c0af51aa252f/LICENSE"
+        },
+        {
+          "file": "packages/mcp/LICENSE",
+          "sha256": "85cfb556dc2b22b55d2565674fcdaac82f3f2f6b7a928d27003132721bb6736c",
+          "url": "https://github.com/upstash/context7/blob/ba9d74c4daf5b0b1a8df5ee3b3b7c0af51aa252f/packages/mcp/LICENSE"
+        },
+        {
+          "file": "README.md",
+          "sha256": "c513b9ec9c006a85c63d6ad0c9fe49af3eaa517f8e59b66de0af6029ccafda13",
+          "url": "https://github.com/upstash/context7/blob/ba9d74c4daf5b0b1a8df5ee3b3b7c0af51aa252f/README.md"
+        },
+        {
+          "file": "packages/mcp/src/index.ts",
+          "sha256": "4a0838e5f1011da8c4d2d33ea01ac02cc238cdcb48c47113529558c83ecb8523",
+          "url": "https://github.com/upstash/context7/blob/ba9d74c4daf5b0b1a8df5ee3b3b7c0af51aa252f/packages/mcp/src/index.ts"
+        }
+      ]
+    }
+  ]
+}

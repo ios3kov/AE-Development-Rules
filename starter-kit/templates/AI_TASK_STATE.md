@@ -43,6 +43,8 @@ Canonical: [Process §11](../../core/PROCESS.md#контроль-прохожд�
 - Concrete applicability exclusions and reasons:
 - Added/changed/deferred scope and decision source (use [feature-set change](FEATURE_SET_CHANGE.md) when relevant):
 - Remaining dependencies/checks and independent authorized work:
+- For delegated/dependent work: link compact [task contract](TASK_EXECUTION.md) or equivalent owner/dependency/readiness/allowed-path/budget/result fields here; reserve shared devices/caches/output before concurrent actions:
+- Combined candidate verification after integration and separate [spec/quality review](IMPLEMENTATION_REVIEW.md):
 - Final reconciliation observation/time: all current obligations accounted for or explicitly open:
 - Documentation, compatibility/regression and cleanup review references:
 - Claim justified now: implementation done / checks done / ready for scoped validation / ready for release / published:

@@ -9,6 +9,7 @@ const overlays = {
   'REFERENCE-AUDIT': ['REFERENCE_AUDIT.md', 'R0']
 };
 export const featureRules = {
+  skills: ['AGENT-SKILLS'],
   parallel: ['PARALLEL'],
   architecture: ['ARCHITECTURE', 'TESTABILITY'],
   'decision-grill': ['DECISION-GRILL'],
@@ -73,7 +74,7 @@ export function loadManifest(root) {
   }
   // Every numbered canonical section must have a reading-map entry; conditional
   // entries remain conditional, rather than loading every section for every edit.
-  for (const source of ['core/PROCESS.md','core/ENGINEERING.md','profiles/TOOLS.md','profiles/NATIVE.md','profiles/RELEASE.md','profiles/UXP.md']) {
+  for (const source of ['core/PROCESS.md','core/ENGINEERING.md','core/AGENT_SKILLS.md','profiles/TOOLS.md','profiles/NATIVE.md','profiles/RELEASE.md','profiles/UXP.md']) {
     for (const heading of read(source).matchAll(/^## (\d+)\./gm)) {
       if (!mapped.has(source + ':' + heading[1])) throw new Error('unmapped canonical section: ' + source + ':' + heading[1]);
     }

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "repository": "anthropics/skills",
+      "commit": "683bc88e56f3e09ba94f7055977f3d3aa499f202",
+      "files": [
+        {
+          "path": "skills/skill-creator/SKILL.md",
+          "sha256": "dcd4803e61e913e6fc27294184cd3a71f09f5e924ff20c8a9a20173e7b3c2bcf",
+          "url": "https://github.com/anthropics/skills/blob/683bc88e56f3e09ba94f7055977f3d3aa499f202/skills/skill-creator/SKILL.md"
+        },
+        {
+          "path": "skills/skill-creator/scripts/run_loop.py",
+          "sha256": "7bd6f674203168520517eec94c55f493c0d154339b061b4d7c0f0dad187d0f21",
+          "url": "https://github.com/anthropics/skills/blob/683bc88e56f3e09ba94f7055977f3d3aa499f202/skills/skill-creator/scripts/run_loop.py"
+        },
+        {
+          "path": "skills/skill-creator/references/schemas.md",
+          "sha256": "8e8876180a8989b406a4d3edddf875b04cdfd5805cc8616686d552b11ce4455f",
+          "url": "https://github.com/anthropics/skills/blob/683bc88e56f3e09ba94f7055977f3d3aa499f202/skills/skill-creator/references/schemas.md"
+        },
+        {
+          "path": "skills/skill-creator/LICENSE.txt",
+          "sha256": "bc6b3af2f331cbc7fb0da1344efb2cbe5877a31498b4d70dbc7000f3405a1362",
+          "url": "https://github.com/anthropics/skills/blob/683bc88e56f3e09ba94f7055977f3d3aa499f202/skills/skill-creator/LICENSE.txt"
+        }
+      ],
+      "license": "Apache-2.0",
+      "reviewed_at": "2026-10-08",
+      "transfer": "Methodology only; independently authored adapter/tests. No upstream code or full skill installation.",
+      "methodology": "Matched with-skill/baseline observations, repeated timing/usage and reserved held-out evaluation; our independent protected objectives replace model-only grading."
+    },
+    {
+      "repository": "promptfoo/promptfoo",
+      "commit": "bbb583afc824f88a105c38224025c412b3f6b3e7",
+      "files": [
+        {
+          "path": "site/docs/configuration/expected-outputs/index.md",
+          "sha256": "8e762331e1becaa7e087998c224f7e22e25a04f1eb78437684d8300fef08baf0",
+          "url": "https://github.com/promptfoo/promptfoo/blob/bbb583afc824f88a105c38224025c412b3f6b3e7/site/docs/configuration/expected-outputs/index.md"
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "bf813686553f451e1b833fbd827488aee49b60b189626915bf3108d10b754e44",
+          "url": "https://github.com/promptfoo/promptfoo/blob/bbb583afc824f88a105c38224025c412b3f6b3e7/LICENSE"
+        }
+      ],
+      "license": "MIT",
+      "reviewed_at": "2026-10-08",
+      "transfer": "Methodology only; independently authored adapter/tests. No upstream code or full skill installation.",
+      "methodology": "Objective assertions over actual outputs. Critical failures are hard vetoes; weighted averaging cannot cancel a forbidden action."
+    },
+    {
+      "repository": "microsoft/skills",
+      "commit": "354361d83247c76a1c21e802e0d4887c4d8323a3",
+      "files": [
+        {
+          "path": "tests/README.md",
+          "sha256": "a5ca9efba72395a40f3e8b1cb6b6ddb99a3e772a265b5cd0553a9245b57250ec",
+          "url": "https://github.com/microsoft/skills/blob/354361d83247c76a1c21e802e0d4887c4d8323a3/tests/README.md"
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "d9a1b1e30d633d5732ea18e3cba9538d293ebc53e1a9e4e96ab739e0c5c4f1cb",
+          "url": "https://github.com/microsoft/skills/blob/354361d83247c76a1c21e802e0d4887c4d8323a3/LICENSE"
+        }
+      ],
+      "license": "MIT",
+      "reviewed_at": "2026-10-08",
+      "transfer": "Methodology only; independently authored adapter/tests. No upstream code or full skill installation.",
+      "methodology": "Bounded generate/check/repair loops stop at the iteration budget or no new progress; mock harness checks remain separate from live agent runs."
+    }
+  ]
+}
