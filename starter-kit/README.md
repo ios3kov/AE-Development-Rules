@@ -196,15 +196,13 @@ Use [Process §6](../core/PROCESS.md#безопасная-уборка-репо�
 
 For significant work, [Process §11](../core/PROCESS.md#контроль-прохождения-задачи-и-финальная-сверка) requires applicable work/check mapping, block updates and final reconciliation against actual scope/candidate/Evidence. Use the existing task checkpoint and traceability, without duplicate documents. [Smart Entry §2.4](../AI_ENTRYPOINT.md#24-новый-набор-функций-в-текущей-разработке) and [feature delta template](templates/FEATURE_SET_CHANGE.md) preserve existing commitments while adding functions. Reuse covered Stage 0 decisions; investigate only uncovered scope. Neither a checklist nor static tests certify model behavior or AE runtime.
 
-## Conditional reference evidence obligations (experimental)
+## Conditional reference evidence adapters
 
-For a concrete reference/parity target, see [Reference Evidence Obligations](../docs/REFERENCE_EVIDENCE_OBLIGATIONS_PROPOSAL.md). Validate a project-owned JSON ledger with:
+Python 3.11+, stdlib. Existing Reference Audit triggers these helpers; ordinary development has no extra ledger obligation. [Contract/schema/migration](../docs/REFERENCE_EVIDENCE_OBLIGATIONS_PROPOSAL.md), [offline tools](../docs/REFERENCE_ENGINEERING_TOOLS.md), [synthetic example](examples/reference/README.md).
 
 ```sh
-python3 starter-kit/scripts/check_reference_obligations.py /path/to/reference-ledger.json --evidence-root /path/to/observations
-python3 -m unittest discover -s starter-kit/tests -p test_reference_obligations.py -v
+python3 starter-kit/scripts/check_reference_obligations.py /project/ledger.json --policy /reviewed/policy.json --evidence-root /project
+python3 -m unittest discover -s starter-kit/tests -p 'test_reference_*.py' -v
 ```
 
-The CLI exits nonzero on missing required cases, stale verifier revision, inadequate execution authority, duplicate obligation IDs or unresolved contradictions. A non-triggered ledger can be marked `reference_triggered: false`. This is an additive experimental validator, **not yet wired to the canonical release gate or the project's protected trust baseline**. Passing a self-authored ledger alone does not establish evidence authenticity or product parity. No production or publication action is implied.
-
-For reference-ledger schema v1, `inventory` is a list of stable behavior IDs and each must map to exactly one obligation. The validator detects missing mappings, but cannot discover behaviors omitted from the inventory. See [authorized investigation playbooks](../docs/AUTHORIZED_INVESTIGATION_PLAYBOOKS.md). Protected capture provenance and actual host/device pilot evidence remain separate mandatory review concerns.
+The standard CI executes contract/negative tests. Enforced product review uses the combined witness CLI and an externally pinned policy/capture manifest. Missing Evidence, tampered owner/file/result, dropped case/behavior or wrong host/device authority fails with nonzero exit. Success certifies the stated consistency scope only. Trusted settings/capture producers and actual product observations are separate operational tasks; no publication is implied.

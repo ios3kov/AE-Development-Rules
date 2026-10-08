@@ -1,0 +1,1 @@
+{"status": "PASS", "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "obligation_id": "O-1", "check_id": "PARITY-1", "requirement_ids": ["PROJECT-PARITY"], "authority": "host", "environment": "synthetic fixture", "case_results": {"positive": "PASS", "negative": "PASS"}}

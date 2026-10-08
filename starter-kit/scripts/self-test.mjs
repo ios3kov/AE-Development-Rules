@@ -393,6 +393,16 @@ if (fs.existsSync(behavioral)) {
   if (r.status !== 0) fail("starter-kit behavioral smoke failed: " + (r.stderr || r.stdout).trim());
 }
 
+// Conditional reference adapters are verified as standard tooling, with synthetic data only.
+const python = ["python3", "python"].find(command => run(command, ["-c", "import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)"]).status === 0);
+if (!python) fail("Python 3.11+ required for reference adapter contract tests");
+else {
+  const r = run(python, ["-m", "unittest", "discover", "-s", "starter-kit/tests", "-p", "test_reference_*.py", "-v"]);
+  process.stdout.write(r.stdout || "");
+  process.stdout.write(r.stderr || "");
+  if (r.status !== 0) fail("reference adapter contract tests failed");
+}
+
 // Required subset is explicit for each runner. Structural checks are not semantic proof.
 const requirePosix = process.argv.includes("--require-posix");
 const requirePowerShell = process.argv.includes("--require-powershell");

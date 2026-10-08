@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "reference_triggered": true,
+  "candidate_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "reference_sha256": "b796eafb3345c2e12e8be4d1290cd02c76173e3d8971740bbe85ae782dc6e9b2",
+  "obligations": [
+    {
+      "id": "O-1",
+      "required": true,
+      "required_cases": [
+        "positive",
+        "negative"
+      ],
+      "required_authority": "host",
+      "requirement_ids": [
+        "PROJECT-PARITY"
+      ],
+      "check_id": "PARITY-1"
+    }
+  ]
+}

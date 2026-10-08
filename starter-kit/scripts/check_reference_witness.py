@@ -1,83 +1,95 @@
 #!/usr/bin/env python3
-"""Compare candidate evidence to a separately controlled, pinned witness manifest.
-
-The caller must provision the witness manifest and expected digest from a trusted
-source outside candidate control. This verifies attestation matching, not truth.
-"""
+"""Pinned witness + policy + local Evidence validation using trusted code only."""
 import argparse
 import hashlib
 import json
-import re
 from pathlib import Path
 import sys
+from datetime import datetime, timezone
+from check_reference_obligations import canonical, load_json, validate, timestamp, text, HEX, contained_file
 
-def canonical(obj):
-    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
-
-def verify(ledger, manifest, expected_digest):
-    errors = []
-    if not isinstance(expected_digest, str) or not re.fullmatch(r"[0-9a-f]{64}", expected_digest):
-        errors.append("invalid trusted manifest digest")
+def verify(ledger, manifest, expected_digest, evidence_root=None, expected_revision=None, now=None):
+    if not isinstance(manifest, dict):
+        return ["protected manifest must be object"]
+    if not isinstance(expected_digest, str) or not HEX.fullmatch(expected_digest):
+        return ["invalid externally pinned manifest digest"]
     if hashlib.sha256(canonical(manifest)).hexdigest() != expected_digest:
-        errors.append("protected manifest digest mismatch")
-    if manifest.get("schema_version") != 1 or manifest.get("candidate_revision") != ledger.get("candidate_revision"):
-        errors.append("manifest version or candidate mismatch")
-    reference = ledger.get("reference")
-    if not isinstance(reference, dict) or manifest.get("reference_sha256") != reference.get("sha256"):
-        errors.append("reference identity mismatch")
+        return ["protected manifest digest mismatch"]
+    errors = validate(ledger, evidence_root, manifest.get("policy"), expected_revision)
+    if errors:
+        return errors
+    if not ledger["reference_triggered"]:
+        return ["witness review requires triggered reference"]
+    if type(manifest.get("schema_version")) is not int or manifest["schema_version"] != 1:
+        errors.append("invalid manifest schema")
+    current = now or datetime.now(timezone.utc)
+    reviewed, expires = timestamp(manifest.get("reviewed_at")), timestamp(manifest.get("expires_at"))
+    if reviewed is None or expires is None or not reviewed <= current < expires:
+        errors.append("witness review expired or invalid")
+    reviewer = manifest.get("reviewer_id")
+    if not text(reviewer) or manifest.get("review_status") != "APPROVED":
+        errors.append("independent reviewer approval missing")
     captures = manifest.get("captures")
     if not isinstance(captures, list):
-        return errors + ["captures missing"]
+        return errors + ["protected captures missing"]
     by_id = {}
     for capture in captures:
-        if not isinstance(capture, dict) or not capture.get("evidence_id"):
+        if not isinstance(capture, dict) or not text(capture.get("evidence_id")):
             errors.append("invalid protected capture")
             continue
         ident = capture["evidence_id"]
         if ident in by_id:
-            errors.append("duplicate protected capture " + ident)
+            errors.append("duplicate protected capture")
         by_id[ident] = capture
-    for obligation in ledger.get("obligations", []):
-        if not isinstance(obligation, dict) or obligation.get("required") is not True:
+    used = set()
+    for obligation in ledger["obligations"]:
+        if not obligation["required"]:
             continue
-        records = obligation.get("original_cases", []) + obligation.get("fixtures", []) + [obligation.get("verifier")]
-        for record in records:
-            if not isinstance(record, dict):
-                errors.append("malformed evidence record")
+        records = [(role, record) for role in ("original_cases", "fixtures") for record in obligation[role]]
+        records.append(("verifier", obligation["verifier"]))
+        for role, record in records:
+            eid = record["evidence_id"]
+            used.add(eid)
+            witness = by_id.get(eid)
+            if witness is None:
+                errors.append("unwitnessed Evidence " + eid)
                 continue
-            witness = by_id.get(record.get("evidence_id"))
-            if not witness:
-                errors.append("unwitnessed evidence " + str(record.get("evidence_id")))
-                continue
-            for field in ("artifact_sha256", "artifact_path"):
-                if witness.get(field) != record.get(field):
-                    errors.append("witness " + field + " mismatch")
-            if not all(witness.get(k) for k in ("run_id", "runner_id", "observed_at", "authority")):
-                errors.append("incomplete witness provenance")
-            if witness.get("authority") not in {"static", "unit", "integration", "runtime", "packaged-process", "host", "device"}:
-                errors.append("invalid witness authority")
-            if record is obligation.get("verifier") and witness.get("authority") != record.get("authority"):
-                errors.append("verifier authority mismatch")
+            # Covers role, case, environment, authority, run/time, subject and procedure;
+            # byte hashes alone cannot prevent reusing a capture for another scenario.
+            expected = {"obligation_id": obligation["id"], "role": role,
+                        "record_sha256": hashlib.sha256(canonical(record)).hexdigest()}
+            if any(witness.get(k) != v for k, v in expected.items()):
+                errors.append("capture binding mismatch " + eid)
+            if not text(witness.get("runner_id")) or witness.get("runner_id") == reviewer:
+                errors.append("missing runner or self-approved capture " + eid)
             if witness.get("review_status") != "APPROVED":
-                errors.append("unapproved witness")
-            if record is obligation.get("verifier") and witness.get("revision") != ledger.get("candidate_revision"):
-                errors.append("stale witness verifier")
+                errors.append("unapproved capture " + eid)
+            observed = timestamp(record["observed_at"])
+            if reviewed is not None and observed > reviewed:
+                errors.append("capture observed after approval " + eid)
+    if used != set(by_id):
+        errors.append("protected capture coverage mismatch")
     return errors
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("ledger")
+    p.add_argument("ledger", type=Path)
     p.add_argument("--protected-manifest", type=Path, required=True)
     p.add_argument("--expected-manifest-sha256", required=True)
+    p.add_argument("--evidence-root", type=Path, required=True)
+    p.add_argument("--expected-candidate-revision", required=True)
     args = p.parse_args()
     try:
-        ledger = json.loads(Path(args.ledger).read_text())
-        manifest = json.loads(args.protected_manifest.read_text())
-        errors = verify(ledger, manifest, args.expected_manifest_sha256)
-    except (OSError, ValueError, TypeError) as exc:
+        relative = args.ledger.absolute().relative_to(args.evidence_root.absolute()).as_posix()
+        ledger_path = contained_file(args.evidence_root, relative)
+        errors = verify(load_json(ledger_path), load_json(args.protected_manifest),
+                        args.expected_manifest_sha256, args.evidence_root, args.expected_candidate_revision)
+    except (OSError, ValueError, TypeError, RuntimeError) as exc:
         errors = [str(exc)]
-    print(json.dumps({"status": "FAIL" if errors else "PASS", "errors": errors}))
-    return bool(errors)
+    # Never echo protected witness or candidate-controlled diagnostics.
+    print(json.dumps({"status": "FAIL" if errors else "PASS", "scope": "pinned-reference-evidence-consistency",
+                      "parity_certified": False, "error_count": len(errors)}))
+    return 1 if errors else 0
 
 if __name__ == "__main__":
     sys.exit(main())

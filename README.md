@@ -118,3 +118,7 @@ Conditional **DECISION-GRILL (§42)** адаптирует design-tree / frontie
 - [Краткие примеры решений для ИИ](docs/AI_DECISION_EXAMPLES.md)
 
 Скрипты требуют Node.js 22+; POSIX wrappers также требуют zsh. При копировании сохранять весь каталог `scripts`, включая `lib`, и соответствующие schemas/registry для project-record tooling.
+
+## Conditional reference tooling update (unreleased)
+
+[Scope reconciliation](docs/REFERENCE_UPDATE_RECONCILIATION.md), [reference adapters](docs/REFERENCE_EVIDENCE_OBLIGATIONS_PROPOSAL.md), [offline helpers](docs/REFERENCE_ENGINEERING_TOOLS.md) and [agent evaluation delta](docs/REFERENCE_AGENT_EVALUATION.md). Current adopted/versioned baselines and published releases remain unchanged; use the exact tooling commit for explicit adoption. Standard CI verifies synthetic tooling contracts, not real AE/iPhone parity. Product/market/publication items remain paused.
