@@ -297,8 +297,8 @@ class Broker:
         self.skill_loader, self.skill_selected = skill_loader, False
         self.checker_root, self.checker_isolation = checker_root, checker_isolation or isolation
         self.receipts, self.violations, self.checks = [], [], []
-        self.finished, self.repair_count, self.stalls = False, 0, 0
-        self.last_check_snapshot = None
+        self.finished, self.repair_count = False, 0
+        self.check_progress = {}
 
     def handle(self, request, check_timeout=15):
         require(isinstance(request, dict) and isinstance(request.get('op'), str), 'invalid agent protocol')
@@ -318,17 +318,23 @@ class Broker:
                 result = {'status': 'PASS', 'sha256': digest(p.read_bytes())}
             elif op == 'check':
                 require(request.get('alias') in self.case['checks'], 'command alias forbidden')
+                alias = request['alias']
                 current = digest(snapshot(self.project))
-                if self.last_check_snapshot == current:
-                    self.stalls += 1
-                else:
-                    self.stalls = 0
-                self.last_check_snapshot = current
-                self.repair_count += 1
-                require(self.repair_count <= self.plan['repair_budget'] and self.stalls < self.plan['no_progress_limit'], 'repair/no-progress budget exhausted')
-                result = controlled_check(request['alias'], self.case, self.project, self.checker_isolation,
+                previous = self.check_progress.get(alias)
+                # First executions of distinct checks are validation, not repair attempts.
+                if previous is not None:
+                    self.repair_count += 1
+                require(self.repair_count <= self.plan['repair_budget'], 'repair budget exhausted')
+                result = controlled_check(alias, self.case, self.project, self.checker_isolation,
                                           timeout=check_timeout, checker_root=self.checker_root)
                 self.checks.append(result)
+                # Observe the result before deciding: the same files can produce new evidence.
+                outcome = digest({key: result.get(key) for key in
+                                  ('status', 'exit_code', 'stdout_sha256', 'stderr_sha256', 'reason')})
+                signature = (current, outcome)
+                stalls = previous[1] + 1 if previous and previous[0] == signature else 0
+                self.check_progress[alias] = (signature, stalls)
+                require(stalls < self.plan['no_progress_limit'], 'no-progress budget exhausted')
             elif op == 'select_skill':
                 if self.skill_text is None:
                     result = {'status': 'BLOCKED', 'reason': 'baseline arm has no selected skill'}

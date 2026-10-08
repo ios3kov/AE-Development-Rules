@@ -29,7 +29,7 @@ test('A05 manifest rejects empty/missing profiles, fields, duplicate IDs and unk
 test('A07/A09 routing scenarios keep milestone/risk/delivery and scoped reference independent',()=>{
  const common={components:['jsx'],risk:'light',delivery:'development',reference:'none',product_contract:true,contract_covers_scope:true,changes_product_contract:false};
  const cases=[
-  [{task:'audit',reference:'whole-product'},false,false,false],
+  [{task:'audit',reference:'whole-product'},false,true,false],
   [{task:'research'},false,false,false],
   [{task:'documentation',components:['native']},false,false,false],
   [{task:'bugfix'},false,false,true],
@@ -102,5 +102,18 @@ test('filled adoption records have valid declared checks and deliberately unexec
   const record=read('starter-kit/examples/adoption/'+name+'.json');
   assert.equal(inspectRecord(record,schema,path.join(root,'starter-kit/examples/adoption'),registry).recorded_policy,'BLOCKED');
   assert.ok(record.checks.some(c=>c.required && c.status==='NOT RUN'));
+ }
+});
+
+test('explicit reference research and ordinary release retain required reading',()=>{
+ const common={task:'research',components:['jsx'],risk:'light',delivery:'development',reference:'behavior',product_contract:true,contract_covers_scope:true,changes_product_contract:false};
+ assert.ok(route(m,common).rules.includes('REFERENCE-AUDIT'));
+ for(const task of ['audit','documentation','research']) assert.equal(route(m,{...common,task}).implementation_task,false);
+});
+test('plain release includes version and dependency reading for every artifact',()=>{
+ const common={task:'bugfix',components:['jsx'],risk:'light',delivery:'release',reference:'none',product_contract:true,contract_covers_scope:true,changes_product_contract:false};
+ for(const component of m.artifact_profiles.map(p=>p.id)) for(const task of ['bugfix','documentation']){
+  const release=route(m,{...common,task,reference:'none',components:[component],delivery:'release'});
+  for(const id of ['STANDARD-VERSION','PRODUCT-VERSION','DEPSEC']) assert.ok(release.rules.includes(id),component+'/'+task+' missing '+id);
  }
 });

@@ -104,11 +104,11 @@ Critical не означает Release. Низкорисковый patch мож�
 
 | Тип проекта | Validation | Release |
 |---|---|---|
-| Native plugin / effect | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)) / Release Gate; apply actual platform/format gates |
-| JSX / ScriptUI | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)) / Release Gate; apply actual platform/format gates |
-| CEP | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)) / Release Gate; apply actual platform/format gates |
-| UXP | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)) / Release Gate; apply actual platform/format gates |
-| Helper / companion app | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)) / Release Gate; apply actual platform/format gates |
+| Native plugin / effect | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)), STANDARD-VERSION ([§34](core/ENGINEERING.md)), PRODUCT-VERSION ([§36](core/ENGINEERING.md)), DEPSEC ([§35](core/ENGINEERING.md)) / Release Gate; apply actual platform/format gates |
+| JSX / ScriptUI | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)), STANDARD-VERSION ([§34](core/ENGINEERING.md)), PRODUCT-VERSION ([§36](core/ENGINEERING.md)), DEPSEC ([§35](core/ENGINEERING.md)) / Release Gate; apply actual platform/format gates |
+| CEP | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)), STANDARD-VERSION ([§34](core/ENGINEERING.md)), PRODUCT-VERSION ([§36](core/ENGINEERING.md)), DEPSEC ([§35](core/ENGINEERING.md)) / Release Gate; apply actual platform/format gates |
+| UXP | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)), STANDARD-VERSION ([§34](core/ENGINEERING.md)), PRODUCT-VERSION ([§36](core/ENGINEERING.md)), DEPSEC ([§35](core/ENGINEERING.md)) / Release Gate; apply actual platform/format gates |
+| Helper / companion app | GATES ([§26](profiles/RELEASE.md)) / Validation Gate | GATES ([§26](profiles/RELEASE.md)), STANDARD-VERSION ([§34](core/ENGINEERING.md)), PRODUCT-VERSION ([§36](core/ENGINEERING.md)), DEPSEC ([§35](core/ENGINEERING.md)) / Release Gate; apply actual platform/format gates |
 
 ### Conditional feature overlays
 

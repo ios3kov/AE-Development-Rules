@@ -190,6 +190,10 @@
           },
           "review_status": {
             "const": "APPROVED"
+          },
+          "owner_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
           }
         },
         "required": [
@@ -198,7 +202,8 @@
           "role",
           "record_sha256",
           "runner_id",
-          "review_status"
+          "review_status",
+          "owner_sha256"
         ]
       }
     }

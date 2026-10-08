@@ -122,7 +122,7 @@ export function route(manifest, context) {
   const currentContract = context.product_contract && context.contract_covers_scope;
   const productChange = ['new-product','major-feature'].includes(context.task) || context.changes_product_contract;
   const discovery = implementation && productChange && !currentContract;
-  const reference = context.reference !== 'none' && !['audit','documentation','research'].includes(context.task);
+  const reference = context.reference !== 'none';
   const taskRules = [...(context.task === 'bugfix' ? ['DEBUGGING'] : []), ...(implementation || context.task === 'research' ? ['API-SOURCES'] : [])];
   const rules = [...new Set([...selected.flat(),...taskRules,...features.flatMap(feature => featureRules[feature]),...(discovery ? ['PRODUCT-DISCOVERY'] : []),...(reference ? ['REFERENCE-AUDIT'] : [])])];
   const defined = new Set(manifest.rule_groups.map(g => g.id));
