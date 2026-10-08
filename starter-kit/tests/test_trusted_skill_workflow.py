@@ -40,6 +40,7 @@ class WorkflowInputs(unittest.TestCase):
         block = self.body.split('      - name: Validate public inputs before checkout', 1)[1].split('      - name:', 1)[0]
         self.guard = '\n'.join(line[10:] for line in block.split('        run: |\n', 1)[1].splitlines())
         self.environment = {**os.environ, 'CANDIDATE_SHA': 'a' * 40, 'SOURCE_COMMIT': 'b' * 40,
+                            'EVIDENCE_SHA': 'c' * 40,
                             'LEDGER_PATH': 'Evidence/ledger.json', 'SKILL_PATH': 'skills/owned-skill', 'REVIEW_MODE': 'skills'}
 
     def check(self, **changes):

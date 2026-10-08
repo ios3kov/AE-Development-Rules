@@ -95,7 +95,7 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 
 1. Если пользователь явно выбрал конкретный внешний продукт/artifact как референс/основу/аналог — пройти `REFERENCE_SPECIFICATION_TEMPLATE.md` по [Reference Audit](../REFERENCE_AUDIT.md).
 2. Для нового продукта / крупной функции, когда Smart Entry определил product-level неопределённость, пройти Stage 0 через `PRODUCT_DISCOVERY_TEMPLATE.md`.
-3. Скопировать нужные scripts/templates в AE-проект.
+3. Сначала запустить `node starter-kit/scripts/self-test.mjs --dry-run` в полном репозитории стандарта: self-test требует корневые документы, profiles, manifest, registry, fixtures и workflows. Затем скопировать нужные scripts/templates вместе с зависимостями в AE-проект и выполнять применимые проверки проекта.
 4. Подключить релевантные scripts к build/test pipeline или CI.
 5. Инженерно зафиксировать выбранный ИИ/разработчиком **Risk Profile**: Light / Standard / Critical.
 6. Инженерно зафиксировать **Delivery Gate**: Development / Validation / Release. Не перекладывать этот выбор на нетехнического пользователя.

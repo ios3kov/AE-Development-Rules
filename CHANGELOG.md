@@ -1,5 +1,15 @@
 # Changelog
 
+## 10.0.1 — 2026-10-08
+
+Unpublished correction candidate for the 10.0.0 tools. No new normative rule, schema or mandatory process is introduced. [Correction scope, migration and open gates](docs/releases/10.0.1.md).
+
+- Reference review checks source candidate and Evidence storage at independently supplied exact commits. Owner hashes use the source checkout; reports use the Evidence checkout. Existing local combined-root calls remain supported.
+- Skill inventory/scan stops with BLOCKED on directory enumeration errors; no partial package digest or complete scan can be returned.
+- Agent protocol uses nonblocking partial writes/reads and one monotonic deadline for startup, responses and broker check time. Owned process groups are terminated before observer checks.
+- Cache/output claims share one filesystem namespace, including ancestor overlap. Read/read sharing and disjoint resources remain supported.
+- Adoption guidance states that the standard self-test requires the complete standard repository. GitHub protection enforcement remains BLOCKED; live-agent/AE/iPhone pilots and candidate CI/publication remain NOT_RUN.
+
 ## 10.0.0 — 2026-10-08
 
 Major process release under Engineering §34: conditional skill admission can require new review/scan/pinning actions for a previously compliant project. Existing project baselines remain frozen until explicit adoption. [Migration and first use](docs/releases/10.0.0.md). No real-agent effectiveness, security certification or AE runtime acceptance is implied.

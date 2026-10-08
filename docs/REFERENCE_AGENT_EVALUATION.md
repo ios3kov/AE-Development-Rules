@@ -29,6 +29,8 @@ The [extension catalogue](../starter-kit/fixtures/ai/skill-evaluation-cases.json
 
 Each selected case is run from a fresh project for both adopted-rules-only (`baseline`) and adopted-rules-plus-selected-skill (`selected_skill`), with the same declared model/adapter configuration and repeated trials. Only the selected arm can request the skill. The adapter delegates full-package admission and progressive resource loading to `agent_skills.authorize` / `load_resource`; policy, source commit, reviewed scan and the complete package inventory are rechecked. No skill script, hook, MCP or installation runs. An irrelevant selection, protected-file edit, unapproved command or exhausted repair/no-progress budget is a recorded hard failure.
 
+Startup and response transmission use nonblocking partial pipe writes. Requests, responses and broker checks share one monotonic `timeout_s` deadline; check commands receive only the remaining budget. Owned process cleanup has a short bounded termination grace and escalates to killing the group. Final independent objective verification runs after the acting process is stopped, with its own check limits; `duration_ms` includes that observer work and is not solely agent time. Windows agent execution remains unsupported.
+
 The protocol starts with public task/context, file names, edit paths, check aliases and permitted operations. The subprocess sends one JSON object per stdout line and receives the observer's result on stdin. Operations are `read`, `write`, `check`, `select_skill`, `read_skill_resource` and `finish`. Example requests:
 
 ```json

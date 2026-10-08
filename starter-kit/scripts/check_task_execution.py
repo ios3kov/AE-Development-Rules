@@ -183,7 +183,8 @@ def validate(record, root, expected_candidate, required_checks):
             require(not any(overlaps(x, y) for x in a['allowed_paths'] for y in b['allowed_paths']), 'conflicting active write scope')
             for x in a['resources']:
                 for y in b['resources']:
-                    shared = x['kind'] == y['kind'] and (x['key'] == y['key'] if x['kind'] == 'device' else overlaps(x['key'], y['key']))
+                    shared = (x['kind'] == y['kind'] == 'device' and x['key'] == y['key']) or (
+                        x['kind'] in {'cache', 'output'} and y['kind'] in {'cache', 'output'} and overlaps(x['key'], y['key']))
                     require(not (shared and 'exclusive' in {x['mode'], y['mode']}), 'shared resource conflict')
     checks = record.get('integration_checks')
     require(isinstance(checks, list), 'missing integration checks')

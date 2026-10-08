@@ -8,14 +8,14 @@ import sys
 from datetime import datetime, timezone
 from check_reference_obligations import canonical, load_json, validate, timestamp, text, HEX, contained_file
 
-def verify(ledger, manifest, expected_digest, evidence_root=None, expected_revision=None, now=None):
+def verify(ledger, manifest, expected_digest, evidence_root=None, expected_revision=None, now=None, candidate_root=None):
     if not isinstance(manifest, dict):
         return ["protected manifest must be object"]
     if not isinstance(expected_digest, str) or not HEX.fullmatch(expected_digest):
         return ["invalid externally pinned manifest digest"]
     if hashlib.sha256(canonical(manifest)).hexdigest() != expected_digest:
         return ["protected manifest digest mismatch"]
-    errors = validate(ledger, evidence_root, manifest.get("policy"), expected_revision)
+    errors = validate(ledger, evidence_root, manifest.get("policy"), expected_revision, candidate_root)
     if errors:
         return errors
     if not ledger["reference_triggered"]:
@@ -77,13 +77,14 @@ def main():
     p.add_argument("--protected-manifest", type=Path, required=True)
     p.add_argument("--expected-manifest-sha256", required=True)
     p.add_argument("--evidence-root", type=Path, required=True)
+    p.add_argument("--candidate-root", type=Path, help="immutable source checkout; defaults to evidence root for local use")
     p.add_argument("--expected-candidate-revision", required=True)
     args = p.parse_args()
     try:
         relative = args.ledger.absolute().relative_to(args.evidence_root.absolute()).as_posix()
         ledger_path = contained_file(args.evidence_root, relative)
         errors = verify(load_json(ledger_path), load_json(args.protected_manifest),
-                        args.expected_manifest_sha256, args.evidence_root, args.expected_candidate_revision)
+                        args.expected_manifest_sha256, args.evidence_root, args.expected_candidate_revision, candidate_root=args.candidate_root)
     except (OSError, ValueError, TypeError, RuntimeError) as exc:
         errors = [str(exc)]
     # Never echo protected witness or candidate-controlled diagnostics.

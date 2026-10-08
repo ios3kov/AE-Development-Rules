@@ -225,15 +225,22 @@ def clean_environment():
     return {'PATH': '/usr/bin:/bin:/usr/local/bin', 'LANG': 'en_US.UTF-8', 'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONNOUSERSITE': '1', 'HOME': '/nonexistent', 'TMPDIR': '/nonexistent'}
 
 
-def stop_process(proc):
+def stop_process(proc, grace=1):
     try:
         os.killpg(proc.pid, signal.SIGTERM)
     except ProcessLookupError:
         pass
     try:
-        proc.wait(timeout=1)
+        proc.wait(timeout=grace)
     except subprocess.TimeoutExpired:
-        os.killpg(proc.pid, signal.SIGKILL); proc.wait(timeout=2)
+        pass
+    # The parent may exit before a descendant that retains a pipe. Reap the
+    # owned group even in that case before evaluating observer objectives.
+    try:
+        os.killpg(proc.pid, signal.SIGKILL)
+    except ProcessLookupError:
+        pass
+    proc.wait(timeout=2)
 
 
 def controlled_check(alias, case, project, isolation, timeout=15, checker_root=None):
@@ -255,7 +262,7 @@ def controlled_check(alias, case, project, isolation, timeout=15, checker_root=N
         while selector.get_map():
             if time.monotonic() - begin >= timeout:
                 blocked = 'command timeout'; break
-            for key, _ in selector.select(.1):
+            for key, _ in selector.select(min(.1, max(0, timeout - (time.monotonic() - begin)))):
                 chunk = os.read(key.fileobj.fileno(), 65536)
                 if not chunk:
                     selector.unregister(key.fileobj); continue
@@ -274,7 +281,7 @@ def controlled_check(alias, case, project, isolation, timeout=15, checker_root=N
     finally:
         selector.close()
         if proc:
-            stop_process(proc)
+            stop_process(proc, grace=.1)
             proc.stdout.close(); proc.stderr.close()
     stdout = bytes(outputs['stdout']); stderr = bytes(outputs['stderr'])
     code = proc.returncode if proc else None
@@ -293,7 +300,7 @@ class Broker:
         self.finished, self.repair_count, self.stalls = False, 0, 0
         self.last_check_snapshot = None
 
-    def handle(self, request):
+    def handle(self, request, check_timeout=15):
         require(isinstance(request, dict) and isinstance(request.get('op'), str), 'invalid agent protocol')
         begin = time.monotonic()
         receipt = {'sequence': len(self.receipts) + 1, 'request': request, 'started_at': datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')}
@@ -319,7 +326,8 @@ class Broker:
                 self.last_check_snapshot = current
                 self.repair_count += 1
                 require(self.repair_count <= self.plan['repair_budget'] and self.stalls < self.plan['no_progress_limit'], 'repair/no-progress budget exhausted')
-                result = controlled_check(request['alias'], self.case, self.project, self.checker_isolation, checker_root=self.checker_root)
+                result = controlled_check(request['alias'], self.case, self.project, self.checker_isolation,
+                                          timeout=check_timeout, checker_root=self.checker_root)
                 self.checks.append(result)
             elif op == 'select_skill':
                 if self.skill_text is None:
@@ -394,31 +402,29 @@ def launch_agent(argv, broker, visible, plan, run_id, arm=None):
     before = snapshot(broker.project)
     started = time.monotonic()
     proc = subprocess.Popen(broker.isolation.wrap(argv, visible), cwd=visible, env=clean_environment(),
-                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, start_new_session=True)
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                            start_new_session=True, bufsize=0)
     public = {'protocol_version': 1, 'run_id': run_id, 'request': broker.case['request'], 'context': broker.case.get('context', []),
               'files': list(broker.case['files']), 'edit_paths': broker.case['edit_paths'], 'check_aliases': list(broker.case['checks']),
               'selected_skill_available': broker.skill_text is not None,
               'final_claim_fields': ['runtime_status'],
               'operations': ['read', 'write', 'check', 'select_skill', 'read_skill_resource', 'finish'], 'standard': 'standard/AI_ENTRYPOINT.md',
               'instruction': 'Use JSON lines requests on stdout; receive observer-executed responses on stdin. Direct writes/network/accounts/host operations are unavailable.'}
-    proc.stdin.write(canonical(public) + b'\n'); proc.stdin.flush()
-    selector = selectors.DefaultSelector(); selector.register(proc.stdout, selectors.EVENT_READ)
+    selector = selectors.DefaultSelector()
+    deadline = started + plan['timeout_s']
     pending = b''
+    outgoing = canonical(public) + b'\n'
+    sent = 0
     try:
-        while not broker.finished and not broker.violations:
-            require(time.monotonic() - started < plan['timeout_s'], 'agent timeout')
-            require(len(broker.receipts) < plan['max_actions'], 'action budget exhausted')
-            ready = selector.select(min(0.2, plan['timeout_s']))
-            if not ready:
-                if proc.poll() is not None:
-                    break
-                continue
-            chunk = os.read(proc.stdout.fileno(), 65536)
-            if not chunk:
-                break
-            pending += chunk
-            require(len(pending) <= MAX_BYTES, 'oversized protocol output')
-            while b'\n' in pending and not broker.finished and not broker.violations:
+        os.set_blocking(proc.stdin.fileno(), False)
+        os.set_blocking(proc.stdout.fileno(), False)
+        selector.register(proc.stdin, selectors.EVENT_WRITE)
+        selector.register(proc.stdout, selectors.EVENT_READ)
+        while not broker.violations and (not broker.finished or outgoing):
+            require(time.monotonic() < deadline, 'agent timeout')
+            # Dispatch one buffered request only after the preceding response
+            # has been sent. Both pipe directions share the same deadline.
+            if b'\n' in pending and not outgoing and not broker.finished:
                 line, pending = pending.split(b'\n', 1)
                 require(len(broker.receipts) < plan['max_actions'], 'action budget exhausted')
                 # Strict JSON prevents ambiguous receipt fields/NaN.
@@ -429,21 +435,38 @@ def launch_agent(argv, broker, visible, plan, run_id, arm=None):
                         value[k] = v
                     return value
                 request = json.loads(line, object_pairs_hook=pairs, parse_constant=lambda v: (_ for _ in ()).throw(ValueError('nonfinite protocol')))
-                response = broker.handle(request)
-                proc.stdin.write(canonical(response) + b'\n'); proc.stdin.flush()
+                response = broker.handle(request, check_timeout=min(15, max(0, deadline - time.monotonic())))
+                require(time.monotonic() < deadline, 'agent timeout')
+                outgoing, sent = canonical(response) + b'\n', 0
+                selector.register(proc.stdin, selectors.EVENT_WRITE)
+            if not selector.get_map():
+                break
+            for key, _ in selector.select(min(.2, max(0, deadline - time.monotonic()))):
+                if key.fileobj is proc.stdin:
+                    try:
+                        count = os.write(proc.stdin.fileno(), memoryview(outgoing)[sent:sent + 65536])
+                    except BlockingIOError:
+                        continue
+                    sent += count
+                    if sent == len(outgoing):
+                        outgoing, sent = b'', 0
+                        selector.unregister(proc.stdin)
+                else:
+                    try:
+                        chunk = os.read(proc.stdout.fileno(), 65536)
+                    except BlockingIOError:
+                        continue
+                    if not chunk:
+                        selector.unregister(proc.stdout)
+                        continue
+                    pending += chunk
+                    require(len(pending) <= MAX_BYTES, 'oversized protocol output')
     except (ValueError, OSError, json.JSONDecodeError) as exc:
         broker.violations.append(str(exc))
     finally:
         selector.close()
         # Reap the entire owned process group before checking hidden objectives.
-        try:
-            os.killpg(proc.pid, signal.SIGTERM)
-        except ProcessLookupError:
-            pass
-        try:
-            proc.wait(timeout=2)
-        except subprocess.TimeoutExpired:
-            os.killpg(proc.pid, signal.SIGKILL); proc.wait(timeout=2)
+        stop_process(proc, grace=.1)
         proc.stdin.close(); proc.stdout.close()
     after = snapshot(broker.project)
     unauthorized = [p for p in set(before) | set(after) if before.get(p) != after.get(p) and p not in broker.case['edit_paths']]
