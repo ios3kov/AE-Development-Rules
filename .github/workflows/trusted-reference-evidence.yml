@@ -3,13 +3,27 @@ name: Trusted Reference Evidence Review
 on:
   workflow_dispatch:
     inputs:
+      mode:
+        description: Conditional review subject
+        type: choice
+        options: [reference, skills]
+        default: reference
+        required: true
+      skill_path:
+        description: Safe relative skill package folder (skills mode)
+        required: false
+        type: string
+      source_commit:
+        description: Exact independently reviewed source SHA (skills mode)
+        required: false
+        type: string
       candidate_sha:
         description: Exact reviewed candidate commit SHA
         required: true
         type: string
       ledger_path:
-        description: Safe relative ledger path; Evidence paths are relative to candidate root
-        required: true
+        description: Safe relative ledger path (reference mode)
+        required: false
         type: string
 permissions:
   contents: read
@@ -24,12 +38,23 @@ jobs:
         env:
           LEDGER_PATH: ${{ inputs.ledger_path }}
           CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+          REVIEW_MODE: ${{ inputs.mode }}
+          SKILL_PATH: ${{ inputs.skill_path }}
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
         shell: bash
         run: |
           set -euo pipefail
           [[ "$CANDIDATE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo 'Candidate must be full SHA'; exit 1; }
-          [[ "$LEDGER_PATH" =~ ^[a-zA-Z0-9_./-]+\.json$ ]] || { echo 'Unsafe ledger path'; exit 1; }
-          case "$LEDGER_PATH" in /*|*..*|*//*|./*|'') echo 'Unsafe ledger path'; exit 1;; esac
+          case "${REVIEW_MODE:-reference}" in
+            reference)
+              [[ "$LEDGER_PATH" =~ ^[a-zA-Z0-9_./-]+\.json$ ]] || { echo 'Unsafe ledger path'; exit 1; }
+              case "$LEDGER_PATH" in /*|*..*|*//*|./*|'') echo 'Unsafe ledger path'; exit 1;; esac;;
+            skills)
+              [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || { echo 'Source must be full SHA'; exit 1; }
+              [[ "$SKILL_PATH" =~ ^[a-zA-Z0-9_./-]+$ ]] || { echo 'Unsafe skill path'; exit 1; }
+              case "$SKILL_PATH" in /*|*..*|*//*|./*|*/|'') echo 'Unsafe skill path'; exit 1;; esac;;
+            *) echo 'Unknown review mode'; exit 1;;
+          esac
       - name: Checkout immutable protected verifier revision
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
@@ -45,6 +70,7 @@ jobs:
           lfs: false
           path: candidate
       - name: Check ledger, local Evidence and independent witness together
+        if: inputs.mode == 'reference' || inputs.mode == ''
         env:
           TRUSTED_WITNESS_SHA256: ${{ vars.TRUSTED_WITNESS_SHA256 }}
           TRUSTED_WITNESS_JSON: ${{ secrets.TRUSTED_WITNESS_JSON }}
@@ -64,3 +90,27 @@ jobs:
             --protected-manifest "$witness_file" --expected-manifest-sha256 "$TRUSTED_WITNESS_SHA256" \
             --evidence-root candidate --expected-candidate-revision "$CANDIDATE_SHA"
           echo 'Pinned consistency passed. Capture authenticity and product parity require independent observation review.'
+      - name: Check skill admission with protected policy and candidate bytes
+        if: inputs.mode == 'skills'
+        env:
+          TRUSTED_SKILL_POLICY_SHA256: ${{ vars.TRUSTED_SKILL_POLICY_SHA256 }}
+          TRUSTED_SKILL_POLICY_JSON: ${{ secrets.TRUSTED_SKILL_POLICY_JSON }}
+          SKILL_PATH: ${{ inputs.skill_path }}
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
+          CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TRUSTED_SKILL_POLICY_SHA256" =~ ^[0-9a-f]{64}$ ]] || { echo 'Protected skill policy digest missing'; exit 1; }
+          test -n "$TRUSTED_SKILL_POLICY_JSON" || { echo 'Protected skill policy missing'; exit 1; }
+          test "$(git -C candidate rev-parse HEAD)" = "$CANDIDATE_SHA"
+          umask 077
+          policy_file="$RUNNER_TEMP/skill-policy.json"
+          trap 'rm -f "$policy_file"' EXIT
+          printf '%s' "$TRUSTED_SKILL_POLICY_JSON" > "$policy_file"
+          python3 trusted/starter-kit/scripts/agent_skills.py check \
+            --package "candidate/$SKILL_PATH" --candidate-root candidate \
+            --source-commit "$SOURCE_COMMIT" --policy "$policy_file" \
+            --expected-policy-sha256 "$TRUSTED_SKILL_POLICY_SHA256" \
+            --expected-candidate-revision "$CANDIDATE_SHA"
+          echo 'Exact-byte admission consistency passed; no candidate code executed or security/efficacy certified.'

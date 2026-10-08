@@ -263,6 +263,13 @@
       "source": "core/ENGINEERING.md",
       "applicability": "conditional",
       "trigger": "ui"
+    },
+    {
+      "id": "AGENT-SKILLS",
+      "section": "43",
+      "source": "core/AGENT_SKILLS.md",
+      "applicability": "conditional",
+      "trigger": "skills"
     }
   ],
   "artifact_profiles": [

@@ -6,7 +6,9 @@
 
 ## Версия стандарта
 
-**Стабильная версия стандарта: v9.0.0 — 2026-10-06.**
+**Версия текущего checkout: v10.0.0 — 2026-10-08.**
+
+10.0.0 вводит conditional **Agent Skills §43**: независимый допуск, полный package digest, управляемый lifecycle и проверка фактических возможностей среды. Добавлены исполняемые evaluation/process/native инструменты; Reference Evidence из PR #22 включено в этот release candidate. Обычная задача без внешних расширений не получает skill-инфраструктуру. Это major process release по §34; статус публикации проверяйте по GitHub Release.
 
 9.0.0 вводит **Decision Grill** для материальных взаимозависимых решений: агент строит design tree, сам исследует доступные факты и задаёт пользователю только текущий frontier с рекомендуемым вариантом. Ясные bugfix/малые правки остаются без интервью. Это major process release по §34.
 
@@ -21,6 +23,7 @@
 Сохраняется установленная в 6.0.0 macOS/Windows-политика: выпуск без обязательных платных сертификатов и внешних сервисов подписания/проверки. Приёмка опирается на целостность artifact, установку и фактическую загрузку в AE. Точный released commit, платформенные CI и checksums архивов записаны в release-evidence.json у GitHub Release.
 
 - [VERSION](VERSION)
+- [Начало работы и переход на 10.0.0](docs/releases/10.0.0.md)
 - [Описание релиза и переход на 9.0.0](docs/releases/9.0.0.md)
 - [CHANGELOG.md](CHANGELOG.md)
 - [Описание релиза и переход на 8.0.0](docs/releases/8.0.0.md)
@@ -30,7 +33,8 @@
 - [Описание релиза и переход на 6.0.0](docs/releases/6.0.0.md)
 - [Описание релиза и переход на 5.1.0](docs/releases/5.1.0.md)
 - [Описание релиза и переход на 5.0.0](docs/releases/5.0.0.md)
-- [GitHub Release v9.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v9.0.0)
+- [GitHub Release v10.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v10.0.0)
+- [Предыдущий GitHub Release v9.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v9.0.0)
 - [GitHub Release v8.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v8.0.0)
 - [Предыдущий GitHub Release v7.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v7.0.0)
 - [Предыдущий GitHub Release v6.2.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v6.2.0)
@@ -119,6 +123,6 @@ Conditional **DECISION-GRILL (§42)** адаптирует design-tree / frontie
 
 Скрипты требуют Node.js 22+; POSIX wrappers также требуют zsh. При копировании сохранять весь каталог `scripts`, включая `lib`, и соответствующие schemas/registry для project-record tooling.
 
-## Conditional reference tooling update (unreleased)
+## Conditional reference tooling (included in 10.0.0)
 
-[Scope reconciliation](docs/REFERENCE_UPDATE_RECONCILIATION.md), [reference adapters](docs/REFERENCE_EVIDENCE_OBLIGATIONS_PROPOSAL.md), [offline helpers](docs/REFERENCE_ENGINEERING_TOOLS.md) and [agent evaluation delta](docs/REFERENCE_AGENT_EVALUATION.md). Current adopted/versioned baselines and published releases remain unchanged; use the exact tooling commit for explicit adoption. Standard CI verifies synthetic tooling contracts, not real AE/iPhone parity. Product/market/publication items remain paused.
+[Scope reconciliation](docs/REFERENCE_UPDATE_RECONCILIATION.md), [reference adapters](docs/REFERENCE_EVIDENCE_OBLIGATIONS_PROPOSAL.md), [offline helpers](docs/REFERENCE_ENGINEERING_TOOLS.md) and [agent evaluation delta](docs/REFERENCE_AGENT_EVALUATION.md). Existing adopted baselines and historical releases remain unchanged; adopt 10.0.0 and its exact release commit explicitly. Standard CI verifies synthetic tooling contracts, not real AE/iPhone parity. Product/market/publication items remain paused.

@@ -1,0 +1,298 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Observer-sealed agent evaluation record v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "runs",
+    "comparison"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "experiment_id": {
+      "type": "string"
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "run_id",
+          "case_id",
+          "arm",
+          "repetition",
+          "partition",
+          "mode",
+          "status",
+          "scope",
+          "duration_ms",
+          "critical_violation",
+          "usage",
+          "agent_configuration_sha256",
+          "standard_snapshot_sha256",
+          "catalog_sha256",
+          "selected_skill_sha256",
+          "standard_commit"
+        ],
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "arm": {
+            "enum": [
+              "baseline",
+              "selected_skill"
+            ]
+          },
+          "repetition": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "partition": {
+            "enum": [
+              "tune",
+              "select",
+              "final"
+            ]
+          },
+          "mode": {
+            "enum": [
+              "LIVE",
+              "SYNTHETIC"
+            ]
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "SYNTHETIC_PASS",
+              "FAIL",
+              "BLOCKED",
+              "NOT_RUN"
+            ]
+          },
+          "scope": {
+            "type": "string"
+          },
+          "duration_ms": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "critical_violation": {
+            "type": "boolean"
+          },
+          "action_receipts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "sequence",
+                "request",
+                "result",
+                "duration_ms"
+              ],
+              "properties": {
+                "sequence": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "request": {
+                  "type": "object"
+                },
+                "result": {
+                  "type": "object",
+                  "required": [
+                    "status"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "PASS",
+                        "FAIL",
+                        "BLOCKED"
+                      ]
+                    }
+                  }
+                },
+                "duration_ms": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "started_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "objectives": {
+            "type": "array"
+          },
+          "usage": {
+            "type": "object",
+            "required": [
+              "status",
+              "tokens",
+              "cost"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "PASS",
+                  "NOT_RUN"
+                ]
+              },
+              "tokens": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "cost": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              }
+            }
+          },
+          "selected_skill_sha256": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "agent_configuration_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "standard_snapshot_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "catalog_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "standard_commit": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "mode": {
+                  "const": "LIVE"
+                },
+                "status": {
+                  "enum": [
+                    "PASS",
+                    "FAIL"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "scope": {
+                  "const": "acting-agent-objective-fixture"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "mode": {
+                  "const": "SYNTHETIC"
+                },
+                "status": {
+                  "enum": [
+                    "SYNTHETIC_PASS",
+                    "FAIL"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "scope": {
+                  "const": "adapter-contract-only"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "mode": {
+                  "const": "LIVE"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "PASS",
+                    "FAIL",
+                    "BLOCKED",
+                    "NOT_RUN"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "mode": {
+                  "const": "SYNTHETIC"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "SYNTHETIC_PASS",
+                    "FAIL",
+                    "BLOCKED",
+                    "NOT_RUN"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "status",
+        "scope",
+        "arms",
+        "live_agent_status",
+        "ae_host_status"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

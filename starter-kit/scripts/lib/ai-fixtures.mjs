@@ -67,7 +67,7 @@ export function prepareScenario(id, destination) {
   const names=git(root,['ls-files','--cached','--others','--exclude-standard','-z']).split('\0').filter(Boolean);
   for (const name of names) {
     // Evaluation oracles belong to the observer, not the agent's standard input.
-    if (name.startsWith('starter-kit/fixtures/ai/') || name.startsWith('starter-kit/tests/')) continue;
+    if (name.startsWith('starter-kit/fixtures/ai/') || name.startsWith('starter-kit/tests/') || ['docs/AI_BEHAVIOR_SCENARIOS.md', 'docs/REFERENCE_AGENT_EVALUATION.md', 'docs/AGENT_EVALUATION_SOURCES.json'].includes(name)) continue;
     if (!safeName(name) || !fs.lstatSync(path.join(root,name)).isFile()) throw new Error('unsafe standard source file');
     const to=path.join(standard,name);fs.mkdirSync(path.dirname(to),{recursive:true});fs.copyFileSync(path.join(root,name),to);
   }

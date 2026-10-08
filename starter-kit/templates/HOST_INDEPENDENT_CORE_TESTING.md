@@ -61,3 +61,12 @@
 - If transpiling ExtendScript/UXP code, test the produced artifact too.
 - Do not introduce abstractions more complex than the feature only for testability.
 - Micro-helpers may stay direct if the logic is truly trivial.
+
+## Optional risk-scoped native extension (unreleased)
+
+- Scope inventory: REVIEWED / UNREVIEWED / BLOCKED, source digest and [native review](NATIVE_REVIEW.md).
+- Units: frame/second/fps, pixel/coordinate/scale, selected SDK integer channel scale versus float HDR; rounding/range/tolerance explicit.
+- Property/fuzz: actual source, seed, bounded iterations/time, invariant and malformed corpus; preserve minimized counterexample.
+- Original-defect regression: same check fails at expected assertion on original fixture and passes corrected bytes; setup failure is not red evidence.
+- [Runnable C++17 fixture](../examples/native-core/README.md): buffer boundary, ownership cleanup, time/color conversions, parser/state properties, seed fuzz, compile-rejected wrong units.
+- This finite offline suite does not exercise MFR, SmartFX, thread affinity, Adobe suites, alpha/color management or real host. Missing compiler is BLOCKED; host checks stay NOT RUN.

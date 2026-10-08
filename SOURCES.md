@@ -55,4 +55,25 @@
 
 ## Verification boundary
 
+### SRC-AGENT-SKILLS-FORMAT
+- URL: https://github.com/agentskills/agentskills/blob/69ef37e9424c0a7ea9dd2293b559e43ec8176379/docs/specification.mdx
+- Scope: Pinned standard SKILL.md format and progressive disclosure.
+- Claim: Standard name/description YAML frontmatter with optional license/compatibility/metadata/allowed-tools; resources load on demand; format does not certify tool availability or safety.
+- Last verified: 2026-10-08
+- Refresh interval days: 180
+
+### SRC-GITHUB-PROTECTED-VERIFIER
+- URL: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
+- Scope: Actual branch protection, independent reviews and app-bound required status checks.
+- Claim: Protection must be configured and verified; status source can be restricted to an app, approvals can be invalidated after changes and administrator bypass requires explicit control.
+- Last verified: 2026-10-08
+- Refresh interval days: 90
+
+### SRC-GITHUB-ENVIRONMENT-REVIEW
+- URL: https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments
+- Scope: Environment required-reviewer and secret custody capabilities.
+- Claim: Environment protection and availability depend on actual settings/plan; naming an environment in workflow YAML does not establish configured controls.
+- Last verified: 2026-10-08
+- Refresh interval days: 90
+
 Self-test verifies registry structure and declared age, not live URL availability or truth of the claim. Review each claim in its actual source before advancing Last verified. Retain a source-check record with scope/date/result for significant technology or release decisions. Apple, Microsoft and CEP distribution requirements refer to the registered IDs above.

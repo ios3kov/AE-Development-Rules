@@ -42,6 +42,15 @@
 
 Сторонние компоненты должны быть необходимыми, лицензируемыми и поддерживаемыми.
 
+### Два вывода review и проверяемые замечания (10.0.0)
+<!-- REQ: REVIEW-SPLIT-001 -->
+
+Для существенного изменения SHOULD отдельно фиксировать spec review (текущие требования, пропущенный или лишний scope, наблюдаемая acceptance) и quality review (корректность, безопасность, maintainability и применимые риски). Один разработчик может выполнить оба; отдельный reviewer/агент не обязателен. Каждый вывод относится к точному candidate и перечисляет фактическое покрытие и пробелы. Итоговый PASS не получается усреднением: blocking finding остаётся FAIL, недоступная обязательная проверка — BLOCKED/NOT RUN по существующему процессу.
+
+Actionable finding SHOULD содержать место/диапазон, конкретное последствие и проверяемое основание (кодовый путь, вход, тест или применимый контракт), а не только вкусовую рекомендацию. После исправления повторить затронутую проверку и актуализировать вывод; прежнее review новых bytes не покрывает. [Шаблон](../starter-kit/templates/IMPLEMENTATION_REVIEW.md) встраивается в existing review/checkpoint и не дублирует статус задачи.
+
+Для C/C++-изменений SHOULD выбирать risk-scoped inventory функций/файлов и явно различать REVIEWED, UNREVIEWED и BLOCKED: lifetime, allocation/cleanup и size/stride bounds; integer overflow, signedness, narrowing и NaN/Inf; ownership/borrow/handle pairing и отмена; shared mutable state, thread affinity и reentrancy. Для неприменимой области дать основание; список identifiers или отсутствие scanner findings не означает покрытие. Native details и units — [Native §23](../profiles/NATIVE.md#23-дополнительные-проверки-native-effects--render-plugins).
+
 ### Защита пользователя и недоверенные входные данные
 
 Любые данные вне полного контроля инструмента считать потенциально недоверенными по применимости:
@@ -150,6 +159,7 @@ Workaround не должен незаметно превращаться в по
 9. **Повторить тот же сценарий** и сравнить Evidence.
 10. После достаточного causal Evidence выполнить минимальный fix.
 11. Добавить regression test / fixture для подтверждённого failure mode, если это практически возможно.
+   При практически возможном безопасном запуске SHOULD проверить тот же regression-test на сохранённом исходном дефектном candidate/fixture: он обнаруживает ожидаемый failure mode, а на исправленных bytes проходит. Зафиксировать identity обоих, вход/сценарий, exit/result и Evidence; compile/setup error не является доказательством исходного дефекта. Если original запуск недоступен/небезопасен, оставить его NOT RUN с причиной, сохранить доказанный симптом и ограничить вывод. Не удалять рабочий код ради повторного соблюдения TDD; isolated fixture/mutation подтверждает чувствительность теста только к своей конкретной мутации и не заменяет исходный product candidate.
 12. Удалить временную диагностику, которая не нужна production-коду, и повторно проверить чистый artifact.
 
 SHOULD избегать:
@@ -1253,6 +1263,10 @@ Async state machine по возможности тестировать вне AE
 - GPU backend.
 
 Pure algorithms должны иметь unit/property/fuzz tests, если риск это оправдывает.
+
+При выбранных property/fuzz checks SHOULD сохранять seed, bounds/iteration/time budget, invariant/oracle, malformed corpus и минимальный failing input. Проверять parsing/serialization roundtrip плюс truncation/overflow/embedded bytes; допустимые state transitions плюс cancel/reset/error; численные границы, inverse/monotonicity либо другой применимый invariant. Входы должны проверять тот же исходный алгоритм, а не отдельную переписанную копию. Fuzzer без failures при конечном бюджете не доказывает отсутствие дефектов; sanitizer coverage и thread checks перечисляются отдельно.
+
+[Исполняемый offline C++17 пример](../starter-kit/examples/native-core/README.md) использует bounded buffer API, typed frames/seconds и RGBA8 scale, ownership/error cleanup, parser/state/numeric properties и seeded byte fuzz. Он реально компилирует corrected/original-defect варианты одним regression assertion и ожидаемо отклоняет неверный units API. Это оригинальный учебный core, а не Adobe SDK wrapper или host certificate. Отсутствующий compiler — BLOCKED, реальные AE/MFR/SmartFX checks — отдельно NOT RUN.
 
 Host-specific correctness — buffer ownership, suites, MFR, SmartFX, color management, render lifecycle — подтверждать отдельными AE tests.
 

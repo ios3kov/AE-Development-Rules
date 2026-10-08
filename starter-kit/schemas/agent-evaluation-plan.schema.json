@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ios3kov/AE-Development-Rules/agent-evaluation-plan.schema.json",
+  "title": "Protected agent evaluation plan v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "partition",
+    "standard_commit",
+    "standard_snapshot_sha256",
+    "catalog_sha256",
+    "agent_configuration_sha256",
+    "model",
+    "mode",
+    "case_ids",
+    "selected_skill",
+    "repetitions",
+    "max_actions",
+    "timeout_s",
+    "repair_budget",
+    "no_progress_limit"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "partition": {
+      "enum": [
+        "tune",
+        "select",
+        "final"
+      ]
+    },
+    "standard_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "enum": [
+        "LIVE",
+        "SYNTHETIC"
+      ]
+    },
+    "case_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "selected_skill": {
+      "type": "object",
+      "required": [
+        "name",
+        "source_commit",
+        "package_sha256",
+        "policy_sha256",
+        "task",
+        "available_tools"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "package_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "policy_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "task": {
+          "type": "string",
+          "minLength": 1
+        },
+        "available_tools": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "oracle_exposed_to_configuration": {
+      "type": "boolean"
+    },
+    "standard_snapshot_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "catalog_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "agent_configuration_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "selected_configuration_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "repetitions": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+    },
+    "max_actions": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "timeout_s": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 600
+    },
+    "repair_budget": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "no_progress_limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "partition": {
+            "const": "final"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "selected_configuration_sha256",
+          "oracle_exposed_to_configuration"
+        ],
+        "properties": {
+          "oracle_exposed_to_configuration": {
+            "const": false
+          }
+        }
+      }
+    }
+  ]
+}

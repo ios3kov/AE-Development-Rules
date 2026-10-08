@@ -85,6 +85,8 @@ Do not repeat an unchanged failed action without a recorded basis; preserve reje
 - Regression test / fixture:
 - Before fix:
 - After fix:
+- Same test on original defect: source/artifact identity, exact input/check, expected failure marker, actual exit/result and Evidence (setup failure does not count):
+- If original run is unsafe/unavailable: NOT RUN reason and bounded sensitivity claim; isolated mutation is not the original product:
 - Related existing scenarios rechecked:
 
 ## Cleanup

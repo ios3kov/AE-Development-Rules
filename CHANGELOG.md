@@ -1,9 +1,19 @@
 # Changelog
 
-### Unreleased conditional reference tooling
+## 10.0.0 — 2026-10-08
+
+Major process release under Engineering §34: conditional skill admission can require new review/scan/pinning actions for a previously compliant project. Existing project baselines remain frozen until explicit adoption. [Migration and first use](docs/releases/10.0.0.md). No real-agent effectiveness, security certification or AE runtime acceptance is implied.
+
+### Conditional agent skills and engineering extension
+
+- Adds conditional §43 skill admission/full-package integrity/managed lifecycle, protected complete-scan consistency and task/tool selection. Retains standard SKILL.md and existing Evidence authority; no external installation or general security certificate.
+- Extends the existing evaluation with a protected observer/bounded launcher, skill/no-skill and Russian/ambiguous tune/select/final fixtures. Adds task/resource/review receipts and original offline native property/fuzz/dimensional/red-green examples.
+- See [scope, obligation mapping and adoption analysis](docs/AGENT_SKILLS_IMPLEMENTATION.md). User authorized merge and standards release on 2026-10-08; GitHub settings and paid/live-model/AE runs remain outside the release scope. Historical 9.0.0 and its Evidence remain frozen.
+
+### Conditional reference tooling
 
 - Completes reviewed reference obligations, local Evidence/owner hashes, typed case results and pinned witness comparison; adds offline scenario/trace/graph/version/tool/UI helpers, negative tests and standard CI integration. Existing project gates/registry remain authoritative; draft-tool schema v1 requires migration.
-- Reconciles the agreed 42 in-scope items, expands mobile reference/evaluation methods, and keeps items 33–40 (product/market/publication) paused. No version tag, GitHub Release, product publication or actual AE/iPhone parity is claimed. See [reconciliation](docs/REFERENCE_UPDATE_RECONCILIATION.md).
+- Reconciles the agreed 42 in-scope items, expands mobile reference/evaluation methods, and keeps items 33–40 (product/market/publication) paused. Included from merged PR #22; product publication and actual AE/iPhone parity remain unperformed. Historical implementation reports retain their original candidate status. See [reconciliation](docs/REFERENCE_UPDATE_RECONCILIATION.md).
 
 ## 9.0.0 — 2026-10-06
 

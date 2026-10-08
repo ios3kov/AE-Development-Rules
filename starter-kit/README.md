@@ -206,3 +206,9 @@ python3 -m unittest discover -s starter-kit/tests -p 'test_reference_*.py' -v
 ```
 
 The standard CI executes contract/negative tests. Enforced product review uses the combined witness CLI and an externally pinned policy/capture manifest. Missing Evidence, tampered owner/file/result, dropped case/behavior or wrong host/device authority fails with nonzero exit. Success certifies the stated consistency scope only. Trusted settings/capture producers and actual product observations are separate operational tasks; no publication is implied.
+
+## Conditional agent skills extension — 10.0.0
+
+[Agent Skills §43](../core/AGENT_SKILLS.md) applies only when adding/using a skill/resource/hook/MCP/tool extension. The existing optional manifest `features` accepts `skills`; omission and an ordinary small task keep prior routing. No mandatory tool-manager installation. [Local package/admission tools](../docs/AGENT_SKILLS_TOOLS.md), [protection audit and prepared owner changes](../docs/AGENT_SKILLS_PROTECTION.md), [baseline/scope/migration](../docs/AGENT_SKILLS_IMPLEMENTATION.md).
+
+Python 3.11+ stdlib suites run in the full self-test along with retained reference tests. The package tool never executes imported code; a complete heuristic scan/admission PASS is bounded consistency, not safety. The actual-agent observer fails BLOCKED without enforced supported isolation, keeps expected checks private and distinguishes synthetic adapter tests from LIVE cases. Native C++ properties/fuzz and original-defect regression verify offline methods, not Adobe headers or AE host behavior. Unavailable compilers/platforms/pilots remain explicit.

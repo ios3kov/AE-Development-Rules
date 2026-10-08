@@ -121,7 +121,7 @@ for (const file of canonicalModules) {
     sectionOwners.get(id).push(rel(file));
   }
 }
-for (let id = 1; id <= 41; id++) {
+for (let id = 1; id <= 43; id++) {
   const owners = sectionOwners.get(id) || [];
   if (owners.length === 0) fail("missing canonical section §" + id);
   if (owners.length > 1) fail("duplicate canonical section §" + id + ": " + owners.join(", "));
@@ -395,12 +395,12 @@ if (fs.existsSync(behavioral)) {
 
 // Conditional reference adapters are verified as standard tooling, with synthetic data only.
 const python = ["python3", "python"].find(command => run(command, ["-c", "import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)"]).status === 0);
-if (!python) fail("Python 3.11+ required for reference adapter contract tests");
+if (!python) fail("Python 3.11+ required for standard adapter contract tests");
 else {
-  const r = run(python, ["-m", "unittest", "discover", "-s", "starter-kit/tests", "-p", "test_reference_*.py", "-v"]);
+  const r = run(python, ["-m", "unittest", "discover", "-s", "starter-kit/tests", "-p", "test_*.py", "-v"]);
   process.stdout.write(r.stdout || "");
   process.stdout.write(r.stderr || "");
-  if (r.status !== 0) fail("reference adapter contract tests failed");
+  if (r.status !== 0) fail("standard adapter contract tests failed");
 }
 
 // Required subset is explicit for each runner. Structural checks are not semantic proof.
