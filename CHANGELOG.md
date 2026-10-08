@@ -2,13 +2,13 @@
 
 ## 10.0.1 — 2026-10-08
 
-Unpublished correction candidate for the 10.0.0 tools. No new normative rule, schema or mandatory process is introduced. [Correction scope, migration and open gates](docs/releases/10.0.1.md).
+Correction release for the 10.0.0 tools; publication is confirmed by GitHub Release v10.0.1 and its exact-commit Evidence. No new normative rule, schema or mandatory process is introduced. [Correction scope, migration and open gates](docs/releases/10.0.1.md).
 
 - Reference review checks source candidate and Evidence storage at independently supplied exact commits. Owner hashes use the source checkout; reports use the Evidence checkout. Existing local combined-root calls remain supported.
 - Skill inventory/scan stops with BLOCKED on directory enumeration errors; no partial package digest or complete scan can be returned.
 - Agent protocol uses nonblocking partial writes/reads and one monotonic deadline for startup, responses and broker check time. Owned process groups are terminated before observer checks.
 - Cache/output claims share one filesystem namespace, including ancestor overlap. Read/read sharing and disjoint resources remain supported.
-- Adoption guidance states that the standard self-test requires the complete standard repository. GitHub protection enforcement remains BLOCKED; live-agent/AE/iPhone pilots and candidate CI/publication remain NOT_RUN.
+- Adoption guidance states that the standard self-test requires the complete standard repository. GitHub protection enforcement remains BLOCKED; live-agent/AE/iPhone pilots remain NOT_RUN in the source baseline; final platform CI/publication are recorded in the release assets.
 
 ## 10.0.0 — 2026-10-08
 

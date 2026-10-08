@@ -8,7 +8,7 @@
 
 **Версия текущего checkout: v10.0.1 — 2026-10-08.**
 
-10.0.1 — локальный исправляющий кандидат: раздельные source/Evidence commits, отказ при ошибке чтения package, общий таймаут протокола агента и проверка пересечений cache/output. [Исправления и внедрение](docs/releases/10.0.1.md). Публикация и CI нового кандидата пока NOT_RUN; защита GitHub и реальные пилоты остаются отдельными открытыми проверками.
+10.0.1 — исправляющий выпуск: раздельные source/Evidence commits, отказ при ошибке чтения package, общий таймаут протокола агента и проверка пересечений cache/output. [Исправления и внедрение](docs/releases/10.0.1.md). Публикация подтверждается GitHub Release v10.0.1 и приложенным exact-commit CI Evidence. Защита GitHub и реальные пилоты оцениваются отдельно; успешный CI не подтверждает их выполнение.
 
 10.0.0 вводит conditional **Agent Skills §43**: независимый допуск, полный package digest, управляемый lifecycle и проверка фактических возможностей среды. Добавлены исполняемые evaluation/process/native инструменты; Reference Evidence из PR #22 включено в этот release candidate. Обычная задача без внешних расширений не получает skill-инфраструктуру. Это major process release по §34; статус публикации проверяйте по GitHub Release.
 
@@ -25,7 +25,7 @@
 Сохраняется установленная в 6.0.0 macOS/Windows-политика: выпуск без обязательных платных сертификатов и внешних сервисов подписания/проверки. Приёмка опирается на целостность artifact, установку и фактическую загрузку в AE. Точный released commit, платформенные CI и checksums архивов записаны в release-evidence.json у GitHub Release.
 
 - [VERSION](VERSION)
-- [Исправляющий кандидат и переход на 10.0.1](docs/releases/10.0.1.md)
+- [Исправления и переход на 10.0.1](docs/releases/10.0.1.md)
 - [Начало работы и переход на 10.0.0](docs/releases/10.0.0.md)
 - [Описание релиза и переход на 9.0.0](docs/releases/9.0.0.md)
 - [CHANGELOG.md](CHANGELOG.md)
@@ -36,6 +36,7 @@
 - [Описание релиза и переход на 6.0.0](docs/releases/6.0.0.md)
 - [Описание релиза и переход на 5.1.0](docs/releases/5.1.0.md)
 - [Описание релиза и переход на 5.0.0](docs/releases/5.0.0.md)
+- [GitHub Release v10.0.1](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v10.0.1)
 - [GitHub Release v10.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v10.0.0)
 - [Предыдущий GitHub Release v9.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v9.0.0)
 - [GitHub Release v8.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v8.0.0)

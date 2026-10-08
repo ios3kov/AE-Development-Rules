@@ -8,9 +8,10 @@ import zipfile
 
 
 class StandardReleaseTests(unittest.TestCase):
+    workflow_name = 'release-10.0.0.yml'
     @classmethod
     def setUpClass(cls):
-        path = Path(__file__).resolve().parents[2] / '.github/workflows/release-10.0.0.yml'
+        path = Path(__file__).resolve().parents[2] / '.github/workflows' / cls.workflow_name
         cls.workflow = path.read_text()
         body = cls.workflow.split("          python3 - <<'PY'\n", 1)[1].rsplit('          PY', 1)[0]
         source = '\n'.join(line[10:] for line in body.splitlines())
@@ -68,6 +69,10 @@ class StandardReleaseTests(unittest.TestCase):
         self.assertLess(self.source.index("require(set(ci) == set(required)"), self.source.index("api('/git/tags',"))
         self.assertLess(self.source.index("'Uploaded asset digest/size mismatch'"), self.source.index("{'draft': False"))
         self.assertNotIn('pull_request_target', self.workflow)
+
+
+class CorrectionReleaseTests(StandardReleaseTests):
+    workflow_name = 'release-10.0.1.yml'
 
 
 if __name__ == '__main__':
