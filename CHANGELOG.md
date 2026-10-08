@@ -1,5 +1,14 @@
 # Changelog
 
+## 11.0.0 — 2026-10-08
+
+Compact-standard release; publication and exact source are confirmed by GitHub Release v11.0.0 and its attached Evidence. Major baseline change under §34: Light reading selects core/profile/task overlays; skill admission differs for inert text, local execution and remote services. Existing adopted baselines remain frozen. [Scope, compatibility and preservation](docs/COMPACT_STANDARD.md).
+
+- One mandatory core and one handoff/release checklist; state/status documents link instead of reproducing readiness lists.
+- Cleanup and retrospective examples are conditional guides; the safety contract remains in canonical sections.
+- Optional agent-evaluation package owns code/schemas/fixtures/procedure; legacy CLI/imports remain compatibility loaders. Observer snapshots exclude the new package path.
+- Native AE requirements and core Evidence lifecycle/checker protections are preserved; measured real-agent benefit remains NOT_RUN.
+
 ## 10.0.2 — 2026-10-08
 
 Targeted corrections to the existing automation; publication is confirmed by GitHub Release v10.0.2 and its exact-commit Evidence. [Migration and limits](docs/releases/10.0.2.md). Existing normative AE requirements remain unchanged.

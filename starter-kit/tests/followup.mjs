@@ -16,10 +16,18 @@ test('F01 bugfix selects diagnostics; API sources and Light minimum remain disco
   const m = loadManifest(root);
   for (const component of ['native','jsx','cep','uxp','helper']) {
     const result = route(m, {...context, components:[component], risk:'light'});
-    for (const id of ['DEBUGGING','API-SOURCES','GIT','IDENTITY','REGRESSION','EVIDENCE']) assert.ok(result.rules.includes(id), component + '/' + id);
+    for (const id of ['CORE-SCOPE','DEBUGGING','API-SOURCES']) assert.ok(result.rules.includes(id), component + '/' + id);
   }
+  const core=fs.readFileSync(path.join(root,'core/PROCESS.md'),'utf8').split('## 1.')[1].split('## 2.')[0];
+  for(const term of ['branch/HEAD/local changes','SHA-256','регрессия','BLOCKED/NOT RUN','§26']) assert.ok(core.includes(term),term);
   for (const task of ['audit','documentation','research']) assert.equal(route(m, {...context, task}).implementation_task, false);
   assert.ok(!route(m, {...context, task:'documentation'}).rules.includes('DEBUGGING'));
+});
+
+test('compact scenario snapshots exclude the relocated observer package',()=>{
+ const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'ae-compact-oracle-'));
+ try {const dest=path.join(tmp,'run');prepareScenario('AI-EVAL-01',dest);assert.ok(!fs.existsSync(path.join(dest,'standard/packages/agent-evaluation')));assert.equal(inspectScenario(dest).file_scope,'PASS');}
+ finally {fs.rmSync(tmp,{recursive:true,force:true});}
 });
 
 test('F08 reversed/unbounded/missing section ranges reject; valid ranges and R0 work', () => {

@@ -116,7 +116,7 @@ export function route(manifest, context) {
   const selected = context.components.map(id => {
     const p = manifest.artifact_profiles.find(p => p.id === id);
     if (!p) throw new Error('unknown component');
-    return [...(context.task === "documentation" ? ["CORE-SCOPE","GIT","DOCS","EVIDENCE","STATE","WORKFLOW","STANDARD-VERSION"] : rulesFor(p, context.risk)), ...(context.delivery === 'development' ? [] : p[context.delivery].rules)];
+    return [...(context.task === "documentation" ? ["CORE-SCOPE"] : rulesFor(p, context.risk)), ...(context.delivery === 'development' ? [] : p[context.delivery].rules)];
   });
   const implementation = !['audit','documentation','research'].includes(context.task);
   const currentContract = context.product_contract && context.contract_covers_scope;

@@ -345,7 +345,7 @@ No model runs are claimed by this catalogue. Store actual run records with the p
 
 ## Selected-skill evaluation extension — observer-only
 
-The [existing reference agent evaluation procedure](REFERENCE_AGENT_EVALUATION.md#executable-acting-agent-adapter--unreleased) now has a runnable subprocess adapter and an [observer-only extension catalogue](../starter-kit/fixtures/ai/skill-evaluation-cases.json). This does not renumber or replace AI-EVAL-01–25 or their historical Evidence.
+The [existing reference agent evaluation procedure](REFERENCE_AGENT_EVALUATION.md#executable-acting-agent-adapter--experimental) now has a runnable subprocess adapter and an [observer-only extension catalogue](../packages/agent-evaluation/fixtures/skill-evaluation-cases.json). This does not renumber or replace AI-EVAL-01–25 or their historical Evidence.
 
 | Extension | Actual observable result | Critical rejection |
 | --- | --- | --- |

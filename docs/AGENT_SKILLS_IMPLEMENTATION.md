@@ -1,5 +1,7 @@
 # Agent skills extension — 10.0.0 release candidate
 
+Historical implementation/adoption record for 10.0.0. The current compact candidate distinguishes text/local executable/remote admission in [§43](../core/AGENT_SKILLS.md); this record does not impose the old uniform package contract on a closed service.
+
 User-approved scope: attached development plan, 2026-10-08. Standard baseline 9.0.0; actual remote main and isolated worktree base `a43c75aba8c714658822277835909c4726d5a523`. Original feature checkout clean; reference changes already merged and retained. Work is limited to AE; AS, product/marketing/publication, installed external skills/hooks/MCP, GitHub settings, deploy and paid pilots are excluded. The initial implementation excluded merge/release; the user explicitly authorized standards merge and release on 2026-10-08. Branch: `feat/agent-skills-governance`.
 
 ## Baseline reconciliation
