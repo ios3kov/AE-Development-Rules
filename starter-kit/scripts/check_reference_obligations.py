@@ -45,7 +45,7 @@ def validate(data):
         elif owner["revision"] != data.get("candidate_revision"):
             errors.append(prefix + " stale owner revision")
         required_cases = o.get("required_cases")
-        if not isinstance(required_cases, list) or not required_cases or any(c not in CASES for c in required_cases):
+        if not isinstance(required_cases, list) or not required_cases or any(c not in CASES for c in required_cases) or len(set(required_cases)) != len(required_cases):
             errors.append(prefix + " invalid required_cases")
             continue
         originals = o.get("original_cases", [])
@@ -58,10 +58,14 @@ def validate(data):
                 matches = [v for v in collection if isinstance(v, dict) and v.get("kind") == case and v.get("evidence_id") and v.get("artifact_sha256")]
                 if len(matches) != 1:
                     errors.append(prefix + " " + label + " missing/ambiguous " + case)
+        if o.get("required_authority") not in RANK:
+            errors.append(prefix + " unknown required authority")
         verifier = o.get("verifier")
         if not isinstance(verifier, dict) or not all(verifier.get(k) for k in ("command", "evidence_id", "artifact_sha256")):
             errors.append(prefix + " verifier evidence missing")
             continue
+        if verifier.get("authority") not in RANK:
+            errors.append(prefix + " unknown verifier authority")
         if verifier.get("status") != "PASS" or verifier.get("revision") != data.get("candidate_revision"):
             errors.append(prefix + " verifier failed or stale")
         needed = o.get("required_authority")
