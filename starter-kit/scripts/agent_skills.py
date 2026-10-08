@@ -583,12 +583,18 @@ def _manage_unlocked(action, root, owner, package=None, name=None, source_commit
     if action == 'rollback':
         if not isinstance(target_digest,str) or not SHA.fullmatch(target_digest):
             raise SkillError('explicit rollback digest required')
-        matches = [r for r in existing['history'] if r['package_sha256'] == target_digest]
-        if len(matches) != 1:
-            raise SkillError('rollback version missing/ambiguous')
-        target = matches[0]
         package = root/'.history'/name/target_digest/name
-        source_commit = target['source_commit']
+        # History retains commit provenance even when two commits have identical bytes.
+        # The pinned current policy uniquely selects the permitted source identity.
+        policy = policy_read(policy_path, expected_policy_sha256, candidate_revision, [root, package])
+        entries = [e for e in policy['entries'] if e['name'] == name and e['package_sha256'] == target_digest]
+        if len(entries) != 1:
+            raise SkillError('rollback version missing from protected registry', 'BLOCKED')
+        source_commit = entries[0]['source_commit']
+        matches = [r for r in existing['history'] if r['package_sha256'] == target_digest
+                   and r['source_commit'] == source_commit]
+        if len(matches) != 1:
+            raise SkillError('rollback source identity missing/ambiguous')
         inv, entry = authorize(package,source_commit,policy_path,expected_policy_sha256,candidate_revision,install_root=root)
         if inv['package_sha256'] != target_digest:
             raise SkillError('rollback restored bytes mismatch')

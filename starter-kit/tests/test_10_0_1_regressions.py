@@ -185,6 +185,7 @@ class CorrectionTests(unittest.TestCase):
             records = [item[role]] if role == 'verifier' else item[role]
             for record in records:
                 manifest['captures'].append({'evidence_id': record['evidence_id'], 'obligation_id': item['id'],
+                                            'owner_sha256': hashlib.sha256(witness.canonical(item['owner'])).hexdigest(),
                                             'role': role, 'record_sha256': hashlib.sha256(witness.canonical(record)).hexdigest(),
                                             'runner_id': 'owned synthetic observer', 'review_status': 'APPROVED'})
         pin = hashlib.sha256(witness.canonical(manifest)).hexdigest()

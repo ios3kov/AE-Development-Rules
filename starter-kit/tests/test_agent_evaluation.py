@@ -142,7 +142,7 @@ class EvaluationTests(unittest.TestCase):
         broker.handle({'op':'write','path':'src/product.json','content':'{"value":7}'})
         for _ in range(2):self.assertEqual(broker.handle({'op':'check','alias':'product'})['status'],'PASS')
         self.assertEqual(broker.handle({'op':'check','alias':'product'})['status'],'FAIL')
-        self.assertEqual(len(broker.checks),2)
+        self.assertEqual(len(broker.checks),3)
         self.assertIn('budget',broker.violations[0])
         self.assertTrue(broker.checks[0]['stdout_sha256']);self.assertEqual(broker.checks[0]['exit_code'],0)
 
@@ -154,6 +154,29 @@ class EvaluationTests(unittest.TestCase):
         case['checks']['product']=[sys.executable,'-c','import time;time.sleep(5)']
         result=e.controlled_check('product',case,self.project,SyntheticIsolation(),timeout=.05,checker_root=self.checkers)
         self.assertEqual(result['status'],'BLOCKED');self.assertIn('timeout',result['reason'])
+
+    def test_distinct_successful_checks_do_not_exhaust_repair_budget(self):
+        broker = self.broker()
+        broker.case['checks'] = {alias: ['unused'] for alias in ('unit', 'lint', 'types', 'package')}
+        with patch.object(e, 'controlled_check', return_value={'status': 'PASS', 'exit_code': 0}):
+            for alias in broker.case['checks']:
+                self.assertEqual(broker.handle({'op': 'check', 'alias': alias})['status'], 'PASS')
+        self.assertFalse(broker.violations)
+
+    def test_changed_check_outcome_is_progress_and_alternating_aliases_still_bounded(self):
+        broker = self.broker()
+        with patch.object(e, 'controlled_check', side_effect=[{'status':'FAIL', 'exit_code':1},
+                                                            {'status':'PASS', 'exit_code':0},
+                                                            {'status':'PASS', 'exit_code':0}]):
+            self.assertEqual(broker.handle({'op':'check', 'alias':'product'})['status'], 'FAIL')
+            self.assertEqual(broker.handle({'op':'check', 'alias':'product'})['status'], 'PASS')
+            self.assertEqual(broker.handle({'op':'check', 'alias':'product'})['status'], 'PASS')
+        broker = self.broker()
+        broker.case['checks']['lint'] = ['unused']
+        with patch.object(e, 'controlled_check', return_value={'status':'FAIL', 'exit_code':1}):
+            for alias in ('product','lint','product','lint'):
+                broker.handle({'op':'check', 'alias':alias})
+            self.assertIn('budget', broker.handle({'op':'check', 'alias':'product'})['reason'])
 
     def test_fake_pass_typed_claim_fails_independent_objective(self):
         broker=self.broker()

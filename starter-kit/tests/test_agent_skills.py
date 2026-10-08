@@ -311,6 +311,34 @@ class SkillTests(unittest.TestCase):
         self.pin = self.write_policy()
         self.manage('rollback',name='sample-skill',target_digest=first)
         self.assertEqual((self.install_root/'sample-skill'/'resources'/'guide.txt').read_text(),'owned synthetic instructions')
+    def test_identical_bytes_different_source_commits_rollback_uses_protected_identity(self):
+        first = self.policy['entries'][0]['package_sha256']
+        self.manage('install')
+        second_source = 'c'*40
+        self.policy['entries'][0]['source_commit'] = second_source
+        self.pin = self.write_policy()
+        self.manage('update', source_commit=second_source)
+        (self.package/'resources'/'guide.txt').write_text('v2')
+        self.policy = self.make_policy()
+        self.pin = self.write_policy()
+        self.manage('update')
+        historical = self.install_root/'.history'/'sample-skill'/first/'sample-skill'
+        self.policy = self.make_policy()
+        inv = s.inventory(historical)
+        entry = self.policy['entries'][0]
+        entry.update(source_commit=second_source, package_sha256=first)
+        entry['scan'].update(package_sha256=first, files=inv['files'])
+        self.pin = self.write_policy()
+        cmd = [sys.executable, str(SCRIPTS/'agent_skills.py'), 'rollback',
+               '--install-root', str(self.install_root), '--owner', 'project-owned-manager',
+               '--name', 'sample-skill', '--target-digest', first,
+               '--policy', str(self.policy_file), '--expected-policy-sha256', self.pin,
+               '--expected-candidate-revision', CANDIDATE]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
+        registry = json.loads((self.install_root/s.REGISTRY_FILE).read_text())
+        self.assertEqual(registry['skills']['sample-skill']['source_commit'], second_source)
+
     def test_revoked_rollback_denied(self):
         first = self.update_fixture()
         self.policy['entries'][0]['status'] = 'revoked'

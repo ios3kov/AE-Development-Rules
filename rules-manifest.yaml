@@ -322,7 +322,10 @@
       "release": {
         "inherit": "",
         "rules": [
-          "GATES"
+          "GATES",
+          "STANDARD-VERSION",
+          "PRODUCT-VERSION",
+          "DEPSEC"
         ],
         "notes": "GATES / Release Gate + MAC-DIST or WIN-DIST when applicable"
       }
@@ -378,7 +381,10 @@
       "release": {
         "inherit": "",
         "rules": [
-          "GATES"
+          "GATES",
+          "STANDARD-VERSION",
+          "PRODUCT-VERSION",
+          "DEPSEC"
         ],
         "notes": "GATES / Release Gate; OS signing only for executable installer/helper"
       }
@@ -433,7 +439,10 @@
       "release": {
         "inherit": "",
         "rules": [
-          "GATES"
+          "GATES",
+          "STANDARD-VERSION",
+          "PRODUCT-VERSION",
+          "DEPSEC"
         ],
         "notes": "GATES / Release Gate + Adobe distribution requirements; OS signing only for executable code"
       }
@@ -490,7 +499,10 @@
       "release": {
         "inherit": "",
         "rules": [
-          "GATES"
+          "GATES",
+          "STANDARD-VERSION",
+          "PRODUCT-VERSION",
+          "DEPSEC"
         ],
         "notes": "GATES / Release Gate + current Adobe distribution requirements; OS signing only for native addon/executable"
       }
@@ -544,7 +556,10 @@
       "release": {
         "inherit": "",
         "rules": [
-          "GATES"
+          "GATES",
+          "STANDARD-VERSION",
+          "PRODUCT-VERSION",
+          "DEPSEC"
         ],
         "notes": "GATES / Release Gate + MAC-DIST or WIN-DIST when applicable"
       }

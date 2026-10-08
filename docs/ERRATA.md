@@ -4,18 +4,32 @@ Known defects and temporary controls for adopted baselines. This registry does n
 
 ## 10.0.0 tool corrections
 
-Affected baseline: **10.0.0**, exact source `d65baf37d76cc7c25981250d64a8d93c55c4bff2`, checked 2026-10-08. [10.0.1 correction candidate and tests](releases/10.0.1.md) is prepared locally, unpublished; candidate CI is NOT_RUN.
+Affected baseline: **10.0.0**, exact source `d65baf37d76cc7c25981250d64a8d93c55c4bff2`, checked 2026-10-08. [10.0.1 corrections and tests](releases/10.0.1.md) were published as [v10.0.1](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v10.0.1), peeled source `f276b9507a4fbccd239d2f32fafe40b87efac4a0`. [Release-source CI](https://github.com/ios3kov/AE-Development-Rules/actions/runs/37780064136) passed on Linux, macOS and Windows. Subsequent documentation/protection main `62e78aa278954900fcd1a4a9465bb6a949b9e52a` also passed [three-OS CI](https://github.com/ios3kov/AE-Development-Rules/actions/runs/37781665962). Original local-stage reports remain historical.
 
 | ID | Defect / temporary control | Correction state |
 | --- | --- | --- |
-| FIX-1001-01 | Reference dispatch requires reports inside their own subject commit. Keep source and Evidence separate; the 10.0.0 workflow cannot complete that path. | Local 10.0.1 candidate; separate source/Evidence checkouts and roots. |
-| FIX-1001-02 | Unreadable directories can be omitted from package digest/complete scan. Do not admit a package whose complete readable inventory is unverified. | Local 10.0.1 candidate; enumeration errors block. |
-| FIX-1001-03 | Blocking protocol writes can outlive agent timeout. Avoid relying on 10.0.0 timeout enforcement for a stalled adapter. | Local 10.0.1 candidate; nonblocking I/O and shared deadline. |
-| FIX-1001-04 | Cross-kind cache/output overlap is missed. Review physical path overlaps independently. | Local 10.0.1 candidate; shared filesystem namespace. |
-| FIX-1001-05 | Install guidance implies self-test validates a scripts-only copy. Run it in the full standard repository. | Guidance clarified in 10.0.1 candidate. |
-| OPS-1001-01 | Main protection disabled and rulesets empty. Treat local checks as advisory until independent custody is enforced. | BLOCKED; account-side setup/rejection proof remain open. |
+| FIX-1001-01 | Reference dispatch requires reports inside their own subject commit. Keep source and Evidence separate; the 10.0.0 workflow cannot complete that path. | Published 10.0.1; separate source/Evidence checkouts and roots. |
+| FIX-1001-02 | Unreadable directories can be omitted from package digest/complete scan. Do not admit a package whose complete readable inventory is unverified. | Published 10.0.1; enumeration errors block. |
+| FIX-1001-03 | Blocking protocol writes can outlive agent timeout. Avoid relying on 10.0.0 timeout enforcement for a stalled adapter. | Published 10.0.1; nonblocking I/O and shared deadline. |
+| FIX-1001-04 | Cross-kind cache/output overlap is missed. Review physical path overlaps independently. | Published 10.0.1; shared filesystem namespace. |
+| FIX-1001-05 | Install guidance implies self-test validates a scripts-only copy. Run it in the full standard repository. | Published 10.0.1 guidance. |
+| OPS-1001-01 | Main protection disabled and rulesets empty. Treat local checks as advisory until independent custody is enforced. | Basic main protection/rejection proof PASS; independent verifier/policy custody BLOCKED. See [current protection status](AGENT_SKILLS_PROTECTION.md). |
 
-Historical released 10.0.0 artifacts and reports retain their original bytes and subjects. No pilot or publication is claimed by these corrections.
+Historical released 10.0.0 artifacts and reports retain their original bytes and subjects. Publication is evidenced above; agent effectiveness and independent custody are not established by these corrections.
+
+## 10.0.1 automation corrections in 10.0.2
+
+Affected inspected main: **10.0.1**, `62e78aa278954900fcd1a4a9465bb6a949b9e52a`, observed 2026-10-08. The corrections below are included in the 10.0.2 source. Availability is confirmed only by [GitHub Release v10.0.2](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v10.0.2) and its exact-commit CI/archive Evidence. Existing product baselines stay frozen until explicit adoption.
+
+| ID | Defect / temporary control | Correction state |
+| --- | --- | --- |
+| FIX-1002-01 | Distinct checks on unchanged files consume no-progress/repair budgets. Review which check and outcome repeats. | 10.0.2: per-alias snapshot/outcome accounting; initial distinct checks do not consume repair retries. |
+| FIX-1002-02 | Identical package bytes from different source commits make digest-only rollback ambiguous. | 10.0.2: externally pinned policy selects the source identity; matching history and full authorization remain mandatory. |
+| FIX-1002-03 | Witness does not bind the implementation owner path inside the same commit. Require explicit independent review of that association. | 10.0.2: every capture requires `owner_sha256`, the canonical digest of the complete obligation `owner` object. Old unbound manifests fail closed and require a fresh independent review/pin; do not relabel historical Evidence. |
+| FIX-1002-04 | Explicit reference research and plain release omit applicable reading. Read Reference Audit and version/dependency sections directly meanwhile. | 10.0.2: explicit reference triggers Reference Audit independently of implementation permission; release profiles include STANDARD-VERSION, PRODUCT-VERSION and DEPSEC. |
+| FIX-1002-05 | Errata calls published 10.0.1 an unpublished local candidate. | Corrected documentation above distinguishes publication, basic protection and unresolved independent custody. |
+
+Regressions: `starter-kit/tests/test_agent_evaluation.py`, `test_agent_skills.py` (real rollback CLI), `test_reference_witness.py`, and `contracts.mjs`. Synthetic contracts do not establish agent effectiveness or real AE acceptance. No human approval is inferred from these changes.
 
 ## Historical 5.0.0 errata
 

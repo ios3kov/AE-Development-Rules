@@ -57,7 +57,8 @@ def verify(ledger, manifest, expected_digest, evidence_root=None, expected_revis
             # Covers role, case, environment, authority, run/time, subject and procedure;
             # byte hashes alone cannot prevent reusing a capture for another scenario.
             expected = {"obligation_id": obligation["id"], "role": role,
-                        "record_sha256": hashlib.sha256(canonical(record)).hexdigest()}
+                        "record_sha256": hashlib.sha256(canonical(record)).hexdigest(),
+                        "owner_sha256": hashlib.sha256(canonical(obligation["owner"])).hexdigest()}
             if any(witness.get(k) != v for k, v in expected.items()):
                 errors.append("capture binding mismatch " + eid)
             if not text(witness.get("runner_id")) or witness.get("runner_id") == reviewer:

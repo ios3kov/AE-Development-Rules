@@ -25,6 +25,7 @@ class WitnessTests(unittest.TestCase):
             for record in records:
                 self.manifest["captures"].append({"evidence_id":record["evidence_id"],"obligation_id":obligation["id"],
                     "role":role,"record_sha256":hashlib.sha256(w.canonical(record)).hexdigest(),
+                    "owner_sha256":hashlib.sha256(w.canonical(obligation["owner"])).hexdigest(),
                     "runner_id":"separate observer","review_status":"APPROVED"})
         self.pin = hashlib.sha256(w.canonical(self.manifest)).hexdigest()
     def check(self, repin=False):
@@ -78,6 +79,20 @@ class WitnessTests(unittest.TestCase):
     def test_changed_path_and_reference(self):
         self.ledger["reference"]["sha256"] = "b"*64
         self.assertTrue(self.check())
+    def test_missing_or_wrong_owner_binding_fails_closed(self):
+        for capture in self.manifest['captures']:
+            capture.pop('owner_sha256')
+        self.assertTrue(self.check(repin=True))
+        for capture in self.manifest['captures']:
+            capture['owner_sha256'] = 'b'*64
+        self.assertTrue(self.check(repin=True))
+
+    def test_owner_substitution_same_revision_and_bytes_is_rejected(self):
+        owner = self.ledger['obligations'][0]['owner']
+        (self.root/'src/other').write_bytes((self.root/'src/main').read_bytes())
+        owner['path'] = 'src/other'
+        self.assertTrue(self.check())
+
     def test_duplicate_extra_capture(self):
         self.manifest["captures"].append(dict(self.manifest["captures"][0]))
         self.assertTrue(self.check(repin=True))

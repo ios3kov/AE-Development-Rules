@@ -44,3 +44,5 @@ python3 starter-kit/scripts/check_native_examples.py --sanitizers
 ```
 
 Tool success establishes only the named scope. Missing tools/AE/isolation are BLOCKED/NOT_RUN, never fabricated PASS. Final exact-candidate results and remaining pilot limitations are recorded in the implementation report.
+
+Rollback selects the source commit for the requested package digest from the externally pinned current policy, then requires that exact commit/digest pair in managed history. Identical package bytes from multiple source commits remain separate provenance records; they do not make rollback ambiguous. Revoked, absent, unreviewed or tampered packages remain blocked by the normal admission checks.
