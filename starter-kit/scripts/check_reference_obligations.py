@@ -2,13 +2,33 @@
 """Fail-closed, conditional reference parity obligation validator."""
 import argparse
 import json
+import hashlib
+import re
 import pathlib
 import sys
 
 RANK = {"static": 0, "unit": 1, "integration": 2, "runtime": 3, "packaged-process": 4, "host": 5, "device": 5}
 CASES = {"positive", "negative", "malformed", "boundary", "cancellation", "recovery"}
 
-def validate(data):
+HEX = re.compile(r"^[0-9a-fA-F]{64}$")
+
+def evidence_integrity(record, root):
+    if not isinstance(record, dict):
+        return False
+    relative = record.get("artifact_path")
+    digest = record.get("artifact_sha256")
+    if not isinstance(relative, str) or not relative or not isinstance(digest, str) or not HEX.fullmatch(digest):
+        return False
+    try:
+        base = root.resolve(strict=True)
+        path = (base / relative).resolve(strict=True)
+        if not path.is_relative_to(base) or not path.is_file():
+            return False
+        return hashlib.sha256(path.read_bytes()).hexdigest() == digest.lower()
+    except (OSError, RuntimeError, ValueError):
+        return False
+
+def validate(data, evidence_root=None):
     errors = []
     if not isinstance(data, dict):
         return ["root must be an object"]
@@ -60,10 +80,17 @@ def validate(data):
                     errors.append(prefix + " " + label + " missing/ambiguous " + case)
         if o.get("required_authority") not in RANK:
             errors.append(prefix + " unknown required authority")
+        if evidence_root is not None:
+            for label, collection in (("original_cases", originals), ("fixtures", fixtures)):
+                for record in collection:
+                    if not evidence_integrity(record, pathlib.Path(evidence_root)):
+                        errors.append(prefix + " " + label + " evidence integrity failure")
         verifier = o.get("verifier")
         if not isinstance(verifier, dict) or not all(verifier.get(k) for k in ("command", "evidence_id", "artifact_sha256")):
             errors.append(prefix + " verifier evidence missing")
             continue
+        if evidence_root is not None and not evidence_integrity(verifier, pathlib.Path(evidence_root)):
+            errors.append(prefix + " verifier evidence integrity failure")
         if verifier.get("authority") not in RANK:
             errors.append(prefix + " unknown verifier authority")
         if verifier.get("status") != "PASS" or verifier.get("revision") != data.get("candidate_revision"):
@@ -79,9 +106,10 @@ def validate(data):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("ledger")
+    parser.add_argument("--evidence-root", type=pathlib.Path)
     args = parser.parse_args()
     try:
-        errors = validate(json.loads(pathlib.Path(args.ledger).read_text(encoding="utf-8")))
+        errors = validate(json.loads(pathlib.Path(args.ledger).read_text(encoding="utf-8")), args.evidence_root)
     except (OSError, ValueError) as exc:
         errors = [str(exc)]
     print(json.dumps({"status": "FAIL" if errors else "PASS", "errors": errors}, ensure_ascii=False, indent=2))
