@@ -33,6 +33,8 @@ def validate(data):
         else:
             seen.add(ident)
         if o.get("required") is not True:
+            if o.get("required") is not False:
+                errors.append(prefix + " required must be boolean")
             continue
         if o.get("status") != "PASS":
             errors.append(prefix + " required obligation not PASS")
