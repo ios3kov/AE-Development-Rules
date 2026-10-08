@@ -1,3 +1,5 @@
+> Scope: this CLI enforces the strict local managed-package path. It does not implement text-only review or remote-service admission. See the three distinct paths in [§43](../core/AGENT_SKILLS.md).
+
 # Conditional skill tooling — v1 adapters in 10.0.0
 
 Python 3.11+, standard library; no external skill/scanner/MCP installation or network download. The formats are projections of existing project requirements/checks/Evidence, not a new normative registry. [§43](../core/AGENT_SKILLS.md) is the admission/use contract. [Scope/adoption](AGENT_SKILLS_IMPLEMENTATION.md); [reviewed sources/licenses](AGENT_SKILL_SOURCES.json).

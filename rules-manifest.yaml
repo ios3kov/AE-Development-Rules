@@ -280,17 +280,8 @@
         "inherit": "",
         "rules": [
           "CORE-SCOPE",
-          "GIT",
-          "IDENTITY",
-          "REGRESSION",
-          "EVIDENCE",
           "CODE-SAFETY",
-          "NATIVE-RUNTIME",
-          "AUTOMATION",
-          "COMPLETION",
-          "STATE",
-          "WORKFLOW",
-          "STANDARD-VERSION"
+          "NATIVE-RUNTIME"
         ],
         "notes": "Applicable safety, state, identity, completion and runtime minimum; scope remains proportional, including eligible micro-helpers"
       },
@@ -337,15 +328,6 @@
         "inherit": "",
         "rules": [
           "CORE-SCOPE",
-          "GIT",
-          "IDENTITY",
-          "REGRESSION",
-          "EVIDENCE",
-          "AUTOMATION",
-          "COMPLETION",
-          "STATE",
-          "WORKFLOW",
-          "STANDARD-VERSION",
           "TOOL-RUNTIME"
         ],
         "notes": "Applicable safety, state, identity, completion and runtime minimum; scope remains proportional, including eligible micro-helpers"
@@ -396,16 +378,7 @@
         "inherit": "",
         "rules": [
           "CORE-SCOPE",
-          "TOOL-RUNTIME",
-          "GIT",
-          "IDENTITY",
-          "REGRESSION",
-          "EVIDENCE",
-          "AUTOMATION",
-          "COMPLETION",
-          "STATE",
-          "WORKFLOW",
-          "STANDARD-VERSION"
+          "TOOL-RUNTIME"
         ],
         "notes": "Applicable safety, state, identity, completion and runtime minimum; scope remains proportional, including eligible micro-helpers"
       },
@@ -455,15 +428,6 @@
         "rules": [
           "CORE-SCOPE",
           "UXP",
-          "GIT",
-          "IDENTITY",
-          "REGRESSION",
-          "EVIDENCE",
-          "AUTOMATION",
-          "COMPLETION",
-          "STATE",
-          "WORKFLOW",
-          "STANDARD-VERSION",
           "TOOL-RUNTIME"
         ],
         "notes": "Applicable safety, state, identity, completion and runtime minimum; scope remains proportional, including eligible micro-helpers"
@@ -514,16 +478,7 @@
         "inherit": "",
         "rules": [
           "CORE-SCOPE",
-          "GIT",
-          "IDENTITY",
-          "REGRESSION",
-          "EVIDENCE",
           "CODE-SAFETY",
-          "AUTOMATION",
-          "COMPLETION",
-          "STATE",
-          "WORKFLOW",
-          "STANDARD-VERSION",
           "TOOL-RUNTIME"
         ],
         "notes": "Applicable safety, state, identity, completion and runtime minimum; scope remains proportional, including eligible micro-helpers"

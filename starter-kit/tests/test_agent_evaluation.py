@@ -14,7 +14,7 @@ sys.path.insert(0, str(SCRIPTS))
 import agent_evaluation as e
 import check_agent_evaluation as verifier
 
-PACK = Path(__file__).resolve().parents[1] / 'fixtures/ai/skill-evaluation-cases.json'
+PACK = Path(__file__).resolve().parents[2] / 'packages/agent-evaluation/fixtures/skill-evaluation-cases.json'
 
 
 class SyntheticIsolation:
@@ -314,6 +314,26 @@ class EvaluationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'oracle'):
             e.run_plan(p,e.digest(p.read_bytes()),PACK,standard,[],[],self.root/'observer','missing-package','missing-policy')
         self.assertFalse((self.root/'observer').exists())
+
+    def test_moved_optional_package_is_observer_only(self):
+        standard = self.root/'unsafe-package'; standard.mkdir()
+        package = standard/'packages/agent-evaluation'; package.mkdir(parents=True)
+        (package/'README.md').write_text('observer-only hidden procedure')
+        plan = copy.deepcopy(self.plan); plan['standard_snapshot_sha256'] = e.digest(e.snapshot(standard))
+        p = self.root/'package-plan.json'; p.write_text(json.dumps(plan))
+        with self.assertRaisesRegex(ValueError, 'oracle'):
+            e.run_plan(p, e.digest(p.read_bytes()), PACK, standard, [], [], self.root/'package-observer', 'missing-package', 'missing-policy')
+        self.assertFalse((self.root/'package-observer').exists())
+
+    def test_legacy_and_package_cli_retain_nonzero_failure(self):
+        record = self.root/'bad-record.json'; record.write_text('{}')
+        package = Path(__file__).resolve().parents[2]/'packages/agent-evaluation'
+        outputs = []
+        for entry in (SCRIPTS/'check_agent_evaluation.py', package/'check_agent_evaluation.py'):
+            result = subprocess.run([sys.executable, str(entry), '--record', str(record), '--expected-sha256', e.digest(record.read_bytes())], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1, result.stdout+result.stderr)
+            outputs.append(json.loads(result.stdout))
+        self.assertEqual(outputs[0], outputs[1])
 
     def test_runtime_cannot_overlap_any_observer_plan_catalog_policy(self):
         observer=self.root/'observer';observer.mkdir()
