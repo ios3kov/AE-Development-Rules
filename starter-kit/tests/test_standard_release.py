@@ -79,5 +79,9 @@ class AutomationCorrectionReleaseTests(StandardReleaseTests):
     workflow_name = 'release-10.0.2.yml'
 
 
+class CompactReleaseTests(StandardReleaseTests):
+    workflow_name = 'release-11.0.0.yml'
+
+
 if __name__ == '__main__':
     unittest.main()
