@@ -10,7 +10,30 @@ import unittest
 WORKFLOW = Path(__file__).resolve().parents[2] / '.github/workflows/trusted-reference-evidence.yml'
 
 
-@unittest.skipUnless(shutil.which('bash'), 'Bash workflow input guard unavailable on this platform')
+def supported_bash():
+    # Windows may resolve a WSL stub named bash without an installed distro.
+    # Probe execution and also discover Git Bash relative to the actual Git.
+    candidates = [shutil.which('bash')]
+    git = shutil.which('git')
+    if git:
+        directory = Path(git).resolve().parent
+        candidates.extend([str(directory / 'bash.exe'), str(directory.parent / 'bin/bash.exe')])
+    for candidate in candidates:
+        if not candidate or not Path(candidate).is_file():
+            continue
+        try:
+            probe = subprocess.run([candidate, '-c', 'set -euo pipefail; [[ abc =~ ^[a-z]+$ ]]; printf BASH_GUARD_READY'],
+                                   capture_output=True, timeout=5)
+            if probe.returncode == 0 and probe.stdout == b'BASH_GUARD_READY':
+                return candidate
+        except (OSError, subprocess.TimeoutExpired):
+            continue
+    return None
+
+
+BASH = supported_bash()
+
+
 class WorkflowInputs(unittest.TestCase):
     def setUp(self):
         self.body = WORKFLOW.read_text()
@@ -20,7 +43,9 @@ class WorkflowInputs(unittest.TestCase):
                             'LEDGER_PATH': 'Evidence/ledger.json', 'SKILL_PATH': 'skills/owned-skill', 'REVIEW_MODE': 'skills'}
 
     def check(self, **changes):
-        return subprocess.run(['bash', '-c', self.guard], env={**self.environment, **changes},
+        if BASH is None:
+            self.skipTest('NOT_RUN: executable Bash workflow runtime unavailable')
+        return subprocess.run([BASH, '-c', self.guard], env={**self.environment, **changes},
                               capture_output=True, timeout=5).returncode
 
     def test_reference_backwards_compatibility_and_skill_subject(self):
