@@ -36,6 +36,12 @@ class ReferenceValidatorTests(unittest.TestCase):
     def test_required_flag_invalid(self):
         x = sample(); x["obligations"][0]["required"] = "false"
         self.assertTrue(module.validate(x))
+    def test_duplicate_required_case(self):
+        x = sample(); x['obligations'][0]['required_cases'] = ['positive', 'positive']
+        self.assertTrue(module.validate(x))
+    def test_unknown_authority(self):
+        x = sample(); x['obligations'][0]['verifier']['authority'] = 'fictional'
+        self.assertTrue(module.validate(x))
     def test_not_triggered(self):
         x = {"schema_version": 1, "reference_triggered": False}
         self.assertEqual(module.validate(x), [])
