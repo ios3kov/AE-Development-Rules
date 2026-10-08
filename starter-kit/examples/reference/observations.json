@@ -1,0 +1,24 @@
+{
+  "inventory": [
+    "O-1"
+  ],
+  "observations": [
+    {
+      "behavior_id": "O-1",
+      "case_id": "O-1-positive",
+      "claim_status": "OBSERVED",
+      "evidence_id": "synthetic-original",
+      "artifact_path": "capture.txt",
+      "artifact_sha256": "b796eafb3345c2e12e8be4d1290cd02c76173e3d8971740bbe85ae782dc6e9b2",
+      "preconditions": {},
+      "input": {
+        "value": 1
+      },
+      "action": "fixture-only comparison",
+      "expected": {
+        "value": 1
+      },
+      "environment": "synthetic"
+    }
+  ]
+}

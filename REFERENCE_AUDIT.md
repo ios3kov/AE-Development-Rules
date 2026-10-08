@@ -387,3 +387,9 @@ Stage 0 и Reference Audit MAY идти итеративно, если пони�
 Нельзя заменять неизвестную внутреннюю реализацию уверенной догадкой.  
 Нельзя начинать coding whole-product analogue после поверхностного просмотра UI.  
 Нельзя считать parity доказанным без систематических сравнительных тестов.
+
+## Проверяемые reference obligations
+
+При явно выбранном референсе SHOULD применять адаптер по reviewed check plan, сохраняя существующую цепочку requirements → checks → Evidence и [условный reference adapter](docs/REFERENCE_EVIDENCE_OBLIGATIONS_PROPOSAL.md). Reviewed inventory задаёт минимальные behaviors/cases/authority до отчёта; ledger не может их удалить или понизить. Проверять исходные наблюдения, owner и файлы Evidence, typed verifier results и [независимый witness](docs/PROTECTED_REFERENCE_PROVENANCE.md) при enforced review. Отсутствующая required проверка даёт nonzero exit и остаётся FAIL/BLOCKED/NOT_RUN. При отсутствии reference trigger дополнительный ledger не требуется.
+
+[Методики](docs/AUTHORIZED_INVESTIGATION_PLAYBOOKS.md) и [offline helpers](docs/REFERENCE_ENGINEERING_TOOLS.md) покрывают целевой binary/mobile/browser анализ, воспроизводимые сценарии, graph/trace/version/UI comparisons. Статический вывод не доказывает runtime; generated fixture не означает выполненный тест. Existing product gates и Evidence authority сохраняются. Проверки самого стандарта — synthetic contract/negative tests; реальные AE/iPhone-прогоны относятся к отдельному продукту и не блокируют merge стандарта.

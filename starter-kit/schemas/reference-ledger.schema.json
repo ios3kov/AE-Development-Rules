@@ -1,0 +1,537 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "reference-ledger.schema.json",
+  "description": "Semantic policy, file integrity and witness checks are implemented by the CLI; schema validation alone cannot establish PASS.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "reference_triggered": {
+      "type": "boolean"
+    },
+    "candidate_revision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "reference": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "sha256"
+      ]
+    },
+    "inventory": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "required_cases": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "positive",
+                "negative",
+                "malformed",
+                "boundary",
+                "cancellation",
+                "recovery"
+              ]
+            }
+          },
+          "required_authority": {
+            "enum": [
+              "static",
+              "unit",
+              "integration",
+              "runtime",
+              "packaged-process",
+              "host",
+              "device"
+            ]
+          },
+          "requirement_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "check_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "exclusion_reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "decision_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "BLOCKED",
+              "NOT_RUN",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "owner": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "revision",
+              "sha256"
+            ]
+          },
+          "original_cases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "evidence_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "artifact_path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "artifact_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "status": {
+                  "enum": [
+                    "PASS",
+                    "FAIL",
+                    "BLOCKED",
+                    "NOT_RUN",
+                    "NOT_APPLICABLE"
+                  ]
+                },
+                "authority": {
+                  "enum": [
+                    "static",
+                    "unit",
+                    "integration",
+                    "runtime",
+                    "packaged-process",
+                    "host",
+                    "device"
+                  ]
+                },
+                "command": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "tool_version": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "environment": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "run_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "kind": {
+                  "enum": [
+                    "positive",
+                    "negative",
+                    "malformed",
+                    "boundary",
+                    "cancellation",
+                    "recovery"
+                  ]
+                },
+                "revision": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                },
+                "reference_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "claim_status": {
+                  "enum": [
+                    "PROVEN",
+                    "OBSERVED",
+                    "INFERRED",
+                    "UNKNOWN"
+                  ]
+                },
+                "requirement_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "check_id": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "evidence_id",
+                "artifact_path",
+                "artifact_sha256",
+                "status",
+                "authority",
+                "command",
+                "tool_version",
+                "environment",
+                "observed_at",
+                "run_id"
+              ]
+            }
+          },
+          "fixtures": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "evidence_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "artifact_path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "artifact_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "status": {
+                  "enum": [
+                    "PASS",
+                    "FAIL",
+                    "BLOCKED",
+                    "NOT_RUN",
+                    "NOT_APPLICABLE"
+                  ]
+                },
+                "authority": {
+                  "enum": [
+                    "static",
+                    "unit",
+                    "integration",
+                    "runtime",
+                    "packaged-process",
+                    "host",
+                    "device"
+                  ]
+                },
+                "command": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "tool_version": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "environment": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "run_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "kind": {
+                  "enum": [
+                    "positive",
+                    "negative",
+                    "malformed",
+                    "boundary",
+                    "cancellation",
+                    "recovery"
+                  ]
+                },
+                "revision": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                },
+                "reference_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "claim_status": {
+                  "enum": [
+                    "PROVEN",
+                    "OBSERVED",
+                    "INFERRED",
+                    "UNKNOWN"
+                  ]
+                },
+                "requirement_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "check_id": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "evidence_id",
+                "artifact_path",
+                "artifact_sha256",
+                "status",
+                "authority",
+                "command",
+                "tool_version",
+                "environment",
+                "observed_at",
+                "run_id"
+              ]
+            }
+          },
+          "verifier": {
+            "type": "object",
+            "properties": {
+              "evidence_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "artifact_path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "artifact_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "status": {
+                "enum": [
+                  "PASS",
+                  "FAIL",
+                  "BLOCKED",
+                  "NOT_RUN",
+                  "NOT_APPLICABLE"
+                ]
+              },
+              "authority": {
+                "enum": [
+                  "static",
+                  "unit",
+                  "integration",
+                  "runtime",
+                  "packaged-process",
+                  "host",
+                  "device"
+                ]
+              },
+              "command": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tool_version": {
+                "type": "string",
+                "minLength": 1
+              },
+              "environment": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observed_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "positive",
+                  "negative",
+                  "malformed",
+                  "boundary",
+                  "cancellation",
+                  "recovery"
+                ]
+              },
+              "revision": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              "reference_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "claim_status": {
+                "enum": [
+                  "PROVEN",
+                  "OBSERVED",
+                  "INFERRED",
+                  "UNKNOWN"
+                ]
+              },
+              "requirement_ids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "check_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "evidence_id",
+              "artifact_path",
+              "artifact_sha256",
+              "status",
+              "authority",
+              "command",
+              "tool_version",
+              "environment",
+              "observed_at",
+              "run_id"
+            ]
+          },
+          "contradictions": {
+            "type": "array"
+          },
+          "residual_unknowns": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "required",
+          "status",
+          "required_authority",
+          "requirement_ids",
+          "check_id"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "required": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "required_cases",
+                "owner",
+                "original_cases",
+                "fixtures",
+                "verifier",
+                "contradictions",
+                "residual_unknowns"
+              ]
+            },
+            "else": {
+              "required": [
+                "exclusion_reason",
+                "decision_ref"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "reference_triggered"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "reference_triggered": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "candidate_revision",
+          "reference",
+          "inventory",
+          "obligations"
+        ]
+      }
+    }
+  ]
+}

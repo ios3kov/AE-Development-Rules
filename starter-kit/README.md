@@ -195,3 +195,14 @@ Use [Process §6](../core/PROCESS.md#безопасная-уборка-репо�
 ## End-to-end task control and new feature sets
 
 For significant work, [Process §11](../core/PROCESS.md#контроль-прохождения-задачи-и-финальная-сверка) requires applicable work/check mapping, block updates and final reconciliation against actual scope/candidate/Evidence. Use the existing task checkpoint and traceability, without duplicate documents. [Smart Entry §2.4](../AI_ENTRYPOINT.md#24-новый-набор-функций-в-текущей-разработке) and [feature delta template](templates/FEATURE_SET_CHANGE.md) preserve existing commitments while adding functions. Reuse covered Stage 0 decisions; investigate only uncovered scope. Neither a checklist nor static tests certify model behavior or AE runtime.
+
+## Conditional reference evidence adapters
+
+Python 3.11+, stdlib. Existing Reference Audit triggers these helpers; ordinary development has no extra ledger obligation. [Contract/schema/migration](../docs/REFERENCE_EVIDENCE_OBLIGATIONS_PROPOSAL.md), [offline tools](../docs/REFERENCE_ENGINEERING_TOOLS.md), [synthetic example](examples/reference/README.md).
+
+```sh
+python3 starter-kit/scripts/check_reference_obligations.py /project/ledger.json --policy /reviewed/policy.json --evidence-root /project
+python3 -m unittest discover -s starter-kit/tests -p 'test_reference_*.py' -v
+```
+
+The standard CI executes contract/negative tests. Enforced product review uses the combined witness CLI and an externally pinned policy/capture manifest. Missing Evidence, tampered owner/file/result, dropped case/behavior or wrong host/device authority fails with nonzero exit. Success certifies the stated consistency scope only. Trusted settings/capture producers and actual product observations are separate operational tasks; no publication is implied.

@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "reference_triggered": true,
+  "reference": {
+    "name": "Synthetic",
+    "version": "1",
+    "sha256": "b796eafb3345c2e12e8be4d1290cd02c76173e3d8971740bbe85ae782dc6e9b2"
+  },
+  "candidate_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "inventory": [
+    "O-1"
+  ],
+  "obligations": [
+    {
+      "id": "O-1",
+      "required": true,
+      "required_cases": [
+        "positive",
+        "negative"
+      ],
+      "required_authority": "host",
+      "requirement_ids": [
+        "PROJECT-PARITY"
+      ],
+      "check_id": "PARITY-1",
+      "status": "PASS",
+      "owner": {
+        "path": "src/main",
+        "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "sha256": "b796eafb3345c2e12e8be4d1290cd02c76173e3d8971740bbe85ae782dc6e9b2"
+      },
+      "contradictions": [],
+      "residual_unknowns": [],
+      "original_cases": [
+        {
+          "artifact_path": "capture.txt",
+          "artifact_sha256": "b796eafb3345c2e12e8be4d1290cd02c76173e3d8971740bbe85ae782dc6e9b2",
+          "authority": "host",
+          "status": "PASS",
+          "environment": "synthetic fixture",
+          "command": "fixture probe",
+          "tool_version": "1",
+          "observed_at": "2026-01-01T00:00:00Z",
+          "run_id": "run-1",
+          "evidence_id": "original_cases-positive",
+          "kind": "positive",
+          "reference_sha256": "b796eafb3345c2e12e8be4d1290cd02c76173e3d8971740bbe85ae782dc6e9b2",
+          "claim_status": "OBSERVED"
+        },
+        {
+          "artifact_path": "capture.txt",
+          "artifact_sha256": "b796eafb3345c2e12e8be4d1290cd02c76173e3d8971740bbe85ae782dc6e9b2",
+          "authority": "host",
+          "status": "PASS",
+          "environment": "synthetic fixture",
+          "command": "fixture probe",
+          "tool_version": "1",
+          "observed_at": "2026-01-01T00:00:00Z",
+          "run_id": "run-1",
+          "evidence_id": "original_cases-negative",
+          "kind": "negative",
+          "reference_sha256": "b796eafb3345c2e12e8be4d1290cd02c76173e3d8971740bbe85ae782dc6e9b2",
+          "claim_status": "OBSERVED"
+        }
+      ],
+      "fixtures": [
+        {
+          "artifact_path": "capture.txt",
+          "artifact_sha256": "b796eafb3345c2e12e8be4d1290cd02c76173e3d8971740bbe85ae782dc6e9b2",
+          "authority": "unit",
+          "status": "PASS",
+          "environment": "synthetic fixture",
+          "command": "fixture probe",
+          "tool_version": "1",
+          "observed_at": "2026-01-01T00:00:00Z",
+          "run_id": "run-1",
+          "evidence_id": "fixtures-positive",
+          "kind": "positive",
+          "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "artifact_path": "capture.txt",
+          "artifact_sha256": "b796eafb3345c2e12e8be4d1290cd02c76173e3d8971740bbe85ae782dc6e9b2",
+          "authority": "unit",
+          "status": "PASS",
+          "environment": "synthetic fixture",
+          "command": "fixture probe",
+          "tool_version": "1",
+          "observed_at": "2026-01-01T00:00:00Z",
+          "run_id": "run-1",
+          "evidence_id": "fixtures-negative",
+          "kind": "negative",
+          "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "verifier": {
+        "artifact_path": "verifier.json",
+        "artifact_sha256": "f278ccf5244c196f585250b3db4b9b8d96307f47059ffe656dab913cbeab811b",
+        "authority": "host",
+        "status": "PASS",
+        "environment": "synthetic fixture",
+        "command": "fixture probe",
+        "tool_version": "1",
+        "observed_at": "2026-01-01T00:00:00Z",
+        "run_id": "run-1",
+        "evidence_id": "verifier-1",
+        "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "check_id": "PARITY-1",
+        "requirement_ids": [
+          "PROJECT-PARITY"
+        ]
+      }
+    }
+  ]
+}

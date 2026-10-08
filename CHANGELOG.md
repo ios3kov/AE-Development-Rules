@@ -1,5 +1,10 @@
 # Changelog
 
+### Unreleased conditional reference tooling
+
+- Completes reviewed reference obligations, local Evidence/owner hashes, typed case results and pinned witness comparison; adds offline scenario/trace/graph/version/tool/UI helpers, negative tests and standard CI integration. Existing project gates/registry remain authoritative; draft-tool schema v1 requires migration.
+- Reconciles the agreed 42 in-scope items, expands mobile reference/evaluation methods, and keeps items 33–40 (product/market/publication) paused. No version tag, GitHub Release, product publication or actual AE/iPhone parity is claimed. See [reconciliation](docs/REFERENCE_UPDATE_RECONCILIATION.md).
+
 ## 9.0.0 — 2026-10-06
 
 - Adds DECISION-GRILL / Process §42 and DECISION-GRILL-001: material dependent product/UX/scope decisions are resolved as a design tree/frontier interview with an explicit recommendation per question. Facts available from code, repository state, tools or sources remain the agent's responsibility.

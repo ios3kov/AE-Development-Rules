@@ -1,0 +1,11 @@
+# Configure independent GitHub Evidence verification
+
+The standard's manual workflow is implemented; activation/capture is separate project adoption. This change does not claim administrative settings are configured, and does not require AE/iPhone runs to merge the standard.
+
+1. Use the repository environment `reference-evidence` on protected main. Independently verify branch/workflow review, environment access and reviewer identities. Public/private repositories and account plans may provide different controls. If environment approval is unavailable, use an externally approved manifest/pin with independent custody; do not silently treat a branch restriction as independent review.
+2. A separate authorized observer creates captures and an independent reviewer approves their scope, artifacts and provenance. Use the [witness schema](../starter-kit/schemas/reference-witness.schema.json) with embedded reviewed policy, expiry and role-bound record digests. The candidate implementation agent must not author and approve its own witness.
+3. Provision secret `TRUSTED_WITNESS_JSON` and independently managed variable `TRUSTED_WITNESS_SHA256`. Canonical digest uses sorted keys, compact separators, UTF-8, ensure_ascii=False and no NaN/Infinity. Protect both from candidate authors. Do not put actual witness data in PR fixtures or logs.
+4. Dispatch **Trusted Reference Evidence Review** from main with full candidate SHA and a safe relative JSON ledger path. All Evidence/owner paths are relative to candidate root. Workflow pins the protected verifier to the dispatch revision and checks actual candidate HEAD. The combined command validates policy/ledger, owner and Evidence bytes, typed verifier case results and witness bindings.
+5. Review the run and protected capture provenance. Green means consistency with the pinned witness; actual execution, independence and sufficient product coverage still require observation review. Missing data fails; synthetic standard CI is separate and needs none of these secrets.
+
+Not asserted by this update: settings/reviewer membership, external capture custody, authenticated runner credentials, signature attestation, real AE/iPhone execution or product parity. These remain explicit operational limitations; no release/publication authority follows from a green comparison.
