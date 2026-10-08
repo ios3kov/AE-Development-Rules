@@ -7,6 +7,7 @@ source outside candidate control. This verifies attestation matching, not truth.
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 import sys
 
@@ -15,6 +16,8 @@ def canonical(obj):
 
 def verify(ledger, manifest, expected_digest):
     errors = []
+    if not isinstance(expected_digest, str) or not re.fullmatch(r"[0-9a-f]{64}", expected_digest):
+        errors.append("invalid trusted manifest digest")
     if hashlib.sha256(canonical(manifest)).hexdigest() != expected_digest:
         errors.append("protected manifest digest mismatch")
     if manifest.get("schema_version") != 1 or manifest.get("candidate_revision") != ledger.get("candidate_revision"):
@@ -51,6 +54,10 @@ def verify(ledger, manifest, expected_digest):
                     errors.append("witness " + field + " mismatch")
             if not all(witness.get(k) for k in ("run_id", "runner_id", "observed_at", "authority")):
                 errors.append("incomplete witness provenance")
+            if witness.get("authority") not in {"static", "unit", "integration", "runtime", "packaged-process", "host", "device"}:
+                errors.append("invalid witness authority")
+            if record is obligation.get("verifier") and witness.get("authority") != record.get("authority"):
+                errors.append("verifier authority mismatch")
             if witness.get("review_status") != "APPROVED":
                 errors.append("unapproved witness")
             if record is obligation.get("verifier") and witness.get("revision") != ledger.get("candidate_revision"):
