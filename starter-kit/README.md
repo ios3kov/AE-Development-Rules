@@ -201,7 +201,7 @@ For significant work, [Process §11](../core/PROCESS.md#контроль-про�
 For a concrete reference/parity target, see [Reference Evidence Obligations](../docs/REFERENCE_EVIDENCE_OBLIGATIONS_PROPOSAL.md). Validate a project-owned JSON ledger with:
 
 ```sh
-python3 starter-kit/scripts/check_reference_obligations.py /path/to/reference-ledger.json
+python3 starter-kit/scripts/check_reference_obligations.py /path/to/reference-ledger.json --evidence-root /path/to/observations
 python3 -m unittest discover -s starter-kit/tests -p test_reference_obligations.py -v
 ```
 
