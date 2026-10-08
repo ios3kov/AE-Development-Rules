@@ -30,6 +30,12 @@ class ReferenceValidatorTests(unittest.TestCase):
     def test_duplicate_id(self):
         x = sample(); x["obligations"].append(x["obligations"][0].copy())
         self.assertTrue(module.validate(x))
+    def test_required_flag_missing(self):
+        x = sample(); del x["obligations"][0]["required"]
+        self.assertTrue(module.validate(x))
+    def test_required_flag_invalid(self):
+        x = sample(); x["obligations"][0]["required"] = "false"
+        self.assertTrue(module.validate(x))
     def test_not_triggered(self):
         x = {"schema_version": 1, "reference_triggered": False}
         self.assertEqual(module.validate(x), [])
