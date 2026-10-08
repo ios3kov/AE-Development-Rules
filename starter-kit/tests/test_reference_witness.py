@@ -14,7 +14,7 @@ class WitnessTests(unittest.TestCase):
         self.record = {"evidence_id":"E1","artifact_sha256":"a"*64,"artifact_path":"capture.bin"}
         self.ledger = {"candidate_revision":"rev1","reference":{"sha256":"b"*64},
             "obligations":[{"required":True,"original_cases":[dict(self.record)],
-                            "fixtures":[dict(self.record)],"verifier":dict(self.record, revision="rev1")}]}
+                            "fixtures":[dict(self.record)],"verifier":dict(self.record, revision="rev1", authority="host")}]}
         self.manifest = {"schema_version":1,"candidate_revision":"rev1","reference_sha256":"b"*64,
             "captures":[dict(self.record,run_id="run1",runner_id="trusted",observed_at="2026-10-08T08:00:00Z",
                              authority="host",review_status="APPROVED",revision="rev1")]}
