@@ -18,8 +18,12 @@ on:
         required: false
         type: string
       candidate_sha:
-        description: Exact reviewed candidate commit SHA
+        description: Exact reviewed source candidate SHA (reports may be stored separately)
         required: true
+        type: string
+      evidence_sha:
+        description: Exact commit storing ledger and Evidence (required in reference mode)
+        required: false
         type: string
       ledger_path:
         description: Safe relative ledger path (reference mode)
@@ -38,6 +42,7 @@ jobs:
         env:
           LEDGER_PATH: ${{ inputs.ledger_path }}
           CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+          EVIDENCE_SHA: ${{ inputs.evidence_sha }}
           REVIEW_MODE: ${{ inputs.mode }}
           SKILL_PATH: ${{ inputs.skill_path }}
           SOURCE_COMMIT: ${{ inputs.source_commit }}
@@ -47,6 +52,7 @@ jobs:
           [[ "$CANDIDATE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo 'Candidate must be full SHA'; exit 1; }
           case "${REVIEW_MODE:-reference}" in
             reference)
+              [[ "$EVIDENCE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo 'Evidence must be full SHA'; exit 1; }
               [[ "$LEDGER_PATH" =~ ^[a-zA-Z0-9_./-]+\.json$ ]] || { echo 'Unsafe ledger path'; exit 1; }
               case "$LEDGER_PATH" in /*|*..*|*//*|./*|'') echo 'Unsafe ledger path'; exit 1;; esac;;
             skills)
@@ -69,6 +75,15 @@ jobs:
           submodules: false
           lfs: false
           path: candidate
+      - name: Checkout Evidence as data only
+        if: inputs.mode == 'reference' || inputs.mode == ''
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ inputs.evidence_sha }}
+          persist-credentials: false
+          submodules: false
+          lfs: false
+          path: evidence
       - name: Check ledger, local Evidence and independent witness together
         if: inputs.mode == 'reference' || inputs.mode == ''
         env:
@@ -76,19 +91,21 @@ jobs:
           TRUSTED_WITNESS_JSON: ${{ secrets.TRUSTED_WITNESS_JSON }}
           LEDGER_PATH: ${{ inputs.ledger_path }}
           CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+          EVIDENCE_SHA: ${{ inputs.evidence_sha }}
         shell: bash
         run: |
           set -euo pipefail
           [[ "$TRUSTED_WITNESS_SHA256" =~ ^[0-9a-f]{64}$ ]] || { echo 'Protected manifest digest missing'; exit 1; }
           test -n "$TRUSTED_WITNESS_JSON" || { echo 'Protected witness missing'; exit 1; }
           test "$(git -C candidate rev-parse HEAD)" = "$CANDIDATE_SHA"
+          test "$(git -C evidence rev-parse HEAD)" = "$EVIDENCE_SHA"
           umask 077
           witness_file="$RUNNER_TEMP/reference-witness.json"
           trap 'rm -f "$witness_file"' EXIT
           printf '%s' "$TRUSTED_WITNESS_JSON" > "$witness_file"
-          python3 trusted/starter-kit/scripts/check_reference_witness.py "candidate/$LEDGER_PATH" \
+          python3 trusted/starter-kit/scripts/check_reference_witness.py "evidence/$LEDGER_PATH" \
             --protected-manifest "$witness_file" --expected-manifest-sha256 "$TRUSTED_WITNESS_SHA256" \
-            --evidence-root candidate --expected-candidate-revision "$CANDIDATE_SHA"
+            --evidence-root evidence --candidate-root candidate --expected-candidate-revision "$CANDIDATE_SHA"
           echo 'Pinned consistency passed. Capture authenticity and product parity require independent observation review.'
       - name: Check skill admission with protected policy and candidate bytes
         if: inputs.mode == 'skills'

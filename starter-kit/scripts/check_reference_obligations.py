@@ -111,7 +111,10 @@ def policy_errors(policy):
             errors.append("invalid policy authority")
     return errors
 
-def validate(data, evidence_root=None, policy=None, expected_revision=None):
+def validate(data, evidence_root=None, policy=None, expected_revision=None, candidate_root=None):
+    # Legacy local use may keep source and reports together; enforced review
+    # supplies the immutable source checkout independently of Evidence storage.
+    owner_root = candidate_root if candidate_root is not None else evidence_root
     errors = policy_errors(policy)
     if not isinstance(data, dict):
         return errors + ["ledger root must be object"]
@@ -163,7 +166,7 @@ def validate(data, evidence_root=None, policy=None, expected_revision=None):
         owner = item.get("owner")
         if not isinstance(owner, dict) or not text(owner.get("path")) or owner.get("revision") != revision:
             errors.append(ident + ": implementation owner missing/stale")
-        elif evidence_root is not None and not evidence_integrity({"artifact_path": owner["path"], "artifact_sha256": owner.get("sha256")}, evidence_root):
+        elif owner_root is not None and not evidence_integrity({"artifact_path": owner["path"], "artifact_sha256": owner.get("sha256")}, owner_root):
             errors.append(ident + ": implementation owner hash/path failure")
         for field in ("contradictions", "residual_unknowns"):
             if item.get(field) != []:
@@ -223,11 +226,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("ledger")
     parser.add_argument("--evidence-root", type=pathlib.Path)
+    parser.add_argument("--candidate-root", type=pathlib.Path, help="source checkout; defaults to evidence root for local use")
     parser.add_argument("--policy", type=pathlib.Path, required=True)
     parser.add_argument("--expected-candidate-revision")
     args = parser.parse_args()
     try:
-        errors = validate(load_json(args.ledger), args.evidence_root, load_json(args.policy), args.expected_candidate_revision)
+        errors = validate(load_json(args.ledger), args.evidence_root, load_json(args.policy), args.expected_candidate_revision, args.candidate_root)
     except (OSError, ValueError, TypeError, RuntimeError) as exc:
         errors = [str(exc)]
     print(json.dumps({"status": "FAIL" if errors else "PASS", "scope": "reference-ledger-consistency", "parity_certified": False, "errors": errors}, ensure_ascii=False))

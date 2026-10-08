@@ -197,7 +197,11 @@ def inventory(package, check_name=True):
     seen = set()
     total = 0
     directories = []
-    for root, dirs, files in os.walk(package, followlinks=False):
+    def walk_error(exc):
+        # os.walk otherwise silently omits unreadable directories and can seal
+        # a partial package as complete. No digest/admission may use that result.
+        raise SkillError('package directory unavailable', 'BLOCKED') from exc
+    for root, dirs, files in os.walk(package, followlinks=False, onerror=walk_error):
         for name in dirs:
             if (Path(root)/name).stat(follow_symlinks=False).st_mode & 0o7000:
                 raise SkillError('special directory permission bits denied')

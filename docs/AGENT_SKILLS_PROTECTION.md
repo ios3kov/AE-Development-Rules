@@ -1,12 +1,12 @@
 # Verifier protection — read-only audit and prepared changes
 
-Checked 2026-10-08 via authenticated GitHub connector, against main `a43c75aba8c714658822277835909c4726d5a523`:
+Checked 2026-10-08 via authenticated GitHub connector, against released main `d65baf37d76cc7c25981250d64a8d93c55c4bff2` for the 10.0.1 correction review:
 
 | Query | Actual result |
 | --- | --- |
 | GET branches/main | `protected: false`; protection enabled false; status-check enforcement off; contexts/checks empty |
 | GET rulesets | Empty list `[]` |
-| GET branches/main/protection | 403 `Resource not accessible by integration`; administration details unavailable to connector |
+| GET branches/main/protection | NOT_RUN for this review; previous audit received 403 `Resource not accessible by integration`; current administration details remain NOT_VERIFIED |
 
 The branch endpoint explicitly reports no main protection; no rulesets are visible. Detailed administrative bypass/reviewer/environment settings remain NOT_VERIFIED, not inferred from CODEOWNERS or workflow text. No GitHub settings were changed. This is an operational enforcement gap, not a failing offline standard contract.
 

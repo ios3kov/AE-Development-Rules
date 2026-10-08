@@ -2,6 +2,23 @@
 
 Known defects and temporary controls for adopted baselines. This registry does not change an adopted version in place, authenticate approvals, close mandatory product checks or certify an AI configuration. Keep original reports/Evidence. Adoption remains governed by [Engineering §34](../core/ENGINEERING.md#34-версия-стандарта-и-фиксация-baseline).
 
+## 10.0.0 tool corrections
+
+Affected baseline: **10.0.0**, exact source `d65baf37d76cc7c25981250d64a8d93c55c4bff2`, checked 2026-10-08. [10.0.1 correction candidate and tests](releases/10.0.1.md) is prepared locally, unpublished; candidate CI is NOT_RUN.
+
+| ID | Defect / temporary control | Correction state |
+| --- | --- | --- |
+| FIX-1001-01 | Reference dispatch requires reports inside their own subject commit. Keep source and Evidence separate; the 10.0.0 workflow cannot complete that path. | Local 10.0.1 candidate; separate source/Evidence checkouts and roots. |
+| FIX-1001-02 | Unreadable directories can be omitted from package digest/complete scan. Do not admit a package whose complete readable inventory is unverified. | Local 10.0.1 candidate; enumeration errors block. |
+| FIX-1001-03 | Blocking protocol writes can outlive agent timeout. Avoid relying on 10.0.0 timeout enforcement for a stalled adapter. | Local 10.0.1 candidate; nonblocking I/O and shared deadline. |
+| FIX-1001-04 | Cross-kind cache/output overlap is missed. Review physical path overlaps independently. | Local 10.0.1 candidate; shared filesystem namespace. |
+| FIX-1001-05 | Install guidance implies self-test validates a scripts-only copy. Run it in the full standard repository. | Guidance clarified in 10.0.1 candidate. |
+| OPS-1001-01 | Main protection disabled and rulesets empty. Treat local checks as advisory until independent custody is enforced. | BLOCKED; account-side setup/rejection proof remain open. |
+
+Historical released 10.0.0 artifacts and reports retain their original bytes and subjects. No pilot or publication is claimed by these corrections.
+
+## Historical 5.0.0 errata
+
 Affected baseline for the entries below: **5.0.0**, published tag peeled to `8d88b19afea726b7c79988c5f6958f65d13995ba`. Observation date: 2026-10-02. Historical findings/reproductions: [deep-audit ledger](DEEP_AUDIT_BACKLOG.md). Correction tracking: [5.1 remediation](DEEP_AUDIT_REMEDIATION_5_1.md).
 
 Historical scope: D04 below describes the 5.0.0/5.1.0 checker contract. The [6.0.0 release](releases/6.0.0.md) removes that policy gate and changes the checker interface; the historical finding is retained, not a current requirement.

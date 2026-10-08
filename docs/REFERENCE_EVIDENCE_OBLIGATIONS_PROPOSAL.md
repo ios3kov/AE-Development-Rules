@@ -13,15 +13,17 @@ Before investigation, the project reviewer owns the coverage inventory, required
 Schemas: [policy](../starter-kit/schemas/reference-policy.schema.json), [ledger](../starter-kit/schemas/reference-ledger.schema.json), [witness](../starter-kit/schemas/reference-witness.schema.json). Python 3.11+; standard library only. The CLI implements semantic validation as well as the structural contract. The earlier draft v1 omitted policy and execution metadata: migrate it before use; it now fails closed.
 
 ```sh
-python3 starter-kit/scripts/check_reference_obligations.py /project/reference-ledger.json \
-  --policy /reviewed/reference-policy.json --evidence-root /project \
-  --expected-candidate-revision FULL_GIT_SHA
-python3 starter-kit/scripts/check_reference_witness.py /project/reference-ledger.json \
+python3 starter-kit/scripts/check_reference_obligations.py /evidence/reference-ledger.json \
+  --policy /reviewed/reference-policy.json --evidence-root /evidence \
+  --candidate-root /source --expected-candidate-revision SOURCE_FULL_GIT_SHA
+python3 starter-kit/scripts/check_reference_witness.py /evidence/reference-ledger.json \
   --protected-manifest /protected/witness.json --expected-manifest-sha256 EXTERNAL_PIN \
-  --evidence-root /project --expected-candidate-revision FULL_GIT_SHA
+  --evidence-root /evidence --candidate-root /source --expected-candidate-revision SOURCE_FULL_GIT_SHA
 ```
 
-Policy binds exact 40-character candidate Git SHA and reference SHA-256. `inventory` and obligation IDs must equal reviewed coverage. Each required obligation has one owner `{path, revision, sha256}`, existing requirement/check IDs, required case kinds, required authority, PASS status, original observations, candidate fixtures, verifier, and explicit empty contradictions/residual_unknowns. Owner and all Evidence paths are relative to the candidate root, regular files without symlinks or traversal. SHA-256 verifies actual local bytes. Exclusions require NOT_APPLICABLE, matching reason and decision reference from the reviewed policy.
+Policy binds exact 40-character candidate Git SHA and reference SHA-256. `inventory` and obligation IDs must equal reviewed coverage. Each required obligation has one owner `{path, revision, sha256}`, existing requirement/check IDs, required case kinds, required authority, PASS status, original observations, candidate fixtures, verifier, and explicit empty contradictions/residual_unknowns. Owner paths use `--candidate-root`; ledger/artifact paths use `--evidence-root`. Both require regular files without symlinks or traversal. Omitting `--candidate-root` retains combined-root local behavior. SHA-256 verifies actual local bytes. Exclusions require NOT_APPLICABLE, matching reason and decision reference from the reviewed policy.
+
+Freeze source commit S before capturing reports that name S. Store the ledger/reports separately at commit E, such as a later commit or Evidence branch in the same repository. The trusted workflow pins both checkouts; `candidate_revision`, owner revision and fixture/verifier revisions remain S. Adding reports changes E without invalidating the source identity. A source copy in E cannot replace owner bytes from S.
 
 Each Evidence record contains a globally unique evidence_id, artifact_path/artifact_sha256, status, authority, command, tool_version, UTC observed_at, environment and run_id. Original cases also name the exact reference_sha256 and PROVEN/OBSERVED claim status; candidate fixtures/verifier name the candidate revision. Original observations and verifier must meet the reviewed authority. `host` and `device` are distinct: an AE host observation cannot close an iPhone requirement. The fixture execution authority is recorded separately; generating a fixture never proves running the product.
 
