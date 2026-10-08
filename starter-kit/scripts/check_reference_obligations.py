@@ -42,6 +42,9 @@ def validate(data, evidence_root=None):
         errors.append("candidate_revision missing")
     if not isinstance(data.get("reference"), dict) or not all(data["reference"].get(k) for k in ("name", "version", "sha256")) or (isinstance(data.get("reference"), dict) and not HEX.fullmatch(str(data["reference"].get("sha256", "")))):
         errors.append("reference identity incomplete")
+    inventory = data.get("inventory")
+    if not isinstance(inventory, list) or not inventory or any(not isinstance(x, str) or not x for x in inventory) or len(set(inventory)) != len(inventory):
+        errors.append("inventory must contain unique behavior IDs")
     obligations = data.get("obligations")
     if not isinstance(obligations, list) or not obligations:
         return errors + ["triggered reference requires obligations"]
@@ -105,6 +108,13 @@ def validate(data, evidence_root=None):
             errors.append(prefix + " insufficient verifier authority")
         if o.get("contradictions") or o.get("residual_unknowns"):
             errors.append(prefix + " unresolved contradictions/unknowns")
+    if isinstance(inventory, list) and all(isinstance(x, str) for x in inventory):
+        missing = set(inventory) - seen
+        unexpected = seen - set(inventory)
+        if missing:
+            errors.append("unmapped inventory behaviors: " + ", ".join(sorted(missing)))
+        if unexpected:
+            errors.append("obligations absent from inventory: " + ", ".join(sorted(unexpected)))
     return errors
 
 def main():
