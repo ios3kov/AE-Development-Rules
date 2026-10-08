@@ -1,0 +1,48 @@
+name: Trusted Reference Evidence Review
+# Manual review only. This workflow MUST run from the protected default branch.
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: Exact reviewed candidate commit SHA
+        required: true
+        type: string
+      ledger_path:
+        description: Ledger path in candidate repository
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  independent-witness:
+    runs-on: ubuntu-latest
+    environment: reference-evidence
+    steps:
+      - name: Checkout protected verifier from default branch
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: main
+          persist-credentials: false
+          path: trusted
+      - name: Checkout candidate read-only
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ inputs.candidate_sha }}
+          persist-credentials: false
+          path: candidate
+      - name: Validate protected inputs
+        env:
+          TRUSTED_WITNESS_SHA256: ${{ vars.TRUSTED_WITNESS_SHA256 }}
+          TRUSTED_WITNESS_JSON: ${{ secrets.TRUSTED_WITNESS_JSON }}
+          LEDGER_PATH: ${{ inputs.ledger_path }}
+          CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$CANDIDATE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo 'Candidate must be full SHA'; exit 1; }
+          [[ "$TRUSTED_WITNESS_SHA256" =~ ^[0-9a-f]{64}$ ]] || { echo 'Protected manifest digest missing'; exit 1; }
+          test -n "$TRUSTED_WITNESS_JSON" || { echo 'Protected witness missing'; exit 1; }
+          case "$LEDGER_PATH" in /*|*..*|'') echo 'Unsafe ledger path'; exit 1;; esac
+          printf '%s' "$TRUSTED_WITNESS_JSON" > "$RUNNER_TEMP/witness.json"
+          python3 trusted/starter-kit/scripts/check_reference_witness.py "candidate/$LEDGER_PATH" --protected-manifest "$RUNNER_TEMP/witness.json" --expected-manifest-sha256 "$TRUSTED_WITNESS_SHA256"
+          echo 'Witness comparison passed; real host/device attestation still requires reviewer confirmation.'
