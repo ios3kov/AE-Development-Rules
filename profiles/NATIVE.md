@@ -21,7 +21,7 @@
 
 Ни один non-interactive render path не должен требовать UI.
 
-### Покрытие native review и единицы (unreleased)
+### Покрытие native review и единицы (10.0.0)
 <!-- REQ: NATIVE-REVIEW-001 -->
 
 Для затронутых C/C++ функций SHOULD сохранить inventory проверенных/непроверенных участков с exact candidate/source digest и основанием. Memory bounds/allocation/lifetime, numeric bounds/overflow/NaN/Inf, ownership/error/cancel cleanup и concurrency/thread affinity рассматриваются отдельно; UNREVIEWED/BLOCKED не превращать в REVIEWED по факту общей сборки. Необязательный [native review record](../starter-kit/templates/NATIVE_REVIEW.md), schema и `check_native_review.py` сверяют объявленный reviewed scope, actual source/Evidence bytes и пять областей, не исполняют SDK callbacks и не выдают host certification.

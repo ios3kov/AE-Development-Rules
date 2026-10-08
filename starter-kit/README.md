@@ -207,7 +207,7 @@ python3 -m unittest discover -s starter-kit/tests -p 'test_reference_*.py' -v
 
 The standard CI executes contract/negative tests. Enforced product review uses the combined witness CLI and an externally pinned policy/capture manifest. Missing Evidence, tampered owner/file/result, dropped case/behavior or wrong host/device authority fails with nonzero exit. Success certifies the stated consistency scope only. Trusted settings/capture producers and actual product observations are separate operational tasks; no publication is implied.
 
-## Conditional agent skills extension — unreleased
+## Conditional agent skills extension — 10.0.0
 
 [Agent Skills §43](../core/AGENT_SKILLS.md) applies only when adding/using a skill/resource/hook/MCP/tool extension. The existing optional manifest `features` accepts `skills`; omission and an ordinary small task keep prior routing. No mandatory tool-manager installation. [Local package/admission tools](../docs/AGENT_SKILLS_TOOLS.md), [protection audit and prepared owner changes](../docs/AGENT_SKILLS_PROTECTION.md), [baseline/scope/migration](../docs/AGENT_SKILLS_IMPLEMENTATION.md).
 

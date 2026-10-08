@@ -1,4 +1,4 @@
-# Conditional skill tooling — unreleased v1 adapters
+# Conditional skill tooling — v1 adapters in 10.0.0
 
 Python 3.11+, standard library; no external skill/scanner/MCP installation or network download. The formats are projections of existing project requirements/checks/Evidence, not a new normative registry. [§43](../core/AGENT_SKILLS.md) is the admission/use contract. [Scope/adoption](AGENT_SKILLS_IMPLEMENTATION.md); [reviewed sources/licenses](AGENT_SKILL_SOURCES.json).
 
