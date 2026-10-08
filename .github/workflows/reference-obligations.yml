@@ -14,4 +14,4 @@ jobs:
         with:
           persist-credentials: false
       - name: Run reference obligation negative tests
-        run: python3 -m unittest discover -s starter-kit/tests -p test_reference_obligations.py -v
+        run: python3 -m unittest discover -s starter-kit/tests -p 'test_reference_*.py' -v
