@@ -1,5 +1,7 @@
 import importlib.util
 import pathlib
+import tempfile
+import hashlib
 import unittest
 
 path = pathlib.Path(__file__).resolve().parents[1] / "scripts" / "check_reference_obligations.py"
@@ -42,6 +44,17 @@ class ReferenceValidatorTests(unittest.TestCase):
     def test_unknown_authority(self):
         x = sample(); x['obligations'][0]['verifier']['authority'] = 'fictional'
         self.assertTrue(module.validate(x))
+    def test_evidence_hash_and_containment(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            file = root / "capture.txt"
+            file.write_text("observed")
+            record = {"artifact_path": "capture.txt", "artifact_sha256": hashlib.sha256(file.read_bytes()).hexdigest()}
+            self.assertTrue(module.evidence_integrity(record, root))
+            file.write_text("tampered")
+            self.assertFalse(module.evidence_integrity(record, root))
+            record["artifact_path"] = "../outside.txt"
+            self.assertFalse(module.evidence_integrity(record, root))
     def test_not_triggered(self):
         x = {"schema_version": 1, "reference_triggered": False}
         self.assertEqual(module.validate(x), [])
