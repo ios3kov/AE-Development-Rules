@@ -206,3 +206,5 @@ python3 -m unittest discover -s starter-kit/tests -p test_reference_obligations.
 ```
 
 The CLI exits nonzero on missing required cases, stale verifier revision, inadequate execution authority, duplicate obligation IDs or unresolved contradictions. A non-triggered ledger can be marked `reference_triggered: false`. This is an additive experimental validator, **not yet wired to the canonical release gate or the project's protected trust baseline**. Passing a self-authored ledger alone does not establish evidence authenticity or product parity. No production or publication action is implied.
+
+For reference-ledger schema v1, `inventory` is a list of stable behavior IDs and each must map to exactly one obligation. The validator detects missing mappings, but cannot discover behaviors omitted from the inventory. See [authorized investigation playbooks](../docs/AUTHORIZED_INVESTIGATION_PLAYBOOKS.md). Protected capture provenance and actual host/device pilot evidence remain separate mandatory review concerns.
