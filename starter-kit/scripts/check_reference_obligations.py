@@ -36,7 +36,11 @@ def validate(data, evidence_root=None):
         errors.append("schema_version must equal 1")
     if data.get("reference_triggered") is not True:
         return errors if data.get("reference_triggered") is False else errors + ["reference_triggered must be boolean"]
-    if not isinstance(data.get("reference"), dict) or not all(data["reference"].get(k) for k in ("name", "version", "sha256")):
+    if evidence_root is None:
+        errors.append("triggered reference requires --evidence-root")
+    if not isinstance(data.get("candidate_revision"), str) or not data.get("candidate_revision"):
+        errors.append("candidate_revision missing")
+    if not isinstance(data.get("reference"), dict) or not all(data["reference"].get(k) for k in ("name", "version", "sha256")) or (isinstance(data.get("reference"), dict) and not HEX.fullmatch(str(data["reference"].get("sha256", "")))):
         errors.append("reference identity incomplete")
     obligations = data.get("obligations")
     if not isinstance(obligations, list) or not obligations:
