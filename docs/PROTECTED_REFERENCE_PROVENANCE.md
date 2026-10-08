@@ -23,3 +23,15 @@ The starter-kit reference ledger validator verifies JSON structure, inventory co
 AE: an authorized plugin/effect in real After Effects with a pinned host version and render fixtures.
 AS: an authorized app on a real iPhone with pinned OS/build, cold-start, interruption, permission and recovery cases.
 Keep synthetic CI PASS separate from host/device pilot results. Do not merge a claim of end-to-end parity on synthetic evidence alone.
+
+## Implemented independent-manifest comparison
+
+Run the candidate ledger check first, then use:
+
+```sh
+python3 starter-kit/scripts/check_reference_witness.py /path/ledger.json \
+  --protected-manifest /trusted/witness.json \
+  --expected-manifest-sha256 "$PINNED_WITNESS_SHA256"
+```
+
+The digest MUST be supplied by a protected CI configuration or independent reviewer, never read from the candidate PR or the witness itself. The witness must be produced and approved by a separate observer with capture IDs, artifact digests, run IDs, runner identity, authority, timestamp and candidate revision. A candidate-authored manifest plus candidate-authored digest is **not** an independent witness. The CLI checks consistency with that externally pinned witness; it does not authenticate the runner or attest actual AE/iPhone execution. Do not claim production-grade attestation without independently managed runner credentials and real host/device observations.
