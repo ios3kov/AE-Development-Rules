@@ -195,3 +195,14 @@ Use [Process §6](../core/PROCESS.md#безопасная-уборка-репо�
 ## End-to-end task control and new feature sets
 
 For significant work, [Process §11](../core/PROCESS.md#контроль-прохождения-задачи-и-финальная-сверка) requires applicable work/check mapping, block updates and final reconciliation against actual scope/candidate/Evidence. Use the existing task checkpoint and traceability, without duplicate documents. [Smart Entry §2.4](../AI_ENTRYPOINT.md#24-новый-набор-функций-в-текущей-разработке) and [feature delta template](templates/FEATURE_SET_CHANGE.md) preserve existing commitments while adding functions. Reuse covered Stage 0 decisions; investigate only uncovered scope. Neither a checklist nor static tests certify model behavior or AE runtime.
+
+## Conditional reference evidence obligations (experimental)
+
+For a concrete reference/parity target, see [Reference Evidence Obligations](../docs/REFERENCE_EVIDENCE_OBLIGATIONS_PROPOSAL.md). Validate a project-owned JSON ledger with:
+
+```sh
+python3 starter-kit/scripts/check_reference_obligations.py /path/to/reference-ledger.json
+python3 -m unittest discover -s starter-kit/tests -p test_reference_obligations.py -v
+```
+
+The CLI exits nonzero on missing required cases, stale verifier revision, inadequate execution authority, duplicate obligation IDs or unresolved contradictions. A non-triggered ledger can be marked `reference_triggered: false`. This is an additive experimental validator, **not yet wired to the canonical release gate or the project's protected trust baseline**. Passing a self-authored ledger alone does not establish evidence authenticity or product parity. No production or publication action is implied.
