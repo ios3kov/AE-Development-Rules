@@ -18,7 +18,7 @@ def sample(root):
     verifier = {"command": "run", "status": "PASS", "revision": revision, "authority": "host", "evidence_id": "E-2", "artifact_path": "capture.txt", "artifact_sha256": digest}
     return {"schema_version": 1, "reference_triggered": True,
             "reference": {"name": "Example", "version": "1", "sha256": digest},
-            "candidate_revision": revision,
+            "candidate_revision": revision, "inventory": ["O-1"],
             "obligations": [{"id": "O-1", "required": True, "status": "PASS",
                              "owner": {"path": "src/main", "revision": revision},
                              "required_cases": ["positive"], "original_cases": [dict(case)],
@@ -78,6 +78,12 @@ class ReferenceValidatorTests(unittest.TestCase):
         self.assertTrue(self.validate())
     def test_invalid_reference_hash(self):
         self.data["reference"]["sha256"] = "not-a-hash"
+        self.assertTrue(self.validate())
+    def test_missing_inventory_behavior(self):
+        self.data["inventory"].append("O-2")
+        self.assertTrue(self.validate())
+    def test_uninventoried_obligation(self):
+        self.data["inventory"] = ["O-2"]
         self.assertTrue(self.validate())
     def test_not_triggered(self):
         self.assertEqual(module.validate({"schema_version": 1, "reference_triggered": False}), [])
