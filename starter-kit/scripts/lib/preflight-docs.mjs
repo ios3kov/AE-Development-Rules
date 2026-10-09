@@ -11,7 +11,8 @@ function git(cwd, ...args) {
 }
 const names = text => text.split('\0').filter(Boolean);
 export function checkDocsScope(cwd, baseRef = process.env.AE_PREFLIGHT_BASE_REF) {
-  const root = git(cwd, 'rev-parse', '--show-toplevel').trim();
+  // Git for Windows uses forward slashes; compare canonical native paths.
+  const root = fs.realpathSync(git(cwd, 'rev-parse', '--show-toplevel').trim());
   const changed = new Set([
     ...names(git(root, 'diff', '--name-only', '--no-renames', '-z')),
     ...names(git(root, 'diff', '--cached', '--name-only', '--no-renames', '-z')),
@@ -40,7 +41,8 @@ export function checkDocsScope(cwd, baseRef = process.env.AE_PREFLIGHT_BASE_REF)
     const documentation = /\.(md|rst)$/i.test(name) || /(^|\/)(LICENSE|COPYING|NOTICE)(\.txt)?$/.test(name);
     if (!documentation || special.has(name)) { rejected.push(name); continue; }
     const absolute = path.resolve(root, name);
-    if (!absolute.startsWith(root + path.sep)) { rejected.push(name); continue; }
+    const relative = path.relative(root, absolute);
+    if (relative === '..' || relative.startsWith('..' + path.sep) || path.isAbsolute(relative)) { rejected.push(name); continue; }
     try {
       const stat = fs.lstatSync(absolute);
       if (!stat.isFile() || (process.platform !== 'win32' && (stat.mode & 0o111))) rejected.push(name);
