@@ -1,5 +1,14 @@
 # Changelog
 
+## 11.1.0 — 2026-10-09
+
+Finalized working baseline after the v11.0.1 audit. Minor: optional tooling/guides and enforcement corrections; no new mandatory AE/project contract, applicability change or record-schema migration. [Adoption, verification and limits](docs/releases/11.1.0.md). Publication and exact source are established by the annotated tag, GitHub Release and attached Evidence.
+
+- Include PR #32: empty preflight becomes BLOCKED/exit 2; explicit docs-only scope; Markdown destination/fragment checks and preserved compatibility anchors; Windows path normalization.
+- Retain the short canonical core and add navigable command-discovery/UX guidance without a second rulebook.
+- Practical AI evaluation is owner-run and outside this release gate. The optional pilot remains NOT_RUN; no model effectiveness or AE-host result is inferred from CI.
+- Reuse the exact-source CI/archive/digest publisher and extend its existing negative regressions to 11.1.0. Old releases and adopted baselines remain unchanged.
+
 ## 11.0.1 — 2026-10-09
 
 Editorial patch to 11.0.0: consolidate remaining duplicate instructions and align registry metadata with the existing optional evaluation contract. Mandatory meaning, applicability, stable IDs and tooling interfaces remain unchanged. Previously compliant 11.0.0 projects remain compliant; adopted baselines stay pinned. [Scope, compatibility and verification](docs/releases/11.0.1.md).
