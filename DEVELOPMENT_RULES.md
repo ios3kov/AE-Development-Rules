@@ -143,15 +143,6 @@ Time-sensitive external facts: [SOURCES.md](SOURCES.md).
 
 ## Главное правило
 
-**Risk Profile и Delivery Gate выбираются независимо. Пользовательская validation не заменяет внутренний QA, а release-only ceremony не должна автоматически навязываться каждому тестовому build.**
-
-Перед передачей artifact MUST быть однозначно известно:
-
-1. какой Risk Profile применяется;
-2. какой Delivery Gate применяется;
-3. какой commit / Build ID / artifact проверяется;
-4. какие обязательные проверки текущего scope имеют Test Status PASS / FAIL / BLOCKED / NOT RUN / N/A;
-5. какие ограничения остаются;
-6. какие Evidence подтверждают вывод.
+Risk Profile и Delivery Gate выбираются независимо по [ядру §1](core/PROCESS.md#1-применение-правил-и-обязательность-проверок). Передача artifact MUST соответствовать [единому чеклисту §26](profiles/RELEASE.md#26-validation-gate-и-release-gate); формат Evidence и Test Status определены в [§10](core/PROCESS.md#10-evidence-и-статусы-проверок).
 
 Написанный код — не то же самое, что проверенный продукт. Проверенная версия — не то же самое, что следующая сборка.
