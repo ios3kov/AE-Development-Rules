@@ -1,5 +1,15 @@
 # Changelog
 
+## 11.0.1 — 2026-10-09 (unreleased)
+
+Editorial patch to 11.0.0: consolidate remaining duplicate instructions and align registry metadata with the existing optional evaluation contract. Mandatory meaning, applicability, stable IDs and tooling interfaces remain unchanged. Previously compliant 11.0.0 projects remain compliant; adopted baselines stay pinned. [Scope, compatibility and verification](docs/releases/11.0.1.md).
+
+- Replace repeated handoff lists in the normative index and Engineering ending with links to Release §26 and the core scope/Evidence definitions.
+- Keep performance domains in Engineering §17, measurement method in §18 and profiling depth/triggers in §19; preserve execution time, repeated operations and idle-load coverage.
+- Keep product interview triggers and scope in Discovery §0.2; link dependent decision rounds to Process §42.
+- Link Native §23 to the common C/C++ review contract in Engineering §14, retaining native digest, review-status, units and optional checker details.
+- Update only the human-readable meaning of `SKILL-EVALUATION-001` to match §43; full held-out paired evaluation remains optional.
+
 ## 11.0.0 — 2026-10-08
 
 Compact-standard release; publication and exact source are confirmed by GitHub Release v11.0.0 and its attached Evidence. Major baseline change under §34: Light reading selects core/profile/task overlays; skill admission differs for inert text, local execution and remote services. Existing adopted baselines remain frozen. [Scope, compatibility and preservation](docs/COMPACT_STANDARD.md).

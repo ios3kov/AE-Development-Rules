@@ -143,7 +143,7 @@
       "id": "SKILL-EVALUATION-001",
       "source": "core/AGENT_SKILLS.md",
       "section": "43",
-      "meaning": "Actual independent baseline versus selected-skill evaluation and held-out acceptance"
+      "meaning": "Comparable actual results for claimed skill improvements; full held-out paired evaluation remains optional"
     },
     {
       "id": "TASK-EXEC-001",
