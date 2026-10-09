@@ -6,11 +6,13 @@
 
 ## Версия стандарта
 
-**Версия текущего checkout: v11.0.1 — 2026-10-09.**
+**Версия текущего checkout: v11.1.0 — 2026-10-09.**
+
+11.1.0 — финализированный рабочий baseline: исправленные preflight и ссылки на разделы, понятный маршрут выполнения и ранняя UX-приёмка. Обязательные требования AE сохранены; [состав выпуска, внедрение и границы](docs/releases/11.1.0.md). Практическое сравнение ИИ пользователь проводит самостоятельно; оно не блокирует выпуск стандарта и не становится обязательным этапом разработки плагина.
 
 11.0.1 — patch-правка: повторные чеклисты передачи, перечни profiling, механика Discovery interview и общий C/C++ review заменены ссылками на основные разделы. Описание `SKILL-EVALUATION-001` согласовано с §43. Обязательность и применимость требований сохранены, включая явное сохранение native review inventory; [состав правки и совместимость](docs/releases/11.0.1.md).
 
-Статус публикации и точный коммит проверяются по [GitHub Release v11.0.1](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v11.0.1), его тегу и приложенному release-evidence.json. Предыдущий выпуск — [v11.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v11.0.0); [его внедрение и совместимость](docs/releases/11.0.0.md).
+Статус публикации и точный коммит проверяются по [GitHub Release v11.1.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v11.1.0), его тегу и приложенному release-evidence.json. Предыдущий выпуск — [v11.0.1](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v11.0.1); [его внедрение и совместимость](docs/releases/11.0.1.md).
 
 11.0.0 сокращает обязательное чтение: [короткое ядро](core/PROCESS.md#1-применение-правил-и-обязательность-проверок), профиль инструмента и [единый чеклист передачи](profiles/RELEASE.md#26-validation-gate-и-release-gate). Допуск text/local executable/remote MCP разделён; evaluation tools вынесены в optional package. [Изменения и миграция](docs/COMPACT_STANDARD.md). Опубликованная 10.0.2 и её Evidence остаются неизменными; новые условия требуют явного принятия baseline.
 
@@ -33,6 +35,7 @@
 Сохраняется установленная в 6.0.0 macOS/Windows-политика: выпуск без обязательных платных сертификатов и внешних сервисов подписания/проверки. Приёмка опирается на целостность artifact, установку и фактическую загрузку в AE. Точный released commit, платформенные CI и checksums архивов записаны в release-evidence.json у GitHub Release.
 
 - [VERSION](VERSION)
+- [Начало работы и переход на 11.1.0](docs/releases/11.1.0.md)
 - [Исправления и переход на 10.0.1](docs/releases/10.0.1.md)
 - [Начало работы и переход на 10.0.0](docs/releases/10.0.0.md)
 - [Описание релиза и переход на 9.0.0](docs/releases/9.0.0.md)

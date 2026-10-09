@@ -14,8 +14,8 @@ node starter-kit/scripts/self-test.mjs --dry-run
 
 Self-test не меняет repository files. Он проверяет:
 
-- local Markdown links и обязательные paths/modules;
-- уникальность глобальных §§1–41;
+- local Markdown paths и поддерживаемые section anchors, обязательные paths/modules;
+- уникальность глобальных §§1–43;
 - синхронизацию `rules-manifest.yaml` → applicability map;
 - conditional Reference Audit trigger / Coverage / parity contract;
 - freshness `SOURCES.md`;
@@ -88,6 +88,8 @@ CI запускает тот же self-test на Linux, macOS и Windows чер�
 - `templates/HOST_INDEPENDENT_CORE_TESTING.md`
 
 ## Внедрение
+
+Для 11.1.0: [миграция preflight и начало работы](../docs/releases/11.1.0.md), [команды проекта и проверка возможностей](../guides/PROJECT_EXECUTION.md). При переносе новых preflight wrappers сохранить `scripts/lib/preflight-docs.mjs`. Без реальной команды проверки обычный preflight возвращает BLOCKED/exit 2; docs-only выбирается явно и не подтверждает код/AE. Полный multi-model pilot не является prerequisite внедрения или выпуска стандарта.
 
 При AI-assisted работе сначала использовать корневой `AI_ENTRYPOINT.md`: ИИ сам определяет нужный процесс по обычной формулировке пользователя.
 
