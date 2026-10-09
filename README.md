@@ -8,9 +8,9 @@
 
 **Версия текущего checkout: v11.0.1 — 2026-10-09.**
 
-11.0.1 — неопубликованная patch-правка: повторные чеклисты передачи, перечни profiling, механика Discovery interview и общий C/C++ review заменены ссылками на основные разделы. Описание `SKILL-EVALUATION-001` согласовано с §43. Обязательность и применимость требований сохранены; [состав правки и совместимость](docs/releases/11.0.1.md).
+11.0.1 — patch-правка: повторные чеклисты передачи, перечни profiling, механика Discovery interview и общий C/C++ review заменены ссылками на основные разделы. Описание `SKILL-EVALUATION-001` согласовано с §43. Обязательность и применимость требований сохранены, включая явное сохранение native review inventory; [состав правки и совместимость](docs/releases/11.0.1.md).
 
-Последний опубликованный выпуск — [GitHub Release v11.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v11.0.0). Публикацию и точный коммит подтверждают его тег и приложенное release-evidence.json; [внедрение и совместимость](docs/releases/11.0.0.md).
+Статус публикации и точный коммит проверяются по [GitHub Release v11.0.1](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v11.0.1), его тегу и приложенному release-evidence.json. Предыдущий выпуск — [v11.0.0](https://github.com/ios3kov/AE-Development-Rules/releases/tag/v11.0.0); [его внедрение и совместимость](docs/releases/11.0.0.md).
 
 11.0.0 сокращает обязательное чтение: [короткое ядро](core/PROCESS.md#1-применение-правил-и-обязательность-проверок), профиль инструмента и [единый чеклист передачи](profiles/RELEASE.md#26-validation-gate-и-release-gate). Допуск text/local executable/remote MCP разделён; evaluation tools вынесены в optional package. [Изменения и миграция](docs/COMPACT_STANDARD.md). Опубликованная 10.0.2 и её Evidence остаются неизменными; новые условия требуют явного принятия baseline.
 
