@@ -73,7 +73,7 @@ try {
       expect(r.status !== 0, "create-owned-test-workspace should refuse symlink root");
 
       r = run("zsh", [path.join(scripts, "preflight.sh")], { cwd: repo });
-      expect(r.status === 0, "preflight.sh should pass clean fixture repository");
+      expect(r.status === 2, "preflight.sh must block when no project checks are configured");
 
       for (const script of ["macos-binary-audit.sh", "macos-bundle-verify.sh", "verify-native-effect-bundle-macos.sh"]) {
         r = run("zsh", [path.join(scripts, script)], { cwd: repo });
@@ -90,7 +90,7 @@ try {
   }
   if (pwsh) {
     r = run(pwsh, ["-NoLogo", "-NoProfile", "-File", path.join(scripts, "preflight.ps1")], { cwd: repo });
-    expect(r.status === 0, "preflight.ps1 should pass clean fixture repository");
+    expect(r.status === 2, "preflight.ps1 must block when no project checks are configured");
 
     fs.writeFileSync(path.join(repo, "package.json"), "{\"name\":\"fixture\",\"version\":\"1.0.0\"}\n");
     const depOut = path.join(tmp, "dep-evidence");
