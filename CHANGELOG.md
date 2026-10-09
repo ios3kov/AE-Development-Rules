@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.0.1 — 2026-10-09 (unreleased)
+## 11.0.1 — 2026-10-09
 
 Editorial patch to 11.0.0: consolidate remaining duplicate instructions and align registry metadata with the existing optional evaluation contract. Mandatory meaning, applicability, stable IDs and tooling interfaces remain unchanged. Previously compliant 11.0.0 projects remain compliant; adopted baselines stay pinned. [Scope, compatibility and verification](docs/releases/11.0.1.md).
 
