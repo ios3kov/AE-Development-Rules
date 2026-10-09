@@ -1,8 +1,10 @@
 # Changelog
 
-## 11.0.1 — 2026-10-09 (unreleased)
+## 11.0.1 — 2026-10-09
 
 Editorial patch to 11.0.0: consolidate remaining duplicate instructions and align registry metadata with the existing optional evaluation contract. Mandatory meaning, applicability, stable IDs and tooling interfaces remain unchanged. Previously compliant 11.0.0 projects remain compliant; adopted baselines stay pinned. [Scope, compatibility and verification](docs/releases/11.0.1.md).
+
+Publication status and the exact source are recorded by GitHub Release v11.0.1, its annotated tag and attached CI/archive Evidence. The version-specific publisher reuses the existing publication gates; it does not change project requirements.
 
 - Replace repeated handoff lists in the normative index and Engineering ending with links to Release §26 and the core scope/Evidence definitions.
 - Keep performance domains in Engineering §17, measurement method in §18 and profiling depth/triggers in §19; preserve execution time, repeated operations and idle-load coverage.
