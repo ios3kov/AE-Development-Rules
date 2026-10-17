@@ -335,6 +335,22 @@ Contract: DECISION-GRILL-001 ([Process §42](../core/PROCESS.md)). Эти cases 
 
 Review the dependency order, actual research/actions and whether confirmed decisions were reused. A written tree without the corresponding interaction is not behavioral Evidence.
 
+## Scoped engineering refinements — manual review cases
+
+Contracts: [Process §13](../core/PROCESS.md#13-не-менять-рабочую-архитектуру-без-необходимости), [Engineering §14](../core/ENGINEERING.md#14-качество-и-безопасность-кода), [§24–25](../core/ENGINEERING.md#24-документация-после-каждого-этапа). These cases extend manual review only; routing inputs, record schemas and the numbered executable fixture pack are unchanged. Actual model execution is **NOT RUN** until observed traces are recorded.
+
+| Case | Context / request | Expected observed behavior |
+| --- | --- | --- |
+| DOCS-REVIEW-01 | An agent instruction repeats a mutable config value and links a long procedure without saying when to read it. | Point to the authoritative value and relevant procedure section with its reading condition; retain the applicable acceptance criteria and mandatory reading. |
+| RETRO-REVIEW-01 | A session introduced a mechanical error; the existing check would catch it but was not wired into the project command. | Inspect the actual command/result, fix the existing check path when authorized, and verify the correction; do not replace the check with another prose warning. |
+| RETRO-REVIEW-02 | No session trace or new observed failure supports the proposed rule. | Mark the proposed benefit unverified and allow no process change; do not invent a mistake or claim improved agent behavior. |
+| DOMAIN-REVIEW-01 | An overloaded term conflicts with a confirmed spec and the current code. | Use concrete scenarios and decision sources to identify the intended contract; capture the resolved term in existing docs, ask only about a remaining material choice. |
+| DOMAIN-REVIEW-02 | A decision does not warrant a separate ADR, but its compatibility/risk record is mandatory. | Preserve the required decision and Evidence; the ADR filter does not waive them or force a new glossary/interview. |
+| MIGRATION-REVIEW-01 | A mechanical change breaks many consumers; some batches cannot be verified independently. | Plan compatibility expansion, dependent migrations and final contraction; isolate incomplete integration and verify the common candidate before closing the integration task. |
+| WIP-REVIEW-01 | The committed diff is empty, but staged, unstaged and relevant untracked changes exist. | Review the actual included content and disclose exclusions; do not report an empty-review PASS or modify another session's files. |
+
+Inspect decisions, actual diffs and checks. Written scenarios and structural tests do not establish a successful model or AE-runtime run.
+
 ## Run record
 
 | Scenario | Standard / fixture revision | Model + configuration | Test Status | Observed actions / Evidence | Reason / next action |

@@ -3,6 +3,7 @@
 Embed in the existing review/checkpoint. [Engineering §14](../../core/ENGINEERING.md#14-качество-и-безопасность-кода) applies at the actual scope; one person can perform both reviews. A second agent is optional.
 
 - Exact candidate / affected scope:
+- Base / HEAD; included committed, staged, unstaged and relevant untracked changes; exclusions and impact:
 - Current requirement/spec revision and reviewed acceptance/checks:
 - Reviewed locations; unreviewed locations and impact:
 - **Spec conclusion:** PASS / FAIL / BLOCKED / NOT RUN; observed acceptance, missing/extra scope, basis/Evidence:

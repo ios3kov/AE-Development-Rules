@@ -38,9 +38,11 @@ Cover relevant host/API behavior, lifecycle/threading, render/MFR/SmartFX, UI/AE
 
 - <decision + why + evidence>
 
-## Promote to common standards
+## Selected reusable improvement, if warranted
 
-- [ ] AE engineering know-how
-- [ ] DEVELOPMENT_RULES
-- [ ] reusable script/template
-- [ ] regression fixture
+Use [Engineering §25.1](../../core/ENGINEERING.md#251-ретроспектива-и-накопление-ae-know-how); a completed retrospective need not add a rule.
+
+- Observed session issue and supporting Evidence:
+- Existing check/rule and why it did not prevent the issue:
+- Smallest useful correction, or reason to leave the process unchanged:
+- Where it belongs, how to verify it, and limits of the conclusion:

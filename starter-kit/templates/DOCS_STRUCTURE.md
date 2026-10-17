@@ -22,6 +22,8 @@ For continuing AI-assisted repository work, embed [AI task state](AI_TASK_STATE.
 
 Sphinx, MkDocs, Wiki or a public site may render/publish the docs, but define which source is canonical and keep generated/public copies synchronized.
 
+When authoring agent instructions or links to procedures, use the existing [Engineering §24 contract](../../core/ENGINEERING.md#24-документация-после-каждого-этапа).
+
 ## Public vs internal
 
 Keep secrets, personal data, private paths, crash dumps and sensitive evidence out of public documentation. Public user docs and internal engineering evidence do not have to live in the same publication surface.

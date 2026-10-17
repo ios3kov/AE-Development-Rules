@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+Scoped documentation refinements informed by the reviewed Matt Pocock sources; existing compliant projects remain compliant. No baseline/version, mandatory gate, routing input or record-schema change. Source pins and transfer limits are recorded in [engineering provenance](docs/ENGINEERING_EXTENSION_SOURCES.json).
+
+- Clarify one authoritative instruction source, conditional reading links and observable completion in DOCS / Engineering §24.
+- Refine conditional retrospective guidance using actual session Evidence, existing checks for mechanical failures and bounded edits to judgement-based rules.
+- Add optional glossary/ADR guidance and expand–migrate–contract planning inside Process §13; preserve required decisions, Evidence and TASK-EXEC-001 integration acceptance.
+- Clarify REVIEW-SPLIT-001 coverage of staged, unstaged and relevant untracked work; add manual review scenarios and align optional templates. Live model behavior remains NOT RUN.
+
 ## 11.1.0 — 2026-10-09
 
 Finalized working baseline after the v11.0.1 audit. Minor: optional tooling/guides and enforcement corrections; no new mandatory AE/project contract, applicability change or record-schema migration. [Adoption, verification and limits](docs/releases/11.1.0.md). Publication and exact source are established by the annotated tag, GitHub Release and attached Evidence.
