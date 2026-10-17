@@ -77,3 +77,15 @@
 - Refresh interval days: 90
 
 Self-test verifies registry structure and declared age, not live URL availability or truth of the claim. Review each claim in its actual source before advancing Last verified. Retain a source-check record with scope/date/result for significant technology or release decisions. Apple, Microsoft and CEP distribution requirements refer to the registered IDs above.
+
+### SRC-REA-STATIC-INTEGRATION
+- URL: https://github.com/ios3kov/production-engineering/tree/60845687c4d7c8a4ad01d1fbe6ec9aeb55ac1e31/integrations/rea
+- Scope: Optional static producer/planner described in docs/REFERENCE_ENGINEERING_TOOLS.md; package selection and current exclusions, not automatic admission.
+- Claim: Exact rea-agents 6.5.0 profile with JS-derived operations quarantined due to missing CommonJS exports; metadata inventory and Ghidra plans require their own host checks. Raw receipts and a smoke PASS are not product-readiness evidence.
+- Last verified: 2026-10-17
+- Refresh interval days: 30
+- Source identity: reviewed upstream main f85a932d71279415dd95cc30083137d1161f83b8; release commit 3b79af28e80785afce9f5998d8f03289402a1847; runtime npm/dependency/image identities recorded separately.
+- License: REA core MIT, Copyright (c) 2026 morluto; checked https://github.com/morluto/rea/blob/3b79af28e80785afce9f5998d8f03289402a1847/LICENSE . Third-party component notices remain separate; no upstream code/text is copied into this standard.
+- Supporting files: integration README.md, profile.json, adapter.py, smoke.mjs and scripts/tests/test_rea_adapter.py in the pinned Production Engineering source.
+- Verification basis: https://github.com/ios3kov/production-engineering/actions/runs/39022130467 — real published CLI on synthetic ZIP/JS/summary only; inspected logs and output hashes, no native/AE/iPhone qualification. The simple JS fixture does not cover the known export-binding failure.
+- Known issue: https://github.com/morluto/rea/issues/3551 — source report/reproduction reviewed; no new reproduction claimed here. Quarantine may be lifted only after a corrected exact package and real renamed/shadowed-export regression verification.
